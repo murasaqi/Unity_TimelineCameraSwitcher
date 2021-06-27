@@ -18,9 +18,8 @@ public class CameraSwitcherControlTrack : TrackAsset
 {
     [HideInInspector]public bool findMissingCameraInHierarchy = false;
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
-    // [Serializable] private SizeBufferPoolSizeSorter _depthState;
-    [SerializeField] private RenderTexture _referenceRenderTexture;
-    // [SerializeField]private int _dephBufferSize = 16;
+    [SerializeField] private RenderTexture _referenceRenderTexture; 
+    private Material _material;
 
     [SerializeField] public ExposedReference<RawImage> m_rawImage;
     private RenderTexture m_textureA;
@@ -40,7 +39,8 @@ public class CameraSwitcherControlTrack : TrackAsset
         var playable = ScriptPlayable<CameraSwitcherControlMixerBehaviour>.Create (graph, inputCount);
         var playableBehaviour = playable.GetBehaviour();
         playableBehaviour.rawImage = m_rawImage.Resolve(graph.GetResolver());
-        playableBehaviour.compositeMaterial = m_rawImage.Resolve(graph.GetResolver()).material;
+        _material = m_rawImage.Resolve(graph.GetResolver()).material;
+        playableBehaviour.compositeMaterial = _material;
 
        InitTexturePools();
 
@@ -84,6 +84,8 @@ public class CameraSwitcherControlTrack : TrackAsset
 
     private void OnDestroy()
     {
+        if (_material != null) _material.SetFloat("_PlayableDirectorTime", 0f);
         KillRenderTexturePool();
+        
     }
 }
