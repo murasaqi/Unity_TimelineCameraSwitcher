@@ -18,20 +18,19 @@ public class CameraSwitcherControlTrack : TrackAsset
 {
     [HideInInspector]public bool findMissingCameraInHierarchy = false;
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
-    [SerializeField] private RenderTexture _referenceRenderTexture; 
+    // [SerializeField] private RenderTexture _referenceRenderTexture; 
     private Material _material;
 
     [SerializeField] public ExposedReference<RawImage> m_rawImage;
-    private RenderTexture m_textureA;
-    private RenderTexture m_textureB;
-    private List<RenderTexture> m_texturePool;
+    [SerializeField] private RenderTexture m_textureA;
+    [SerializeField] private RenderTexture m_textureB;
+
+    private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
+    // private List<RenderTexture> m_texturePool;
 
     public RenderTexture textureA => m_textureA;
     public RenderTexture textureB => m_textureB;
 
-    // public RawImage rawImage;
-
-    public List<RenderTexture> texturePool => m_texturePool;
     
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
@@ -41,11 +40,8 @@ public class CameraSwitcherControlTrack : TrackAsset
         playableBehaviour.rawImage = m_rawImage.Resolve(graph.GetResolver());
         _material = m_rawImage.Resolve(graph.GetResolver()).material;
         playableBehaviour.compositeMaterial = _material;
-
+        _cameraSwitcherControlMixerBehaviour = playableBehaviour;
        InitTexturePools();
-
-       m_textureA = new RenderTexture(_referenceRenderTexture);
-       m_textureB = new RenderTexture(_referenceRenderTexture);
 
         if (playableDirector != null)
         {
@@ -60,32 +56,17 @@ public class CameraSwitcherControlTrack : TrackAsset
     public void InitTexturePools()
     {
        KillRenderTexturePool();
-
-        if(m_texturePool == null) m_texturePool = new List<RenderTexture>();
-        if (textureA != null && textureB != null)
-        {
-           
-            m_texturePool.Clear();
-
-            m_texturePool.Add(m_textureA);
-            m_texturePool.Add(m_textureB);
-        }
-        else
-        {
-            Debug.LogWarning("referenceRenderTextureSetting is null.");
-        }
     }
 
     public void KillRenderTexturePool()
     {
-        if(m_textureA != null) DestroyImmediate(m_textureA);
-        if(m_textureB != null) DestroyImmediate(m_textureB);
+        if(_cameraSwitcherControlMixerBehaviour !=null) _cameraSwitcherControlMixerBehaviour.ResetCameraTarget();
     }
 
     private void OnDestroy()
     {
         if (_material != null) _material.SetFloat("_PlayableDirectorTime", 0f);
-        KillRenderTexturePool();
+        // KillRenderTexturePool();
         
     }
 }

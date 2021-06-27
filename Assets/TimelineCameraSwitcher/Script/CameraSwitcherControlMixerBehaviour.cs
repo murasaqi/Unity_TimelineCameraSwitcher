@@ -12,6 +12,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 {
     
     private List<TimelineClip> m_Clips;
+    private List<Camera> _cameras = new List<Camera>();
     private PlayableDirector m_Director;
     private Material m_CompositeMaterial;
     private CameraSwitcherControlTrack m_track;
@@ -42,22 +43,35 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     }
 
     public RawImage rawImage;
+    
+    
 
-
+    public void ResetCameraTarget()
+    {
+        foreach (var camera in _cameras)
+        {
+            Debug.Log(camera.name);
+            camera.targetTexture = null;
+        }
+    }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
         if (!compositeMaterial)
             return;
 
         compositeMaterial.SetFloat("_PlayableDirectorTime",(float)director.time);
-        
+        _cameras.Clear();
 
         int i = 0;
         foreach (TimelineClip clip in m_Clips)
         {
             var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
             var playableBehaviour = scriptPlayable.GetBehaviour();
-            if(playableBehaviour.camera != null)playableBehaviour.camera.enabled = false;
+            if (playableBehaviour.camera != null)
+            {
+                _cameras.Add(playableBehaviour.camera);
+                playableBehaviour.camera.enabled = false;
+            }
             i++;
         }
 
@@ -234,6 +248,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             }
             inputPort++;
         }
+        
+        
         
         
     }
