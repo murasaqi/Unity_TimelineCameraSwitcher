@@ -203,7 +203,29 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 }
                 else
                 {
-                    
+                    compositeMaterial.SetTexture("_TextureA",track.textureA);
+                    compositeMaterial.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
+                    compositeMaterial.SetTexture("_TextureB",track.textureA);
+                    compositeMaterial.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
+                    compositeMaterial.SetFloat("_CrossFade", inputWeight);
+                        
+                    var offsetPositionA = new Vector2(
+                        playableBehaviour.offsetPosition.x / rawImage.rectTransform.rect.width,
+                        playableBehaviour.offsetPosition.y / rawImage.rectTransform.rect.height);
+                        
+                    compositeMaterial.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
+                    compositeMaterial.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
+                    compositeMaterial.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
+                    compositeMaterial.SetFloat("_TimeScaleA",playableBehaviour.roughness);
+                    compositeMaterial.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
+                    compositeMaterial.SetVector("_OffsetPositionA",offsetPositionA);
+                        
+                    compositeMaterial.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
+                    compositeMaterial.SetVector("_NoiseSeedB",playableBehaviour.noiseSeed);
+                    compositeMaterial.SetVector("_NoiseScaleB",playableBehaviour.noiseScale);
+                    compositeMaterial.SetFloat("_TimeScaleB",playableBehaviour.roughness);
+                    compositeMaterial.SetVector("_RangeB",playableBehaviour.wiggleRange/100f);
+                    compositeMaterial.SetVector("_OffsetPositionB",offsetPositionA);
                 }
 
                 // Debug.Log($"<color=#00BFFF>{inputWeight} {clip.displayName}</color>");

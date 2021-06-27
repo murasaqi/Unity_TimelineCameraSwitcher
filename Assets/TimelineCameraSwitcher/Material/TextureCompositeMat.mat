@@ -77,7 +77,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureB:
-        m_Texture: {fileID: 8400000, guid: 2d2b636948b0c974ab05099645d64470, type: 2}
+        m_Texture: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -92,12 +92,13 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - Vector1_1: 0.39
     - Vector1_52ff9003f7c54665bfe45b9c377fff98: 0
     - Vector1_58c3db5c15a24f0c8c2ae95442c3748f: 1.05
     - _BumpScale: 1
-    - _CrossFade: 0.64800006
+    - _CrossFade: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -110,7 +111,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 22.833334
+    - _PlayableDirectorTime: 21.737211
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
