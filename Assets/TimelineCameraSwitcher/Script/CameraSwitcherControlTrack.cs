@@ -1,23 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Codice.Utils.Buffers;
+using PlasticGui;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
+
 [Serializable]
 [TrackColor(0.8700427f, 0.4803044f, 0.790566f)]
 [TrackClipType(typeof(CameraSwitcherControlClip))]
-// [TrackBindingType(typeof(TextureCompositorManager))]
+
 
 public class CameraSwitcherControlTrack : TrackAsset
 {
     [HideInInspector]public bool findMissingCameraInHierarchy = false;
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
-    // public RenderTexture referenceRenderTextureSetting;
+    // [Serializable] private SizeBufferPoolSizeSorter _depthState;
+    [SerializeField] private RenderTexture _referenceRenderTexture;
+    // [SerializeField]private int _dephBufferSize = 16;
+
     [SerializeField] public ExposedReference<RawImage> m_rawImage;
-    [SerializeField] private RenderTexture m_textureA;
-    [SerializeField] private RenderTexture m_textureB;
+    private RenderTexture m_textureA;
+    private RenderTexture m_textureB;
     private List<RenderTexture> m_texturePool;
 
     public RenderTexture textureA => m_textureA;
@@ -37,9 +44,9 @@ public class CameraSwitcherControlTrack : TrackAsset
 
        InitTexturePools();
 
-       // if(m_compositeMat)playableBehaviour.compositeMaterial = m_compositeMat;
-       
-        
+       m_textureA = new RenderTexture(_referenceRenderTexture);
+       m_textureB = new RenderTexture(_referenceRenderTexture);
+
         if (playableDirector != null)
         {
             playableBehaviour.director = playableDirector;
@@ -48,7 +55,6 @@ public class CameraSwitcherControlTrack : TrackAsset
         }
 
         return playable;    
-        // return ScriptPlayable<TextureCompositorControlMixerBehaviour>.Create (graph, inputCount);
     }
 
     public void InitTexturePools()
@@ -72,18 +78,8 @@ public class CameraSwitcherControlTrack : TrackAsset
 
     public void KillRenderTexturePool()
     {
-        // if (m_texturePool != null)
-        // {
-        //     while (m_texturePool.Count() > 0)
-        //     {
-        //         var last = m_texturePool.Last();
-        //         m_texturePool.Remove(last);
-        //         DestroyImmediate(last);
-        //         
-        //     }
-        //     
-        //     m_texturePool.Clear();
-        // }
+        if(m_textureA != null) DestroyImmediate(m_textureA);
+        if(m_textureB != null) DestroyImmediate(m_textureB);
     }
 
     private void OnDestroy()

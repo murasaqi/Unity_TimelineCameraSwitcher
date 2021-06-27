@@ -1516,6 +1516,8 @@
         "m_GuidSerialized": "ace573f6-4970-4a6c-959c-85d93bfe413e"
     },
     "m_Name": "NoiseSeed",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_63fb569c988c44269025ed4a52f47585",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -1560,6 +1562,8 @@
         "m_GuidSerialized": "2f05cc69-a933-4829-93a2-58f10907ddd9"
     },
     "m_Name": "Range",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_67e5f70f2051488e9c876035ad81a074",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -1939,6 +1943,8 @@
         "m_GuidSerialized": "7b6399d1-2966-455a-9e14-aaf1cbf7aa0a"
     },
     "m_Name": "Time",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_8496f20fbae642e682a11abd245a2dc1",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -2418,6 +2424,8 @@
         "m_GuidSerialized": "598eeff5-3df7-47a4-b495-44020682757f"
     },
     "m_Name": "NoiseScale",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_c392f53afe6749a28675ee2bdcf47d51",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
