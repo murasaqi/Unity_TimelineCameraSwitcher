@@ -1,9 +1,9 @@
 {
-  "name": "com.murasaqi.texture_compositor_control",
-  "displayName": "Texture Compositor Control",
+  "name": "com.murasaqi.camera_switcher_control",
+  "displayName": "Camera Switcher Control",
   "version": "0.1.2",
   "unity": "2020.1",
-  "description": "Texture Compositor Control",
+  "description": "Camera Switcher Control",
   "keywords": [
     "Timeline",
     "Camera"
