@@ -1,12 +1,12 @@
 {
   "name": "com.murasaqi.texture_compositor_control",
   "displayName": "Texture Compositor Control",
-  "version": "0.1.1",
-  "unity": "2019.3",
+  "version": "0.1.2",
+  "unity": "2020.1",
   "description": "Texture Compositor Control",
   "keywords": [
-    "Script",
-    "editorextensions"
+    "Timeline",
+    "Camera"
   ],
   "unityRelease": "7f1"
 }
