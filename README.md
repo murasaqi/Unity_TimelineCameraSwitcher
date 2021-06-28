@@ -7,9 +7,8 @@ UnityのTimeline上でカメラスイッチングを簡易的に行えるアー�
 URPでお使いいただけます。HDRPでもおそらく動きます。
 
 ## インストールガイド  
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/IY_4eE4b-B4/0.jpg)](https://www.youtube.com/watch?v=IY_4eE4b-B4)
+[youtube](https://www.youtube.com/watch?v=IY_4eE4b-B4)
   
-# 設定
 UnityProjectのディレクトリにあるPackages/manifest.jsonを開き  
 dependenciesに一行追加してください。
 ```
