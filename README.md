@@ -2,24 +2,33 @@
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)
 
-UnityのTimeline上でカメラスイッチングを簡易的に行えるアーティスト向けの拡張です。  
-映像やアニメーション制作において煩雑だったカメラワーク作成を大幅に簡略化することが可能です。
+UnityのTimeline上でカメラスイッチングを簡易的に行えるアーティスト向けの拡張です。    
+映像やアニメーション制作において煩雑だったカメラワーク作成を大幅に簡略化することが可能です。  
 URPでお使いいただけます。HDRPでもおそらく動きます。
 
 # 設定
+UnityProjectのディレクトリにあるPackages/manifest.jsonを開き  
+dependenciesに一行追加してください。
+```
+{
+"dependencies": {
+    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher",
+    ...
+}
+```
 
 ## Canvas
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/canvas_setting.png)  
-Canvasを作成しRawImage要素を作成して、Materialのみをアタッチします。
-MaterialにはShader Graph/Composite Shader をアタッチしてください。
+Canvasを作成しRawImage要素を作成して、Materialのみをアタッチします。  
+MaterialにはShader Graph/Composite Shader をアタッチしてください。  
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。
 　　
 ## Timeline
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/track_setting.gif)  
-CameraSwitcherControlTrackを追加して、Trackの設定欄に先程用意したRawImage要素とRenderTextureを2枚設定します。
-RenderTextureはご自身で使いたい設定のモノを2枚用意してアタッチしてください。
-あとはカメラをドロップしていけばClipが作成されます。
-クリップのブレンディングでリニアなフェードが可能です。
+CameraSwitcherControlTrackを追加して、Trackの設定欄に先程用意したRawImage要素とRenderTextureを2枚設定します。  
+RenderTextureはご自身で使いたい設定のモノを2枚用意してアタッチしてください。  
+あとはカメラをドロップしていけばClipが作成されます。  
+クリップのブレンディングでリニアなフェードが可能です。  
 基本的にUIをレンダリングするカメラ以外は全部こちらに配置しておいてください。
 　　
 ## Clip(Wiggler)
