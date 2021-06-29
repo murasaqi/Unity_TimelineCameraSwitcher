@@ -1,5 +1,5 @@
 # Unity_TimelineCameraSwitcher
-[![Unity 2020.3+](https://img.shields.io/badge/unity-2020.3%2B-blue.svg)](https://unity3d.com/jp/unity/qa/lts-releases?version=2020.3)
+[![Unity 2020.3+](https://img.shields.io/badge/Unity-2020.3%2B-blue.svg?logo=unity)](https://unity3d.com/jp/unity/qa/lts-releases?version=2020.3)
 
 > ## v0.1.2 (29/06/2021)
 > 
