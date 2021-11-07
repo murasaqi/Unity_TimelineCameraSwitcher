@@ -46,7 +46,6 @@ dependenciesに一行追加してください。
 Canvasを作成しRawImage要素を作成します。 
 MaterialにはShader Graph/Composite Shader をアタッチしてください。  
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。 -->
-　　
 ### Timeline
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
 CameraSwitcherControlTrackを追加して、レンダリング結果を表示したいRawImage要素をドロップします。  
