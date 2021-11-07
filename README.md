@@ -48,7 +48,8 @@ MaterialにはShader Graph/Composite Shader をアタッチしてください。
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。 -->
 ### Timeline
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/hierarchy.gif) 
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/hierarchy.gif)   
+
 CameraSwitcherControlTrackを追加して、レンダリング結果を表示したいRawImage要素をドロップします。  
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/trackInspector.jpg)  
