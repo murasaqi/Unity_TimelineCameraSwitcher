@@ -1,13 +1,22 @@
 # Unity_TimelineCameraSwitcher
+[![Unity 2020.3+](https://img.shields.io/badge/Unity-2020.3+-DCD0FF.svg?logo=unity&style=for-the-badge)](https://unity3d.com/jp/unity/qa/lts-releases?version=2020.3)
 
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)
+> ## v0.1.2 (29/06/2021)
+> 
+> - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.2)   
+<br>
+
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)  
 
 UnityのTimeline上でカメラスイッチングを簡易的に行えるアーティスト向けの拡張です。    
 映像やアニメーション制作において煩雑だったカメラワーク作成を大幅に簡略化することが可能です。  
-URPでお使いいただけます。HDRPでもおそらく動きます。  
-**とりあえずデモをすぐに触りたい人はリポジトリをCloneするか直接DLしてください。**
+**現状はURPのみでお使いいただけます。HDRPでもおそらく動きます。**
 
 ## インストールガイド  
+### UnityPackage版
+[UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.2)
+
+### PackageManager版
 [youtube](https://www.youtube.com/watch?v=IY_4eE4b-B4)
   
 UnityProjectのディレクトリにあるPackages/manifest.jsonを開き  
