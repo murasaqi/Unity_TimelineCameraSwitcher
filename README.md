@@ -41,6 +41,8 @@ dependenciesに一行追加してください。
 ```
 
 ## 設定
+
+[Demo　(Youtube)](https://www.youtube.com/watch?v=i62Uwq011UI)　　
 <!-- ### Canvas -->
 <!-- ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
 Canvasを作成しRawImage要素を作成します。 
