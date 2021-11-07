@@ -15,7 +15,7 @@ public class CameraSwitcherControlTrack : TrackAsset
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
     [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
     [SerializeField] private RenderTextureFormat m_renderTextureFormat;
-    [SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
+    [HideInInspector][SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
     public DepthList m_depth;
    
     private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
