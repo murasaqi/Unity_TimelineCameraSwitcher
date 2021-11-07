@@ -1,9 +1,9 @@
 # Unity_TimelineCameraSwitcher
 [![Unity 2020.3+](https://img.shields.io/badge/Unity-2020.3+-DCD0FF.svg?logo=unity&style=for-the-badge)](https://unity3d.com/jp/unity/qa/lts-releases?version=2020.3)
 
-> ## v0.1.2 (29/06/2021)
+> ## v0.1.3 (08/11/2021)
 > 
-> - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.2)   
+> - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.3)   
 <br>
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)  
