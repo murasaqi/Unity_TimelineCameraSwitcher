@@ -49,17 +49,16 @@ Example/PrefabディレクトリにPrefab化されたものを用意してある
 ### Timeline
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/hierarchy.gif)   
-
 CameraSwitcherControlTrackを追加して、レンダリング結果を表示したいRawImage要素をドロップします。  
-
+<br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/trackInspector.jpg)  
-レンダリング時の解像度やカラーフォーマットの変更はTrackのインスペクターで可能です。
-
+レンダリング時の解像度やカラーフォーマットの変更はTrackのインスペクターで可能です。  
+<br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/cameraDragToTrack.gif)  
 あとはカメラをHierarchyからドラッグしていけばClipが作成されます。  
 クリップのブレンディングでクロスフェードが可能です。  
-基本的にUIをレンダリングするカメラ以外は全部こちらに配置しておいてください。
-　　
+基本的にUIをレンダリングするカメラ以外は全部こちらに配置しておいてください。  
+<br>
 ### Clip(Wiggler)
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/clip_setting.gif)  
 Clipごとに手ブレを追加することが可能です。
