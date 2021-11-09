@@ -880,6 +880,8 @@
         "m_GuidSerialized": "f73eab09-2cad-467a-9973-61bdd4324706"
     },
     "m_Name": "noiseSeedA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_12efbed8ce8b464bb5ab77795902bc52",
     "m_OverrideReferenceName": "_NoiseSeedA",
     "m_GeneratePropertyBlock": true,
@@ -1254,7 +1256,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "wiggler",
+    "m_Name": "CameraSwticherWiggler",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1538,6 +1540,8 @@
         "m_GuidSerialized": "38c9691b-5c0c-4db8-ba1e-0266e5ac843f"
     },
     "m_Name": "TextureB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_TextureB",
     "m_GeneratePropertyBlock": true,
@@ -1611,6 +1615,8 @@
         "m_GuidSerialized": "00cb1fe7-b062-4255-8f1b-0fe8d5aafb30"
     },
     "m_Name": "TextureA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Texture2D_435a25c59cf748388a03d5a1ba1523f4",
     "m_OverrideReferenceName": "_TextureA",
     "m_GeneratePropertyBlock": true,
@@ -1912,6 +1918,8 @@
         "m_GuidSerialized": "1d4e2f4e-75fa-484e-a999-10602c686093"
     },
     "m_Name": "Time",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_52ff9003f7c54665bfe45b9c377fff98",
     "m_OverrideReferenceName": "_PlayableDirectorTime",
     "m_GeneratePropertyBlock": true,
@@ -1935,6 +1943,8 @@
         "m_GuidSerialized": "1471b4e9-dbce-42c1-a974-0efbda396c59"
     },
     "m_Name": "OffsetPositionB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_OffsetPositionB",
     "m_GeneratePropertyBlock": true,
@@ -2093,6 +2103,8 @@
         "m_GuidSerialized": "12393019-8c70-4a87-85dd-62954d811474"
     },
     "m_Name": "TimeScaleA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_58c3db5c15a24f0c8c2ae95442c3748f",
     "m_OverrideReferenceName": "_TimeScaleA",
     "m_GeneratePropertyBlock": true,
@@ -2264,6 +2276,8 @@
         "m_GuidSerialized": "4cb956d0-4670-48f8-9d4d-154fecd4b482"
     },
     "m_Name": "NoiseScaleB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_NoiseScaleB",
     "m_GeneratePropertyBlock": true,
@@ -2494,6 +2508,8 @@
         "m_GuidSerialized": "2944d6e5-7723-4e69-8d40-d583b4a63598"
     },
     "m_Name": "RangeB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_RangeB",
     "m_GeneratePropertyBlock": true,
@@ -2580,6 +2596,8 @@
         "m_GuidSerialized": "8669d992-e872-4e00-b0a7-98f4a162b97f"
     },
     "m_Name": "Fade",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_82c50b11505848f48bbd7439436a6939",
     "m_OverrideReferenceName": "_CrossFade",
     "m_GeneratePropertyBlock": true,
@@ -2603,6 +2621,8 @@
         "m_GuidSerialized": "47bf374b-2281-438e-aefe-91f89e0d45a9"
     },
     "m_Name": "NoiseScaleA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_85d14bb10d4647948d9689a1f356f36a",
     "m_OverrideReferenceName": "_NoiseScaleA",
     "m_GeneratePropertyBlock": true,
@@ -2626,6 +2646,8 @@
         "m_GuidSerialized": "80a4aa0e-62e3-4e6c-92a1-24970886bfff"
     },
     "m_Name": "RangeA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_8702686b77fe47e6bee7286a126dc481",
     "m_OverrideReferenceName": "_RangeA",
     "m_GeneratePropertyBlock": true,
@@ -2867,6 +2889,8 @@
         "m_GuidSerialized": "a6af60e2-cbd4-49c7-a64a-89614399f173"
     },
     "m_Name": "WigglePowerB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_WigglePowerB",
     "m_GeneratePropertyBlock": true,
@@ -3028,7 +3052,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "wiggler",
+    "m_Name": "CameraSwticherWiggler",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -3394,6 +3418,8 @@
         "m_GuidSerialized": "3b41e563-2be7-422d-abd0-88c0d601e6e3"
     },
     "m_Name": "OffsetPositionA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_c2165efa7c654798af5072cb642b261e",
     "m_OverrideReferenceName": "_OffsetPositionA",
     "m_GeneratePropertyBlock": true,
@@ -3487,6 +3513,8 @@
         "m_GuidSerialized": "e6a2aeb8-69c5-4c98-8494-3712b971edd8"
     },
     "m_Name": "WigglePowerA",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_ca3916ec89b240e3a9a3d8b844fe8549",
     "m_OverrideReferenceName": "_WigglePowerA",
     "m_GeneratePropertyBlock": true,
@@ -3564,6 +3592,8 @@
         "m_GuidSerialized": "ff54a90a-8eed-4995-a739-3a93b4e46800"
     },
     "m_Name": "noiseSeedB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_NoiseSeedB",
     "m_GeneratePropertyBlock": true,
@@ -3949,6 +3979,8 @@
         "m_GuidSerialized": "f0d402c3-4e73-4856-8304-2e26cfd505c3"
     },
     "m_Name": "TimeScaleB",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_TimeScaleB",
     "m_GeneratePropertyBlock": true,

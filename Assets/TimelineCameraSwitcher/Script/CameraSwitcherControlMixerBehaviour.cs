@@ -18,7 +18,15 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private bool m_FirstFrameHappened;
     private CameraSwitcherSettings m_CameraSwitcherSettings = null;
 
+    private float m_fps;
     
+  
+
+    internal float fps
+    {
+        get => m_fps;
+        set { m_fps = value; }
+    }
     
     internal PlayableDirector director
     {
@@ -105,6 +113,12 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         if(m_CameraSwitcherSettings.renderTextureA.width != m_track.width || m_CameraSwitcherSettings.renderTextureA.height != m_track.height) InitRenderTexture(true);
         if(m_CameraSwitcherSettings.renderTextureB.width != m_track.width || m_CameraSwitcherSettings.renderTextureB.height != m_track.height) InitRenderTexture(false);
         
+        var timelineAsset = director.playableAsset as TimelineAsset;
+       
+        fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
+        var offsetStartTime = (1f / fps) * m_track.m_prerenderingFrameCount;
+        
+        
         m_CompositeMaterial.SetFloat("_PlayableDirectorTime",(float)director.time);
         _cameras.Clear();
 
@@ -129,8 +143,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
            
             
-            var timelineAsset = director.playableAsset as TimelineAsset;
-            var fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
+           
             foreach (var clip in m_Clips)
             {
                 var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
@@ -177,7 +190,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
        
         int inputPort = 0;
-        
+
+
+        var currentDirectorTime = m_Director.time - offsetStartTime;
         foreach (TimelineClip clip in m_Clips)
         {
             
@@ -205,7 +220,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     var _playableBehaviour = _scriptPlayable.GetBehaviour();
                     
                     
-                    if (nextClip.start <= m_Director.time && m_Director.time <= nextClip.start + clip.duration )
+                    if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time <= nextClip.start + clip.duration )
                     {
                         _playableBehaviour.camera.enabled = true;
                         _playableBehaviour.camera.targetTexture = m_CameraSwitcherSettings.renderTextureB;

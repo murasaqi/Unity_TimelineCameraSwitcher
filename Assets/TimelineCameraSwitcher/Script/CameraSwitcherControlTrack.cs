@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -14,6 +15,7 @@ public class CameraSwitcherControlTrack : TrackAsset
     [HideInInspector]public bool findMissingCameraInHierarchy = false;
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
     [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
+    [SerializeField] public int m_prerenderingFrameCount = 3;
     [SerializeField] private RenderTextureFormat m_renderTextureFormat;
     [HideInInspector][SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
     public DepthList m_depth;
@@ -35,11 +37,13 @@ public class CameraSwitcherControlTrack : TrackAsset
         _cameraSwitcherControlMixerBehaviour = playableBehaviour;
         _cameraSwitcherControlMixerBehaviour.cameraSwitcherSettings = m_cameraSwitcherSettings;
         _cameraSwitcherControlMixerBehaviour.compositeMaterial = m_cameraSwitcherSettings.material;
-       InitTexturePools();
+        
+        InitTexturePools();
 
         if (playableDirector != null)
         {
             playableBehaviour.director = playableDirector;
+            playableBehaviour.fps = timelineAsset.editorSettings.fps;
             playableBehaviour.clips = GetClips().ToList();
             playableBehaviour.track = this;
         }
