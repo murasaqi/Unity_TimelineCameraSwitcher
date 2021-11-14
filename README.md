@@ -7,7 +7,9 @@
 <br>
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)  
-**※現状エディターのみでお使いいただけます。ビルド可能アップデートは近日公開予定です。**
+　　
+**※現状エディターのみでお使いいただけます。ビルド可能アップデートは近日公開予定です。**　　
+　　
 UnityのTimeline上でカメラスイッチングを簡易的に行えるアーティスト向けの拡張です。    
 映像やアニメーション制作において煩雑だったカメラワーク作成を大幅に簡略化することが可能です。  
 Cinemasceneとの併用も可能です。
