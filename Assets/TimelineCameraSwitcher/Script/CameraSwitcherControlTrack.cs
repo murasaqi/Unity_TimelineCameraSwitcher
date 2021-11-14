@@ -30,7 +30,9 @@ public class CameraSwitcherControlTrack : TrackAsset
 
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
+        
         var playableDirector = go.GetComponent<PlayableDirector>();
+     
         var playable = ScriptPlayable<CameraSwitcherControlMixerBehaviour>.Create (graph, inputCount);
         var playableBehaviour = playable.GetBehaviour();
         _cameraSwitcherControlMixerBehaviour = playableBehaviour;

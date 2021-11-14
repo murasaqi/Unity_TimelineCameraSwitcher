@@ -455,6 +455,7 @@ PlayableDirector:
     - 460dd39f4ec59334bba95bb443dfcc7f: {fileID: 1719454283}
     - 51240696dcc1550419c13979f730e714: {fileID: 1598200452}
     - d272460241c08284f9ce4d9baa3f4ab6: {fileID: 963194227}
+    - ae2a7f0f225543444be3e091d6cb3e7b: {fileID: 963194227}
     - cb2c0998131d254429b7638d37a65ddd: {fileID: 2013416889}
     - 447a7664a01d1bc4e9d8c1e89d838aeb: {fileID: 1719454283}
     - 384eb563b7282f0489e255dcd56d0ecb: {fileID: 963194227}
@@ -469,6 +470,7 @@ PlayableDirector:
     - a6c3af01429b4214d8e7dc12dd38e2a4: {fileID: 963194227}
     - c40ee0de8a9b5124dae7e59a01e6cfcf: {fileID: 1598200452}
     - 421cc219fd3a80842a5edd25c61e24f0: {fileID: 2084785978}
+    - d55de4bded163894f831f2bd80129864: {fileID: 1598200452}
     - abb494cd3cc87dd42a545932f185bf51: {fileID: 1719454283}
     - f713ec99ae81ee84eab6a39f1a50541c: {fileID: 963194227}
     - 70df8aaa8b8b09d4187c416ca067c879: {fileID: 2013416889}
@@ -548,7 +550,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1112044257}
-  m_LocalRotation: {x: 0.0032592425, y: -0.99548656, z: 0.037185024, w: 0.08725373}
+  m_LocalRotation: {x: 0.0028174212, y: -0.9962365, z: 0.035523638, w: 0.07901269}
   m_LocalPosition: {x: 0.5, y: 1.21, z: 3.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1350,7 +1352,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1530,7 +1532,7 @@ GameObject:
   - component: {fileID: 2065639648}
   - component: {fileID: 2065639647}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CameraSwitcherControl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1550,7 +1552,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSwitcherSettings: {fileID: 11400000, guid: 54e463b1fb982354d9d028e4737e4bb9,
     type: 2}
-  outPutTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
+  outPutRenderTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
+  outputRawImage: {fileID: 5620586369429494632}
 --- !u!4 &2065639648
 Transform:
   m_ObjectHideFlags: 0
@@ -1754,7 +1757,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1

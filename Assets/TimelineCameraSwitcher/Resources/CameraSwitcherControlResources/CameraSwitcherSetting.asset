@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: CameraSwitcherSetting
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 1f1a0ee1df4282543b7b05e5c6a510b3, type: 2}
-  shader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab, type: 3}
+  compositeShader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab,
+    type: 3}
+  preRenderingFrameCount: 3
   renderTextureA: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
   renderTextureB: {fileID: 8400000, guid: 57128d7fbf5cadd4c9e0c76dcb7b9cc0, type: 2}
+  resolution: {x: 1920, y: 1080}
