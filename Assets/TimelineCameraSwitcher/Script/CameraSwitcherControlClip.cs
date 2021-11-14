@@ -25,8 +25,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         return playable;
         
     }
-    
-    
+
+
     private void OnDestroy()
     {
         

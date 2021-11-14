@@ -16,7 +16,7 @@ public enum CameraSwitcherOutputTarget
     RawImage,
     RenderTexture
 }
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class CameraSwitcherControl : MonoBehaviour
 {
     
@@ -26,6 +26,8 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RenderTexture outPutRenderTarget;
     [SerializeField] public RawImage outputRawImage;
+
+    // [SerializeField] private Texture tex;
     private float m_fader;
     public RenderTexture renderTextureA => cameraSwitcherSettings.renderTextureA;
     public RenderTexture renderTextureB => cameraSwitcherSettings.renderTextureB;
@@ -46,30 +48,30 @@ public class CameraSwitcherControl : MonoBehaviour
             cameraSwitcherSettings.preRenderingFrameCount = value;
         }
     }
-    
+
+    private void Update()
+    {
+        Blit();
+    }
+
     public void Blit()
     {
-        if (outPutRenderTarget)
-        {
-            Debug.Log("update");
-            Graphics.Blit(null,outPutRenderTarget,cameraSwitcherSettings.material);
-            if (outputRawImage != null)
-            {
-                outputRawImage.texture = outPutRenderTarget;
-                outputRawImage.material = null;
-            }
-        }
-        else
-        {
-            Debug.Log("nul");
+      
+       
+       
             if (outputRawImage != null)
             {
                 outputRawImage.material = material;
                 outputRawImage.texture = null;
             }
-        }
+            
+            
+            
+            if (outPutRenderTarget)
+            {
+                Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
+            }
 
-        
-        
+
     }
 }
