@@ -6,10 +6,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 
-#if UNITY_EDITOR
 
-
-#endif
 
 // public enum CameraSwitcherOutputTarget
 // {
@@ -36,7 +33,25 @@ public class CameraSwitcherControl : MonoBehaviour
     public int height =>(int) cameraSwitcherSettings.resolution.y;
 
     public Material material => cameraSwitcherSettings.material;
+    
+    #if UNITY_EDITOR
+    [MenuItem("GameObject/Camera Switcher Control/Camera Switcher Control", false, 10)]
+    static void CreateCameraSwitcherControl(MenuCommand command) {
+        //　空のゲームオブジェクト作成
+        GameObject obj = new GameObject ("Camera Switcher Control");
+        //　ゲームオブジェクトの親の設定
+        GameObjectUtility.SetParentAndAlign (obj, command.context as GameObject);
+        //　Undo操作を加える(Ctrl+Zキーの操作に加える）
+        Undo.RegisterCreatedObjectUndo (obj, "Create " + obj.name);
+        //　初期位置を設定
+        obj.AddComponent<CameraSwitcherControl>();
+        //　作成したゲームオブジェクトを選択状態にする
+        Selection.activeObject = obj;
+    }
 
+    #endif
+    
+    
     public int preRenderingFrameCount
     {
         get

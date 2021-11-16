@@ -719,7 +719,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1112044257}
-  m_LocalRotation: {x: 0.0029924358, y: -0.9961312, z: 0.037542302, w: 0.079399996}
+  m_LocalRotation: {x: 0.0024987303, y: -0.99633497, z: 0.031287327, w: 0.07957128}
   m_LocalPosition: {x: 0.5, y: 1.21, z: 3.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1721,7 +1721,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSwitcherSettings: {fileID: 11400000, guid: 54e463b1fb982354d9d028e4737e4bb9,
     type: 2}
-  outputTarget: 1
   outPutRenderTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
   outputRawImage: {fileID: 5620586369429494632}
 --- !u!4 &2065639648
