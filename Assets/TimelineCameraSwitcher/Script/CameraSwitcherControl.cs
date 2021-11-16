@@ -11,11 +11,11 @@ using UnityEngine.UI;
 
 #endif
 
-public enum CameraSwitcherOutputTarget
-{
-    RawImage,
-    RenderTexture
-}
+// public enum CameraSwitcherOutputTarget
+// {
+//     RawImage,
+//     RenderTexture
+// }
 [ExecuteAlways]
 public class CameraSwitcherControl : MonoBehaviour
 {
@@ -23,7 +23,7 @@ public class CameraSwitcherControl : MonoBehaviour
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
 
-    [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
+    // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RenderTexture outPutRenderTarget;
     [SerializeField] public RawImage outputRawImage;
 
@@ -51,7 +51,22 @@ public class CameraSwitcherControl : MonoBehaviour
 
     private void Update()
     {
-        Blit();
+        if (outputRawImage != null)
+        {
+            outputRawImage.material = material;
+            outputRawImage.texture = null;
+        }
+
+    }
+
+    private void LateUpdate()
+    {
+        if (outPutRenderTarget)
+        {
+            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
+        }
+
+
     }
 
     public void Blit()
@@ -59,19 +74,14 @@ public class CameraSwitcherControl : MonoBehaviour
       
        
        
-            if (outputRawImage != null)
-            {
-                outputRawImage.material = material;
-                outputRawImage.texture = null;
-            }
+            // if (outputRawImage != null)
+            // {
+            //     outputRawImage.material = material;
+            //     outputRawImage.texture = null;
+            // }
             
             
             
-            if (outPutRenderTarget)
-            {
-                Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
-            }
-
-
+        
     }
 }

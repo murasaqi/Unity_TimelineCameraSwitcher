@@ -17,8 +17,8 @@ MonoBehaviour:
     camera: {fileID: 0}
     noiseSeed: {x: 1, y: 1}
     noiseScale: {x: 1, y: 1}
-    roughness: 11.4
-    wiggleRange: {x: 8.87, y: 4.78}
+    roughness: 1
+    wiggleRange: {x: 8.87, y: 10.41}
   camera:
     exposedName: c8e9f8c0a03806f41aca4646cc16e4fd
     defaultValue: {fileID: 0}
@@ -629,10 +629,10 @@ MonoBehaviour:
   template:
     wiggle: 1
     camera: {fileID: 0}
-    noiseSeed: {x: 11, y: 1}
-    noiseScale: {x: 1, y: 1}
-    roughness: 16.08
-    wiggleRange: {x: 7.49, y: 1}
+    noiseSeed: {x: 4.73, y: 3.58}
+    noiseScale: {x: 0.65, y: 0.65}
+    roughness: 0.47
+    wiggleRange: {x: 3.3, y: 9.35}
   camera:
     exposedName: 421cc219fd3a80842a5edd25c61e24f0
     defaultValue: {fileID: 0}
@@ -858,25 +858,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -2682,11 +2664,11 @@ MonoBehaviour:
   m_Name: TextureCompositorControlClip
   m_EditorClassIdentifier: 
   template:
-    wiggle: 0
+    wiggle: 1
     camera: {fileID: 0}
     noiseSeed: {x: 0.11, y: 0.21}
     noiseScale: {x: 26.22, y: 80.1}
-    roughness: 4
+    roughness: 0.93
     wiggleRange: {x: 7.5, y: 8.3}
   camera:
     exposedName: 3072d423c7884fb4b8513b897a1125e9
@@ -2903,8 +2885,8 @@ MonoBehaviour:
     camera: {fileID: 0}
     noiseSeed: {x: 1.17, y: 1.4}
     noiseScale: {x: 2, y: 2.35}
-    roughness: 1.54
-    wiggleRange: {x: 0.5, y: 0.89}
+    roughness: 0.14
+    wiggleRange: {x: 12.7, y: 0.89}
   camera:
     exposedName: cb2c0998131d254429b7638d37a65ddd
     defaultValue: {fileID: 0}

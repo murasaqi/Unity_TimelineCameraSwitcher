@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 3,
+    "m_SGVersion": 2,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "b386051e42804b919f68adfdecb8cd76",
     "m_Properties": [
@@ -53,12 +53,6 @@
         }
     ],
     "m_Keywords": [],
-    "m_Dropdowns": [],
-    "m_CategoryData": [
-        {
-            "m_Id": "d2afe8d941b14718bf861c0dd3225ac5"
-        }
-    ],
     "m_Nodes": [
         {
             "m_Id": "e5c4ea47f1014376829e80660caa1fff"
@@ -625,11 +619,10 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"fileID\":10210,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
             "m_Guid": ""
-        },
-        "preventRotation": false
+        }
     },
     "m_Path": "Shader Graphs",
-    "m_GraphPrecision": 0,
+    "m_ConcretePrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -892,8 +885,6 @@
     "m_DefaultReferenceName": "Vector2_12efbed8ce8b464bb5ab77795902bc52",
     "m_OverrideReferenceName": "_NoiseSeedA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1145,9 +1136,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -182.66659545898438,
-            "y": 728.0000610351563,
-            "width": 154.66665649414063,
+            "x": -187.3334197998047,
+            "y": 758.0000610351563,
+            "width": 154.6666717529297,
             "height": 34.0
         }
     },
@@ -1312,9 +1303,7 @@
         -566852455,
         -133833599,
         1620392356
-    ],
-    "m_Dropdowns": [],
-    "m_DropdownSelectedEntries": []
+    ]
 }
 
 {
@@ -1556,8 +1545,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_TextureB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1566,8 +1553,6 @@
         "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
         "m_Guid": ""
     },
-    "isMainTexture": false,
-    "useTilingAndOffset": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -1635,8 +1620,6 @@
     "m_DefaultReferenceName": "Texture2D_435a25c59cf748388a03d5a1ba1523f4",
     "m_OverrideReferenceName": "_TextureA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1645,8 +1628,6 @@
         "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
         "m_Guid": ""
     },
-    "isMainTexture": false,
-    "useTilingAndOffset": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -1703,8 +1684,7 @@
         "m_SerializableColors": []
     },
     "m_TextureType": 0,
-    "m_NormalMapSpace": 0,
-    "m_EnableGlobalMipBias": true
+    "m_NormalMapSpace": 0
 }
 
 {
@@ -1943,8 +1923,6 @@
     "m_DefaultReferenceName": "Vector1_52ff9003f7c54665bfe45b9c377fff98",
     "m_OverrideReferenceName": "_PlayableDirectorTime",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1970,8 +1948,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_OffsetPositionB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 1,
@@ -2132,8 +2108,6 @@
     "m_DefaultReferenceName": "Vector1_58c3db5c15a24f0c8c2ae95442c3748f",
     "m_OverrideReferenceName": "_TimeScaleA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2307,8 +2281,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_NoiseScaleB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2485,17 +2457,11 @@
     "m_ActiveSubTarget": {
         "m_Id": "4bf838d4d2aa4b0dae24430a0f4b0874"
     },
-    "m_AllowMaterialOverride": false,
     "m_SurfaceType": 0,
-    "m_ZTestMode": 4,
-    "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_RenderFace": 2,
+    "m_TwoSided": false,
     "m_AlphaClip": false,
-    "m_CastShadows": true,
-    "m_ReceiveShadows": true,
-    "m_CustomEditorGUI": "",
-    "m_SupportVFX": false
+    "m_CustomEditorGUI": ""
 }
 
 {
@@ -2547,8 +2513,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_RangeB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2637,8 +2601,6 @@
     "m_DefaultReferenceName": "Vector1_82c50b11505848f48bbd7439436a6939",
     "m_OverrideReferenceName": "_CrossFade",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2664,8 +2626,6 @@
     "m_DefaultReferenceName": "Vector2_85d14bb10d4647948d9689a1f356f36a",
     "m_OverrideReferenceName": "_NoiseScaleA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2691,8 +2651,6 @@
     "m_DefaultReferenceName": "Vector2_8702686b77fe47e6bee7286a126dc481",
     "m_OverrideReferenceName": "_RangeA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2936,8 +2894,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_WigglePowerB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -3143,9 +3099,7 @@
         -566852455,
         -133833599,
         1620392356
-    ],
-    "m_Dropdowns": [],
-    "m_DropdownSelectedEntries": []
+    ]
 }
 
 {
@@ -3230,8 +3184,7 @@
         "m_SerializableColors": []
     },
     "m_TextureType": 0,
-    "m_NormalMapSpace": 0,
-    "m_EnableGlobalMipBias": true
+    "m_NormalMapSpace": 0
 }
 
 {
@@ -3470,8 +3423,6 @@
     "m_DefaultReferenceName": "Vector2_c2165efa7c654798af5072cb642b261e",
     "m_OverrideReferenceName": "_OffsetPositionA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 1,
@@ -3567,8 +3518,6 @@
     "m_DefaultReferenceName": "Vector1_ca3916ec89b240e3a9a3d8b844fe8549",
     "m_OverrideReferenceName": "_WigglePowerA",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -3705,8 +3654,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_NoiseSeedB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -4094,8 +4041,6 @@
     "m_DefaultReferenceName": "",
     "m_OverrideReferenceName": "_TimeScaleB",
     "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,

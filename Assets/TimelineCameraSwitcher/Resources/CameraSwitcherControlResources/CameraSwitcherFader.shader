@@ -5,7 +5,8 @@ Shader "Unlit/CameraSwitcherFader"
         _TextureA ("_TextureA", 2D) = "white" {}
         _TextureB ("_TextureA", 2D) = "white" {}
         _CrossFade("CrossFade", Range(0,1)) = 0
-        [ShowAsVector2] _Wiggler("Wiggler", Vector) = (0,0,0,0)
+        _Wiggler("Wiggler", Vector) = (0,0,0,0)
+        _WigglerRange("_WigglerRange",Vector) = (0,0,0,0)
     }
     SubShader
     {
@@ -68,7 +69,7 @@ Shader "Unlit/CameraSwitcherFader"
                 float2 uv_a = r+pivot_uv;
 
 
-                float scaleB = 1.-_WigglerRange.x;
+                float scaleB = 1.-_WigglerRange.y;
                 float2 r_b = (i.uv - pivot_uv) * scaleB;
                 float2 uv_b = r_b+pivot_uv;
                 float4  colA = tex2D(_TextureA, uv_a+_Wiggler.xy);
