@@ -1136,9 +1136,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -182.66659545898438,
-            "y": 728.0000610351563,
-            "width": 154.66665649414063,
+            "x": -187.3334197998047,
+            "y": 758.0000610351563,
+            "width": 154.6666717529297,
             "height": 34.0
         }
     },
@@ -1550,7 +1550,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"34f3db45dab6b6749803d2a103ed08fb\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
         "m_Guid": ""
     },
     "m_Modifiable": true,
@@ -1625,7 +1625,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":8400000,\"guid\":\"2d35b5740aae8ff4d9e27e4e4e1839ad\",\"type\":2}}",
+        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
         "m_Guid": ""
     },
     "m_Modifiable": true,
@@ -2451,7 +2451,7 @@
 }
 
 {
-    "m_SGVersion": 0,
+    "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "72a7b7d584cd4448a9f4b7d79bfe63ab",
     "m_ActiveSubTarget": {
@@ -3543,6 +3543,63 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "d2afe8d941b14718bf861c0dd3225ac5",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "435a25c59cf748388a03d5a1ba1523f4"
+        },
+        {
+            "m_Id": "3bb6fb5fafed459690902e63092499ac"
+        },
+        {
+            "m_Id": "82c50b11505848f48bbd7439436a6939"
+        },
+        {
+            "m_Id": "12efbed8ce8b464bb5ab77795902bc52"
+        },
+        {
+            "m_Id": "58c3db5c15a24f0c8c2ae95442c3748f"
+        },
+        {
+            "m_Id": "85d14bb10d4647948d9689a1f356f36a"
+        },
+        {
+            "m_Id": "8702686b77fe47e6bee7286a126dc481"
+        },
+        {
+            "m_Id": "d5e64f68a88247459bc794c68b568ca0"
+        },
+        {
+            "m_Id": "f4a6a0b5e79d4ffd93a784d9bbb1e768"
+        },
+        {
+            "m_Id": "6b4c72a88fd14cf0b70638901e197df2"
+        },
+        {
+            "m_Id": "77e759580817479aaa4251b07e95b43d"
+        },
+        {
+            "m_Id": "52ff9003f7c54665bfe45b9c377fff98"
+        },
+        {
+            "m_Id": "ca3916ec89b240e3a9a3d8b844fe8549"
+        },
+        {
+            "m_Id": "90e8ed06515f4afdbdac5d3dce9be4b1"
+        },
+        {
+            "m_Id": "c2165efa7c654798af5072cb642b261e"
+        },
+        {
+            "m_Id": "53522dd4f1134923b94dcedd79fa9e09"
+        }
+    ]
 }
 
 {

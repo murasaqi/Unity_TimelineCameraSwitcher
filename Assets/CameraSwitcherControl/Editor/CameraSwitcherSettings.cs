@@ -6,9 +6,12 @@ public class CameraSwitcherSettings : ScriptableObject
 {
     // Start is called before the first frame update
     [SerializeField] public Material material;
-    [SerializeField] public Shader shader;
+    [SerializeField] public Shader compositeShader;
+    // [SerializeField] public Shader wigglerShader;
+    [SerializeField] public int preRenderingFrameCount = 3;
     [SerializeField] public RenderTexture renderTextureA;
     [SerializeField] public RenderTexture renderTextureB;
-    
+    [SerializeField] public Vector2 resolution = new Vector2(1920, 1080);
+
 
 }
