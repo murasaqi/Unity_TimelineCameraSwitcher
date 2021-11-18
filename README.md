@@ -53,18 +53,22 @@ Example/PrefabディレクトリにPrefab化されたものを用意してある
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/addHierarchy.GIF)  
 CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  
 必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
+
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.GIF)   
 CameraSwitcherControlにプレビューを表示したいRawImage要素をアタッチしてください。  
 RenderTexture要素をアタッチすると、そちらにも同時に描写結果を書き込むことが可能です。
+
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/trackInspector.jpg)  
-レンダリング時の解像度やカラーフォーマットの変更はTrackのインスペクターで可能です。  
+レンダリング時の解像度やカラーフォーマットの変更はTrackのインスペクターで可能です。 
+
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/cameraDragToTrack.gif)  
 あとはカメラをHierarchyからドラッグしていけばClipが作成されます。  
 クリップのブレンディングでクロスフェードが可能です。  
 基本的にUIをレンダリングするカメラ以外は全部こちらに配置しておいてください。  
+
 <br>
 ### Clip(Wiggler)
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/clip_setting.gif)  
