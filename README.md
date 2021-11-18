@@ -51,8 +51,8 @@ MaterialにはShader Graph/Composite Shader をアタッチしてください。
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。 -->
 ### Camera Switcher Control
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/addHierarchy.GIF)  
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/CreateSettings.GIF)   
-CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
+CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  
+必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.GIF)   
 CameraSwitcherControlにプレビューを表示したいRawImage要素をアタッチしてください。  
