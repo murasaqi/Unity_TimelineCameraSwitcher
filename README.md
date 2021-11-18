@@ -54,7 +54,7 @@ Example/PrefabディレクトリにPrefab化されたものを用意してある
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/CreateSettings.GIF)   
 CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
 <br>
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.gif)   
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.GIF)   
 CameraSwitcherControlにプレビューを表示したいRawImage要素をアタッチしてください。  
 RenderTexture要素をアタッチすると、そちらにも同時に描写結果を書き込むことが可能です。
 <br>
