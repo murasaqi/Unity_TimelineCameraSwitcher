@@ -50,8 +50,8 @@ Canvasを作成しRawImage要素を作成します。
 MaterialにはShader Graph/Composite Shader をアタッチしてください。  
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。 -->
 ### Camera Switcher Control
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/addHierarchy.gif)  
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/CreateSettings.gif)   
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/addHierarchy.GIF)  
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/CreateSettings.GIF)   
 CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.gif)   
