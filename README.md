@@ -3,7 +3,7 @@
 
 > ## v0.1.3 (08/11/2021)
 > 
-> - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.3)   
+> - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.4)   
 <br>
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)  
@@ -26,7 +26,7 @@ Add package from git URL
 ```
 を選択し
 ```
-https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.3
+https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.4
 ```
 を入力することで追加できます
 
@@ -36,7 +36,7 @@ dependenciesに一行追加してください。
 ```
 {
 "dependencies": {
-    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.3",
+    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.4",
     ...
 }
 ```
