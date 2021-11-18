@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-818852642842878503
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -7,8 +20,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: composite
-  m_Shader: {fileID: 4800000, guid: 7d8d61752029a0f469a36f682186a972, type: 3}
+  m_Name: TextureCompositeMat
+  m_Shader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab,
+    type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -40,7 +54,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
+        m_Texture: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexA:
@@ -71,16 +85,12 @@ Material:
         m_Texture: {fileID: 8400000, guid: 2d2b636948b0c974ab05099645d64470, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Texture:
-        m_Texture: {fileID: 2800000, guid: 9470468fda72f4773a90a0306decbf0f, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _TextureA:
-        m_Texture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+        m_Texture: {fileID: 8400000, guid: 2d35b5740aae8ff4d9e27e4e4e1839ad, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureB:
-        m_Texture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+        m_Texture: {fileID: 8400000, guid: 57128d7fbf5cadd4c9e0c76dcb7b9cc0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -115,11 +125,13 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _PlayableDirectorTime: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeScaleA: 0.47
-    - _TimeScaleB: 0.47
+    - _TimeScaleA: 0.1
+    - _TimeScaleB: 0.1
     - _UVSec: 0
     - _WigglePowerA: 1
     - _WigglePowerB: 1
@@ -134,17 +146,14 @@ Material:
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseScaleA: {r: 0.65, g: 0.65, b: 0, a: 0}
-    - _NoiseScaleB: {r: 0.65, g: 0.65, b: 0, a: 0}
-    - _NoiseSeedA: {r: 4.73, g: 3.58, b: 0, a: 0}
-    - _NoiseSeedB: {r: 4.73, g: 3.58, b: 0, a: 0}
-    - _OffsetPositionA: {r: 0.00012239584, g: 0.00009722222, b: 0, a: 0}
-    - _OffsetPositionB: {r: -0.000026041667, g: 0, b: 0, a: 0}
-    - _RangeA: {r: 0.033, g: 0.0935, b: 0, a: 0}
-    - _RangeB: {r: 0.033, g: 0.0935, b: 0, a: 0}
-    - _Wiggler: {r: 0.002645859, g: -0.021225303, b: 0.002645859, a: -0.021225303}
-    - _WigglerA: {r: 0, g: 0, b: 0, a: 0}
-    - _WigglerRange: {r: 0.0935, g: 0.0935, b: 0, a: 0}
+    - _NoiseScaleA: {r: 1.5, g: 1.57, b: 0, a: 0}
+    - _NoiseScaleB: {r: 1.5, g: 1.57, b: 0, a: 0}
+    - _NoiseSeedA: {r: 0.36, g: 0.43, b: 0, a: 0}
+    - _NoiseSeedB: {r: 0.36, g: 0.43, b: 0, a: 0}
+    - _OffsetPositionA: {r: 0, g: 0, b: 0, a: 0}
+    - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
+    - _RangeA: {r: 0.0232, g: 0.024, b: 0, a: 0}
+    - _RangeB: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []

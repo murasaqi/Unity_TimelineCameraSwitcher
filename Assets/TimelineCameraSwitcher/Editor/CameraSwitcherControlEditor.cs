@@ -107,9 +107,9 @@ public class CameraSwitcherControlEditor : Editor {
                 // var exportPath_compositShader = "Assets/CameraSwitcherSettings/CameraSwitcherCompositeShader.shadergraph";
 
                 var asset = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath, typeof(CameraSwitcherSettings));
-                var rtA = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
-                var rtB = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
-                var mat = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath_compositeMat, typeof(Material));
+                var rtA = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
+                var rtB = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
+                var mat = (Material)AssetDatabase.LoadAssetAtPath(exportPath_compositeMat, typeof(Material));
                 // var shaderGraph = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath_compositShader, typeof(Shader));
                 
                 if (asset == null){

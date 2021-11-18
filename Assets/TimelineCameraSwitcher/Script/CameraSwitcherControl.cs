@@ -21,8 +21,8 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
 
     // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
-    [SerializeField] public RenderTexture outPutRenderTarget;
     [SerializeField] public RawImage outputRawImage;
+    [SerializeField] public RenderTexture outPutRenderTarget;
 
     // [SerializeField] private Texture tex;
     private float m_fader;
@@ -32,6 +32,8 @@ public class CameraSwitcherControl : MonoBehaviour
     public int widht => (int)cameraSwitcherSettings.resolution.x;
     public int height =>(int) cameraSwitcherSettings.resolution.y;
 
+    
+    
     public Material material => cameraSwitcherSettings.material;
     
     #if UNITY_EDITOR

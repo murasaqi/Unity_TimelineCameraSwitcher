@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b658b8f90533d0040bfde6811b76345b, type: 3}
-  m_Name: cameraSwitcherSettings
+  m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
-  compositeShader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab,
-    type: 3}
+  material: {fileID: 0}
+  compositeShader: {fileID: 0}
   preRenderingFrameCount: 3
-  renderTextureA: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
-  renderTextureB: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
+  renderTextureA: {fileID: 0}
+  renderTextureB: {fileID: 0}
   resolution: {x: 1920, y: 1080}

@@ -43,16 +43,20 @@ dependenciesに一行追加してください。
 
 ## 設定
 
-[Demo　(Youtube)](https://www.youtube.com/watch?v=i62Uwq011UI)　　
+<!-- [Demo　(Youtube)](https://www.youtube.com/watch?v=i62Uwq011UI)　　 -->
 <!-- ### Canvas -->
 <!-- ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
 Canvasを作成しRawImage要素を作成します。 
 MaterialにはShader Graph/Composite Shader をアタッチしてください。  
 Example/PrefabディレクトリにPrefab化されたものを用意してあるのでSceneに配置して利用することが可能です。 -->
-### Timeline
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/AddTrack.gif)  
-![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/hierarchy.gif)   
-CameraSwitcherControlTrackを追加して、レンダリング結果を表示したいRawImage要素をドロップします。  
+### Camera Switcher Control
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/addHierarchy.gif)  
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/CreateSettings.gif)   
+CameraSwitcherControlをHierarchy上に追加し、CreateSettingsボタンを押して初期化してください。  必要なアセットが ```Assets/CameraSwitcherSettings ``` 以下に作成されます。
+<br>
+![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/setTimeline.gif)   
+CameraSwitcherControlにプレビューを表示したいRawImage要素をアタッチしてください。  
+RenderTexture要素をアタッチすると、そちらにも同時に描写結果を書き込むことが可能です。
 <br>
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/trackInspector.jpg)  
 レンダリング時の解像度やカラーフォーマットの変更はTrackのインスペクターで可能です。  
