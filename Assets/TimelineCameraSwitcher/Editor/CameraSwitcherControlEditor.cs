@@ -25,8 +25,7 @@ public class CameraSwitcherControlEditor : Editor {
             {
                 foreach (var package in LRequest.Result)
                 {
-                    // 現在、プロジェクトにインストールされていて、ビルトインでもなく
-                    // すでに埋め込まれているものでもないパッケージのみを取得します
+                    
                     if (package.isDirectDependency && package.source
                         != PackageSource.BuiltIn && package.source
                         != PackageSource.Embedded)
@@ -72,12 +71,12 @@ public class CameraSwitcherControlEditor : Editor {
     /// InspectorのGUIを更新
     /// </summary>
     public override void OnInspectorGUI(){
-        //元のInspector部分を表示
+        
         
         CameraSwitcherControl cameraSwitcherControl = target as CameraSwitcherControl;
         
-        if (cameraSwitcherControl.cameraSwitcherSettings == null)
-        {
+        // if (cameraSwitcherControl.cameraSwitcherSettings == null)
+        // {
             
             if (GUILayout.Button("Create settings"))
             {
@@ -174,12 +173,12 @@ public class CameraSwitcherControlEditor : Editor {
                 
                 
             }
-        }
-        else
-        {
-            base.OnInspectorGUI ();
-        }
-       
+       //  }
+       //  else
+       //  {
+       //      
+       //  }   
+       base.OnInspectorGUI ();
 
         //targetを変換して対象を取得
        
