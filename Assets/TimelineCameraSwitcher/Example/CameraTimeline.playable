@@ -1263,7 +1263,7 @@ MonoBehaviour:
     m_Start: 17.216666666666665
     m_ClipIn: 0
     m_Asset: {fileID: -7360027557825784645}
-    m_Duration: 4.433333333333341
+    m_Duration: 2.6833333333333336
     m_TimeScale: 1
     m_ParentTrack: {fileID: -6808278027765936826}
     m_EaseInDuration: 0
@@ -2916,7 +2916,7 @@ MonoBehaviour:
   m_Name: TextureCompositorControlClip
   m_EditorClassIdentifier: 
   template:
-    wiggle: 1
+    wiggle: 0
     camera: {fileID: 0}
     noiseSeed: {x: 0.11, y: 0.21}
     noiseScale: {x: 26.22, y: 80.1}
@@ -3137,8 +3137,8 @@ MonoBehaviour:
     camera: {fileID: 0}
     noiseSeed: {x: 1.17, y: 1.4}
     noiseScale: {x: 2, y: 2.35}
-    roughness: 0.14
-    wiggleRange: {x: 12.7, y: 0.89}
+    roughness: 1.33
+    wiggleRange: {x: 5, y: 5.24}
   camera:
     exposedName: cb2c0998131d254429b7638d37a65ddd
     defaultValue: {fileID: 0}
