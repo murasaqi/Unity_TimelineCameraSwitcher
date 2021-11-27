@@ -80,24 +80,18 @@ public class CameraSwitcherControlEditor : Editor {
             
             if (GUILayout.Button("Create settings"))
             {
+                
+                var path = EditorUtility.OpenFilePanel("Export directory", "", "CSV");
+                if (string.IsNullOrEmpty(path))
+                    return;
+                Debug.Log(path);
                 var baseSettings = Resources.Load<CameraSwitcherSettings>("CameraSwitcherControlResources/CameraSwitcherSetting");
                 var setting = CreateInstance<CameraSwitcherSettings>();
                 
                 var inputCameraA = new RenderTexture(1920, 1080,24);
                 var inputCameraB = new RenderTexture(1920, 1080,24);
                 var compoMat = new Material(baseSettings.material);
-                // var shaderGraph = 
-                if (!AssetDatabase.IsValidFolder("Assets/CameraSwitcherSettings"))
-                {
-                    string path = "Assets/CameraSwitcherSettings/";
-
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-
-                    AssetDatabase.ImportAsset(path);
-                }
+                
 
                 var exportPath = "Assets/CameraSwitcherSettings/cameraSwitcherSettings.asset";
                 var exportPath_rtA = "Assets/CameraSwitcherSettings/inputCameraA.asset";

@@ -14,16 +14,16 @@ public class CameraSwitcherControlTrack : TrackAsset
 {
     [HideInInspector]public bool findMissingCameraInHierarchy = false;
     [HideInInspector]public bool fixMissingPrefabByCameraName = false;
-    [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
-    [SerializeField] public int m_prerenderingFrameCount = 3;
-    [SerializeField] private RenderTextureFormat m_renderTextureFormat;
+    // [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
+    // [SerializeField] public int m_prerenderingFrameCount = 3;
+    // [SerializeField] private RenderTextureFormat m_renderTextureFormat;
     // [SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
     [SerializeField]public DepthList m_depth;
    
     private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
-    public int width => (int)m_resolution.x;
-    public int height => (int)m_resolution.y;
-    public RenderTextureFormat renderTextureFormat => m_renderTextureFormat;
+    // public int width => (int)m_resolution.x;
+    // public int height => (int)m_resolution.y;
+    // public RenderTextureFormat renderTextureFormat => m_renderTextureFormat;
 
     // public CameraSwitcherSettings cameraSwitcherSettings => m_cameraSwitcherSettings;
     public DepthList depthList => m_depth;

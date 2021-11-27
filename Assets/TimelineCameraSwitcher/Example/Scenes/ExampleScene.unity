@@ -405,7 +405,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -543,6 +543,7 @@ PlayableDirector:
     - 51240696dcc1550419c13979f730e714: {fileID: 1598200452}
     - d272460241c08284f9ce4d9baa3f4ab6: {fileID: 963194227}
     - cb2c0998131d254429b7638d37a65ddd: {fileID: 2013416889}
+    - 43fe35c3fa091de49aaa3275ca683161: {fileID: 963194227}
     - 447a7664a01d1bc4e9d8c1e89d838aeb: {fileID: 1719454283}
     - 384eb563b7282f0489e255dcd56d0ecb: {fileID: 963194227}
     - c8e9f8c0a03806f41aca4646cc16e4fd: {fileID: 2082829445}
@@ -556,6 +557,7 @@ PlayableDirector:
     - a6c3af01429b4214d8e7dc12dd38e2a4: {fileID: 963194227}
     - c40ee0de8a9b5124dae7e59a01e6cfcf: {fileID: 1598200452}
     - 421cc219fd3a80842a5edd25c61e24f0: {fileID: 2084785978}
+    - 91fa1cba486f70d41b31cbab8d7b777e: {fileID: 963194227}
     - abb494cd3cc87dd42a545932f185bf51: {fileID: 1719454283}
     - f713ec99ae81ee84eab6a39f1a50541c: {fileID: 963194227}
 --- !u!4 &982157259
@@ -1162,7 +1164,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719454281}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1188,7 +1190,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1414,6 +1416,10 @@ MonoBehaviour:
     type: 2}
   outputRawImage: {fileID: 5620586369429494632}
   outPutRenderTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
+  resolution: {x: 1920, y: 1080}
+  prerenderingFrameCount: 3
+  renderTextureFormat: 0
+  depth: 0
 --- !u!4 &1813787477
 Transform:
   m_ObjectHideFlags: 0
@@ -2732,6 +2738,16 @@ PrefabInstance:
     - target: {fileID: 5620586370151806749, guid: 67aee6f49de32fc4ea4d52a539ede689,
         type: 3}
       propertyPath: canvasImageWiggler
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5620586370151806751, guid: 67aee6f49de32fc4ea4d52a539ede689,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5620586370151806751, guid: 67aee6f49de32fc4ea4d52a539ede689,
+        type: 3}
+      propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5620586371106577705, guid: 67aee6f49de32fc4ea4d52a539ede689,
