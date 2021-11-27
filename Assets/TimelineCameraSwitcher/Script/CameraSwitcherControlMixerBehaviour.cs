@@ -56,7 +56,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     {
         foreach (var camera in _cameras)
         {
-            Debug.Log(camera.name);
+            // Debug.Log(camera.name);
             camera.targetTexture = null;
         }
     }
