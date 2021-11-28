@@ -86,11 +86,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         if (m_TrackBinding.outPutRenderTarget != null)
         {
-            m_TrackBinding.outPutRenderTarget.Release();
-            m_TrackBinding.outPutRenderTarget.format= m_track.renderTextureFormat;
-            m_TrackBinding.outPutRenderTarget.depth = depth;
-            m_TrackBinding.outPutRenderTarget.width = m_track.width;
-            m_TrackBinding.outPutRenderTarget.height = m_track.height;
+            // m_TrackBinding.outPutRenderTarget.Release();
+            // m_TrackBinding.outPutRenderTarget.format= m_track.renderTextureFormat;
+            // m_TrackBinding.outPutRenderTarget.depth = depth;
+            // m_TrackBinding.outPutRenderTarget.width = m_track.width;
+            // m_TrackBinding.outPutRenderTarget.height = m_track.height;
         }
         
         
@@ -233,25 +233,16 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     {
                         if (_playableBehaviour.camera != playableBehaviour.camera)
                         {
-
-
                             _playableBehaviour.camera.enabled = true;
                             _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
                             m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
-                            // var offsetPositionA = new Vector2(
-                            //     playableBehaviour.offsetPosition.x / m_track.width,
-                            //     playableBehaviour.offsetPosition.y / m_track.height);
+                           
                             m_TrackBinding.material.SetFloat("_WigglePowerA", playableBehaviour.wiggle ? 1f : 0f);
                             m_TrackBinding.material.SetVector("_NoiseSeedA", playableBehaviour.noiseSeed);
                             m_TrackBinding.material.SetVector("_NoiseScaleA", playableBehaviour.noiseScale);
                             m_TrackBinding.material.SetFloat("_TimeScaleA", playableBehaviour.roughness);
                             m_TrackBinding.material.SetVector("_RangeA", playableBehaviour.wiggleRange / 100f);
-                            // m_TrackBinding.material.SetVector("_OffsetPositionA",offsetPositionA);
-
-
-                            // var offsetPositionB = new Vector2(
-                            //     _playableBehaviour.offsetPosition.x / m_track.width,
-                            //     _playableBehaviour.offsetPosition.y / m_track.height);
+                           
                             m_TrackBinding.material.SetTexture("_TextureB", m_TrackBinding.renderTextureB);
                             m_TrackBinding.material.SetFloat("_WigglePowerB", _playableBehaviour.wiggle ? 1f : 0f);
                             m_TrackBinding.material.SetVector("_NoiseSeedB", _playableBehaviour.noiseSeed);
@@ -269,33 +260,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime);
 
                         }
+                        else
+                        {
+                            SelectSingleCamera(playableBehaviour, inputWeight);
+                            wigglerRange = new Vector2(
+                                Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
+                                Math.Max(_playableBehaviour.wiggleRange.x, _playableBehaviour.wiggleRange.y)
+                            );
+                            wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime);
+                        }
 
                     }
                     else
                     {
-                        m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
-                        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
-                        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
-                        
-                        // var offsetPositionA = new Vector2(
-                        //     playableBehaviour.offsetPosition.x / m_track.width,
-                        //     playableBehaviour.offsetPosition.y / m_track.height);
-                        
-                        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
-                        m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
-                        m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
-                        m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
-                        // m_TrackBinding.material.SetVector("_OffsetPositionA",offsetPositionA);
-                        
-                        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetVector("_NoiseSeedB",playableBehaviour.noiseSeed);
-                        m_TrackBinding.material.SetVector("_NoiseScaleB",playableBehaviour.noiseScale);
-                        m_TrackBinding.material.SetFloat("_TimeScaleB",playableBehaviour.roughness);
-                        m_TrackBinding.material.SetVector("_RangeB",playableBehaviour.wiggleRange/100f);
-                        // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
+                        SelectSingleCamera(playableBehaviour,inputWeight);
                       
                         wigglerRange = new Vector2(
                             Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
@@ -307,30 +285,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 }
                 else
                 {
-                    m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
-                    m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-                    m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
-                    m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-                    m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
-                        
-                    // var offsetPositionA = new Vector2(
-                    //     playableBehaviour.offsetPosition.x / m_track.width,
-                    //     playableBehaviour.offsetPosition.y / m_track.height);
-                        
-                    m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-                    m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
-                    m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
-                    m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
-                    m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
-                    // m_TrackBinding.material.SetVector("_OffsetPositionA",offsetPositionA);
-                        
-                    m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-                    m_TrackBinding.material.SetVector("_NoiseSeedB",playableBehaviour.noiseSeed);
-                    m_TrackBinding.material.SetVector("_NoiseScaleB",playableBehaviour.noiseScale);
-                    m_TrackBinding.material.SetFloat("_TimeScaleB",playableBehaviour.roughness);
-                    m_TrackBinding.material.SetVector("_RangeB",playableBehaviour.wiggleRange/100f);
-                    // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
-
+                    SelectSingleCamera(playableBehaviour,inputWeight);
                    
                     wigglerRange = new Vector2(
                         Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
@@ -351,6 +306,30 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         // {
         //     m_TrackBinding.Blit();
         // }
+        
+    }
+
+    private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour,float inputWeight )
+    {
+         m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
+        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
+        m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
+        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
+        m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
+      
+        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
+        m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
+        m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
+        m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
+        m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
+        // m_TrackBinding.material.SetVector("_OffsetPositionA",offsetPositionA);
+        
+        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
+        m_TrackBinding.material.SetVector("_NoiseSeedB",playableBehaviour.noiseSeed);
+        m_TrackBinding.material.SetVector("_NoiseScaleB",playableBehaviour.noiseScale);
+        m_TrackBinding.material.SetFloat("_TimeScaleB",playableBehaviour.roughness);
+        m_TrackBinding.material.SetVector("_RangeB",playableBehaviour.wiggleRange/100f);
+        // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
         
     }
 
