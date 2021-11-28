@@ -4,7 +4,7 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 [Serializable]
-public class CameraSwitcherControlBehaviour : PlayableBehaviour
+public class TimelineCameraSwitcherBehaviour : PlayableBehaviour
 {
     public bool wiggle;
     [HideInInspector][SerializeField] public Camera camera;

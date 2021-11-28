@@ -6,11 +6,11 @@ using UnityEngine.Timeline;
 
 [Serializable]
 
-public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
+public class TimelineCameraSwticherClip : PlayableAsset, ITimelineClipAsset
 {
-    [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
+    [SerializeField] TimelineCameraSwitcherBehaviour template = new TimelineCameraSwitcherBehaviour ();
     [SerializeField] ExposedReference<Camera> camera;
-    private CameraSwitcherControlBehaviour clone;
+    private TimelineCameraSwitcherBehaviour clone;
    
     public ClipCaps clipCaps
     {
@@ -19,7 +19,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 
     public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
     {
-        var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template);
+        var playable = ScriptPlayable<TimelineCameraSwitcherBehaviour>.Create (graph, template);
         clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         return playable;

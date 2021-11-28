@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: composite
-  m_Shader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 7d8d61752029a0f469a36f682186a972, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -124,14 +123,14 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 11.797085
+    - _PlayableDirectorTime: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeScaleA: 1
-    - _TimeScaleB: 1
+    - _TimeScaleA: 0.27
+    - _TimeScaleB: 0.27
     - _UVSec: 0
     - _WigglePowerA: 1
     - _WigglePowerB: 1
@@ -146,14 +145,16 @@ Material:
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseScaleA: {r: 1, g: 1, b: 0, a: 0}
-    - _NoiseScaleB: {r: 1, g: 1, b: 0, a: 0}
-    - _NoiseSeedA: {r: 1, g: 1, b: 0, a: 0}
-    - _NoiseSeedB: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseScaleA: {r: 2, g: 2.35, b: 0, a: 0}
+    - _NoiseScaleB: {r: 2, g: 2.35, b: 0, a: 0}
+    - _NoiseSeedA: {r: 1.17, g: 1.4, b: 0, a: 0}
+    - _NoiseSeedB: {r: 1.17, g: 1.4, b: 0, a: 0}
     - _OffsetPositionA: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
-    - _RangeA: {r: 0.0887, g: 0.1041, b: 0, a: 0}
-    - _RangeB: {r: 0.0887, g: 0.1041, b: 0, a: 0}
+    - _RangeA: {r: 0.05, g: 0.052399997, b: 0, a: 0}
+    - _RangeB: {r: 0.05, g: 0.052399997, b: 0, a: 0}
+    - _Wiggler: {r: -0.003560163, g: 0.007626046, b: -0.003560163, a: 0.007626046}
+    - _WigglerRange: {r: 0.052399997, g: 0.052399997, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []

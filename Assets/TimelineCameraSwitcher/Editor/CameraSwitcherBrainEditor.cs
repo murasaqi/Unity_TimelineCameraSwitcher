@@ -1,11 +1,13 @@
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-[CustomEditor(typeof(CameraSwitcherControl))]//拡張するクラスを指定
-public class CameraSwitcherControlEditor : Editor {
+[CustomEditor(typeof(CameraSwitcherBrain))]//拡張するクラスを指定
+public class CameraSwitcherBrainEditor : Editor {
 
     static string targetPackage;
     static EmbedRequest Request;
@@ -73,7 +75,7 @@ public class CameraSwitcherControlEditor : Editor {
     public override void OnInspectorGUI(){
         
         
-        CameraSwitcherControl cameraSwitcherControl = target as CameraSwitcherControl;
+        CameraSwitcherBrain cameraSwitcherBrain = target as CameraSwitcherBrain;
         
         // if (cameraSwitcherControl.cameraSwitcherSettings == null)
         // {
@@ -81,11 +83,32 @@ public class CameraSwitcherControlEditor : Editor {
             if (GUILayout.Button("Create settings"))
             {
                 
-                var path = EditorUtility.OpenFilePanel("Export directory", "", "CSV");
-                if (string.IsNullOrEmpty(path))
+                
+                
+                var filePath = EditorUtility.SaveFilePanelInProject(
+                    "Create Camera Switcher Settings",
+                    "NewCameraSwitcherSettings",
+                    "asset",
+                    "Please enter a file name to save the texture to");
+
+                Debug.Log(filePath);
+                if (string.IsNullOrEmpty(filePath))
                     return;
-                Debug.Log(path);
-                var baseSettings = Resources.Load<CameraSwitcherSettings>("CameraSwitcherControlResources/CameraSwitcherSetting");
+                
+                
+                
+                var exportPath = Path.GetDirectoryName(filePath);
+                if (string.IsNullOrEmpty(filePath))
+                    return;
+                Debug.Log(exportPath);
+                
+           
+                
+                var baseName = Path.GetFileName(filePath).Split(".").First();
+                Debug.Log(baseName);
+                
+                // return;
+                var baseSettings = Resources.Load<CameraSwitcherSettings>("TimelineCameraSwitcherResources/CameraSwitcherSetting");
                 var setting = CreateInstance<CameraSwitcherSettings>();
                 
                 var inputCameraA = new RenderTexture(1920, 1080,24);
@@ -93,21 +116,21 @@ public class CameraSwitcherControlEditor : Editor {
                 var compoMat = new Material(baseSettings.material);
                 
 
-                var exportPath = "Assets/CameraSwitcherSettings/cameraSwitcherSettings.asset";
-                var exportPath_rtA = "Assets/CameraSwitcherSettings/inputCameraA.asset";
-                var exportPath_rtB = "Assets/CameraSwitcherSettings/inputCameraB.asset";
-                var exportPath_compositeMat = "Assets/CameraSwitcherSettings/composite.mat";
+                var exportPath_settings = filePath;
+                var exportPath_rtA = exportPath+"/"+baseName+"_inputCameraA.asset";
+                var exportPath_rtB = exportPath+"/"+baseName+"inputCameraB.asset";
+                var exportPath_compositeMat = exportPath+"/"+baseName+"_composite.mat";
                 // var exportPath_compositShader = "Assets/CameraSwitcherSettings/CameraSwitcherCompositeShader.shadergraph";
 
-                var asset = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath, typeof(CameraSwitcherSettings));
-                var rtA = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
-                var rtB = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath, typeof(RenderTexture));
+                var asset = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath_settings, typeof(CameraSwitcherSettings));
+                var rtA = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath_rtA, typeof(RenderTexture));
+                var rtB = (RenderTexture)AssetDatabase.LoadAssetAtPath(exportPath_rtB, typeof(RenderTexture));
                 var mat = (Material)AssetDatabase.LoadAssetAtPath(exportPath_compositeMat, typeof(Material));
                 // var shaderGraph = (CameraSwitcherSettings)AssetDatabase.LoadAssetAtPath(exportPath_compositShader, typeof(Shader));
                 
                 if (asset == null){
                     // 指定のパスにファイルが存在しない場合は新規作成
-                    AssetDatabase.CreateAsset(setting, exportPath);
+                    AssetDatabase.CreateAsset(setting, exportPath_settings);
                 } else {
                     // 指定のパスに既に同名のファイルが存在する場合は更新
                     EditorUtility.CopySerialized(setting, asset);
@@ -115,7 +138,7 @@ public class CameraSwitcherControlEditor : Editor {
                 }
                 AssetDatabase.Refresh();
 
-                cameraSwitcherControl.cameraSwitcherSettings = AssetDatabase.LoadAssetAtPath<CameraSwitcherSettings>(exportPath);
+                cameraSwitcherBrain.cameraSwitcherSettings = AssetDatabase.LoadAssetAtPath<CameraSwitcherSettings>(exportPath_settings);
                 
                 
                 
@@ -131,7 +154,7 @@ public class CameraSwitcherControlEditor : Editor {
                 AssetDatabase.Refresh();
 
                 
-                cameraSwitcherControl.cameraSwitcherSettings.renderTextureA = AssetDatabase.LoadAssetAtPath<RenderTexture>(exportPath_rtA);
+                cameraSwitcherBrain.cameraSwitcherSettings.renderTextureA = AssetDatabase.LoadAssetAtPath<RenderTexture>(exportPath_rtA);
                 
                 
                 
@@ -147,7 +170,7 @@ public class CameraSwitcherControlEditor : Editor {
                 }
                 AssetDatabase.Refresh();
 
-                cameraSwitcherControl.cameraSwitcherSettings.renderTextureB = AssetDatabase.LoadAssetAtPath<RenderTexture>(exportPath_rtB);
+                cameraSwitcherBrain.cameraSwitcherSettings.renderTextureB = AssetDatabase.LoadAssetAtPath<RenderTexture>(exportPath_rtB);
                 
                 
                 
@@ -161,11 +184,11 @@ public class CameraSwitcherControlEditor : Editor {
                     AssetDatabase.SaveAssets();
                 }
                 AssetDatabase.Refresh();
+                
+                cameraSwitcherBrain.cameraSwitcherSettings.material = AssetDatabase.LoadAssetAtPath<Material>(exportPath_compositeMat);
 
-                cameraSwitcherControl.cameraSwitcherSettings.material = AssetDatabase.LoadAssetAtPath<Material>(exportPath_compositeMat);
-                
-                
-                
+                // cameraSwitcherBrain.material = cameraSwitcherBrain.cameraSwitcherSettings.material;
+
             }
        //  }
        //  else

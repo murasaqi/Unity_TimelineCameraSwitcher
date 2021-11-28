@@ -3,7 +3,7 @@ Shader "Unlit/CameraSwitcherFader"
     Properties
     {
         _TextureA ("_TextureA", 2D) = "white" {}
-        _TextureB ("_TextureA", 2D) = "white" {}
+        _TextureB ("_TextureB", 2D) = "white" {}
         _CrossFade("CrossFade", Range(0,1)) = 0
         _Wiggler("Wiggler", Vector) = (0,0,0,0)
         _WigglerRange("_WigglerRange",Vector) = (0,0,0,0)
@@ -77,7 +77,9 @@ Shader "Unlit/CameraSwitcherFader"
                 // sample the texture
                 fixed4 col = lerp(colA,colB,_CrossFade);
 
-                
+                if(_CrossFade == 0.) col = colA;
+
+                if(_CrossFade == 1.) col = colB;
                 // apply fog
                 // UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

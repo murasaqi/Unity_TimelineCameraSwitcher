@@ -2,8 +2,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 
-[CustomPropertyDrawer(typeof(CameraSwitcherControlTrack))]
-public class LCameraSwitcherControlTrackDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(TimelineCameraSwticherTrack))]
+public class TimelineCameraSwticherTrackDrawer : PropertyDrawer
 {
     public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
     {
