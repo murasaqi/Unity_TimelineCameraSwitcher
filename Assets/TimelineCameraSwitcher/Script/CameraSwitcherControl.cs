@@ -73,15 +73,17 @@ public class CameraSwitcherControl : MonoBehaviour
             outputRawImage.material = material;
             outputRawImage.texture = null;
         }
+        
+        if (outPutRenderTarget)
+        {
+            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
+        }
 
     }
 
     private void LateUpdate()
     {
-        if (outPutRenderTarget)
-        {
-            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
-        }
+       
 
 
     }

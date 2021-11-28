@@ -229,7 +229,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     var _playableBehaviour = _scriptPlayable.GetBehaviour();
                     
                    
-                    if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time <= nextClip.start + clip.duration )
+                    if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time < nextClip.start + clip.duration )
                     {
                         if (_playableBehaviour.camera != playableBehaviour.camera)
                         {
