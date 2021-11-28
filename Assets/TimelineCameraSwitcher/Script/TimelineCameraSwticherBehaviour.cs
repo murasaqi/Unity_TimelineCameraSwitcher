@@ -175,56 +175,51 @@ public class TimelineCameraSwticherBehaviour : PlayableBehaviour
                     playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
                     
                 }
-
-               
-
                 // 次のクリップが存在しているとき
                 if (inputPort + 1 < m_Clips.Count())
                 {
                     var nextClip = m_Clips.ToList()[inputPort + 1];
                     var _scriptPlayable =  (ScriptPlayable<TimelineCameraSwitcherBehaviour>)playable.GetInput(inputPort+1);
                     var _playableBehaviour = _scriptPlayable.GetBehaviour();
-                    
+
                     
                     // 次のクリップをすでに踏んでいる場合（preRenderFrameCountを含む）
                     if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time < nextClip.start + clip.duration )
                     {
-                        
-                        
-                        if (_playableBehaviour.camera != null)
+                        if (_playableBehaviour.camera != null && _playableBehaviour.camera != playableBehaviour.camera)
                         {
                             _playableBehaviour.camera.enabled = true;
                             _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
-                    
-                        }
-                        m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
-                        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
-                        m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
-                        m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
-                        m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
-                        // renderQue.AddQue(playableBehaviour.camera, m_TrackBinding.renderTextureA);
-                        
-                       
-                        // _playableBehaviour.camera.enabled = true;
-                        _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
-                        m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureB);
-                        m_TrackBinding.material.SetFloat("_WigglePowerB",_playableBehaviour.wiggle ? 1f:0f);
-                        m_TrackBinding.material.SetVector("_NoiseSeedB",_playableBehaviour.noiseSeed);
-                        m_TrackBinding.material.SetVector("_NoiseScaleB",_playableBehaviour.noiseScale);
-                        m_TrackBinding.material.SetFloat("_TimeScaleB",_playableBehaviour.roughness);
-                        m_TrackBinding.material.SetVector("_RangeB",_playableBehaviour.wiggleRange/100f);
-                        m_TrackBinding.material.SetFloat("_CrossFade", 1f-inputWeight);
-                        // renderQue.AddQue(_playableBehaviour.camera, m_TrackBinding.renderTextureB);
-                      
+                            
+                            m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
+                            m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
+                            m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
+                            m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
+                            m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
+                            m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
+                            // renderQue.AddQue(playableBehaviour.camera, m_TrackBinding.renderTextureA);
+                            
+                           
+                            // _playableBehaviour.camera.enabled = true;
+                            _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
+                            m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureB);
+                            m_TrackBinding.material.SetFloat("_WigglePowerB",_playableBehaviour.wiggle ? 1f:0f);
+                            m_TrackBinding.material.SetVector("_NoiseSeedB",_playableBehaviour.noiseSeed);
+                            m_TrackBinding.material.SetVector("_NoiseScaleB",_playableBehaviour.noiseScale);
+                            m_TrackBinding.material.SetFloat("_TimeScaleB",_playableBehaviour.roughness);
+                            m_TrackBinding.material.SetVector("_RangeB",_playableBehaviour.wiggleRange/100f);
+                            m_TrackBinding.material.SetFloat("_CrossFade", 1f-inputWeight);
+                            // renderQue.AddQue(_playableBehaviour.camera, m_TrackBinding.renderTextureB);
+                          
 
-                        wigglerRange = new Vector2(
-                            playableBehaviour.wiggle ? Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y): 0,
-                            _playableBehaviour.wiggle ?Math.Max(_playableBehaviour.wiggleRange.x, _playableBehaviour.wiggleRange.y):0
-                        );
-                        wiggler = CalcNoise(playableBehaviour, _playableBehaviour,currentTime);
+                            wigglerRange = new Vector2(
+                                playableBehaviour.wiggle ? Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y): 0,
+                                _playableBehaviour.wiggle ?Math.Max(_playableBehaviour.wiggleRange.x, _playableBehaviour.wiggleRange.y):0
+                            );
+                            wiggler = CalcNoise(playableBehaviour, _playableBehaviour,currentTime);
+                        }
+                            
                         
-                        // m_TrackBinding.AddRenderQue(renderQue);
                     }
                     else
                     {
