@@ -76,7 +76,7 @@ public class CameraSwitcherControl : MonoBehaviour
         
         if (outPutRenderTarget)
         {
-            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material);
+            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material,cameraSwitcherSettings.material.FindPass("Universal Forward"));
         }
 
     }
