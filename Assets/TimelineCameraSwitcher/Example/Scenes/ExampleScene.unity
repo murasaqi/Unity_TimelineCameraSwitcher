@@ -706,7 +706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1283198610
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1486,8 +1486,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSwitcherSettings: {fileID: 11400000, guid: 54e463b1fb982354d9d028e4737e4bb9,
     type: 2}
+  volume: {fileID: 1350045710}
   outputRawImage: {fileID: 5620586369429494632}
   outPutRenderTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
+  dofControl: 1
+  baseDofValues:
+    depthOfFieldMode: 2
+    focusDistance: 0
+    focalLength: 8
+    aperture: 1
+    bladeCount: 1
+    bladeCurvature: 0
+    bladeRotation: -165
 --- !u!4 &1813787477
 Transform:
   m_ObjectHideFlags: 0
@@ -2806,7 +2816,7 @@ PrefabInstance:
     - target: {fileID: 5620586370151806737, guid: 67aee6f49de32fc4ea4d52a539ede689,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5620586370151806749, guid: 67aee6f49de32fc4ea4d52a539ede689,
         type: 3}

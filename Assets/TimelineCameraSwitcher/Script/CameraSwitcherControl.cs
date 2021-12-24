@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -19,10 +20,13 @@ public class CameraSwitcherControl : MonoBehaviour
     
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
-
+    [SerializeField] public Volume volume;
     // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
+    [SerializeField] public bool dofControl = false;
+    [SerializeField] public DofControlProps baseDofValues;
+    
 
     // [SerializeField] private Texture tex;
     private float m_fader;

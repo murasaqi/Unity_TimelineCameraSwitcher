@@ -1,13 +1,14 @@
-// using UnityEngin
+
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Timeline;
-using UnityEngine.UI;
+
 
 public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 {
@@ -60,6 +61,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             camera.targetTexture = null;
         }
     }
+
+    private DepthOfField dof;
     
     private void InitRenderTexture(bool isA)
     {
@@ -126,6 +129,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         m_TrackBinding.material.SetFloat("_PlayableDirectorTime",(float)director.time);
         _cameras.Clear();
 
+        if (dof == null && m_TrackBinding.volume != null)
+        {
+            foreach (var profileComponent in m_TrackBinding.volume.profile.components)
+            {
+                if (profileComponent as DepthOfField)
+                {
+                    dof = profileComponent as DepthOfField;
+                }
+            }
+        }
+       
+        
+        
+
         int i = 0;
         foreach (TimelineClip clip in m_Clips)
         {
@@ -142,62 +159,24 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         i = 0;
 
 #if UNITY_EDITOR
-        // // var missingCameraCount = 0;
-        // if (m_track.findMissingCameraInHierarchy)
-        // {
-        //    
-        //     
-        //    
-        //     foreach (var clip in m_Clips)
-        //     {
-        //         var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
-        //         var playableBehaviour = scriptPlayable.GetBehaviour();
-        //
-        //         var missing = false;
-        //         if (playableBehaviour.camera == null)
-        //         {
-        //             Debug.Log($"<color=#DA70D6>[frame: {Mathf.CeilToInt((float)clip.start*fps )} clip: {clip.displayName}] Camera reference is null.</color>");
-        //             missing = true;
-        //         }
-        //         else
-        //         {
-        //             if (clip.displayName != playableBehaviour.camera.name)
-        //             {
-        //                 Debug.Log($"<color=#9370DB>[frame: {Mathf.CeilToInt((float)clip.start*fps )} clip: {clip.displayName}] Name does not match the camera</color>");
-        //                 missing = true;
-        //             }
-        //         }
-        //
-        //         if (missing && m_track.fixMissingPrefabByCameraName)
-        //         {
-        //             
-        //             var cam = GameObject.Find(clip.displayName);
-        //             if (cam!=null)
-        //             {
-        //                 var serializedObject = new SerializedObject(clip.asset, director);
-        //                 var serializedProperty = serializedObject.FindProperty("camera");
-        //                 // if(cam.GetComponent<Camera>())Debug.Log(cam);
-        //                 Debug.Log(cam.name);
-        //                 // playableBehaviour.camera = cam.GetComponent<Camera>();
-        //                 if(cam.GetComponent<Camera>())serializedProperty.exposedReferenceValue = cam.GetComponent<Camera>();
-        //                 serializedObject.ApplyModifiedProperties();
-        //                 Debug.Log($"<color=#00BFFF>Fix {clip.displayName}</color>");
-        //             }
-        //         }
-        //
-        //         i++;
-        //     }
-        //    
-        // }
+    
 
 #endif
         
-       
         int inputPort = 0;
-
         var currentTime = (float)m_Director.time;
         var wiggler = Vector4.zero;
         var wigglerRange = Vector2.zero;
+        DepthOfFieldMode depthOfFieldMode;
+        var focusDistance = 0f;
+        var focalLength = 0f;
+        var aperture = 0f;
+        var bladeCount = 0;
+        var bladeCurvature = 0f;
+        var bladeRotation = 0f;
+
+
+        var currentClips = new List<CameraSwitcherControlBehaviour>();
         // var currentDirectorTime = m_Director.time - offsetStartTime;
         foreach (TimelineClip clip in m_Clips)
         {
@@ -208,6 +187,23 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             var playableBehaviour = scriptPlayable.GetBehaviour();
 
           
+        
+           if (inputWeight > 0)
+           {
+               if (playableBehaviour.dofOverride)
+               {
+                   depthOfFieldMode = playableBehaviour.dofControlProps.depthOfFieldMode;
+                   focusDistance += playableBehaviour.dofControlProps.focusDistance*inputWeight;
+                   focalLength += playableBehaviour.dofControlProps.focalLength*inputWeight;
+                   aperture += playableBehaviour.dofControlProps.aperture * inputWeight;
+                   bladeCount += Mathf.FloorToInt(playableBehaviour.dofControlProps.bladeCount*inputWeight);
+                   bladeCurvature += playableBehaviour.dofControlProps.bladeCurvature * inputWeight;
+                   bladeRotation += playableBehaviour.dofControlProps.bladeRotation * inputWeight;
+               
+                   currentClips.Add(playableBehaviour);     
+               }
+              
+           }
 
             if (clip.start <= m_Director.time && m_Director.time <= clip.start + clip.duration )
             {
@@ -220,6 +216,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     
                 }
 
+
+             
                
 
                 if (inputPort + 1 < m_Clips.Count() )
@@ -252,6 +250,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
                             // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionB);
 
+                            // DofControl(m_TrackBinding.volume);
 
                             wigglerRange = new Vector2(
                                 Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
@@ -302,13 +301,41 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         m_TrackBinding.material.SetVector("_Wiggler",wiggler);
         m_TrackBinding.material.SetVector("_WigglerRange",wigglerRange/100f);
-        // if (m_TrackBinding != null)
-        // {
-        //     m_TrackBinding.Blit();
-        // }
+
+        if (dof)
+        {
+            if (m_TrackBinding.dofControl)
+            {
+               
+                if (currentClips.Count > 0)
+                {
+                    
+                    dof.focusDistance.value = focusDistance;
+                    dof.focalLength.value = focalLength;
+                    dof.aperture.value = aperture;
+                    dof.bladeCount.value = bladeCount;
+                    dof.bladeCurvature.value = bladeCurvature;
+                    dof.bladeRotation.value = bladeRotation;
+                
+                }
+                else
+                {
+                    dof.focusDistance.value = m_TrackBinding.baseDofValues.focusDistance;
+                    dof.focalLength.value = m_TrackBinding.baseDofValues.focalLength;
+                    dof.aperture.value = m_TrackBinding.baseDofValues.aperture;
+                    dof.bladeCount.value = m_TrackBinding.baseDofValues.bladeCount;
+                    dof.bladeCurvature.value = m_TrackBinding.baseDofValues.bladeCurvature;
+                    dof.bladeRotation.value = m_TrackBinding.baseDofValues.bladeRotation;
+                }
+            }
+        }
+        
+        
+        // if(dof)
+        
         
     }
-
+  
     private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour,float inputWeight )
     {
          m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);

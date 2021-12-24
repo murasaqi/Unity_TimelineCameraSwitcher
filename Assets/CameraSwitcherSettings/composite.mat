@@ -123,14 +123,14 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 3.6666667
+    - _PlayableDirectorTime: 6
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeScaleA: 0.1
-    - _TimeScaleB: 0.1
+    - _TimeScaleA: 0.93
+    - _TimeScaleB: 0.93
     - _UVSec: 0
     - _WigglePowerA: 0
     - _WigglePowerB: 0
@@ -145,16 +145,16 @@ Material:
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseScaleA: {r: 1.5, g: 1.57, b: 0, a: 0}
-    - _NoiseScaleB: {r: 1.5, g: 1.57, b: 0, a: 0}
-    - _NoiseSeedA: {r: 0.4, g: 0.43, b: 0, a: 0}
-    - _NoiseSeedB: {r: 0.4, g: 0.43, b: 0, a: 0}
+    - _NoiseScaleA: {r: 26.22, g: 80.1, b: 0, a: 0}
+    - _NoiseScaleB: {r: 26.22, g: 80.1, b: 0, a: 0}
+    - _NoiseSeedA: {r: 0.11, g: 0.21, b: 0, a: 0}
+    - _NoiseSeedB: {r: 0.11, g: 0.21, b: 0, a: 0}
     - _OffsetPositionA: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
-    - _RangeA: {r: 0.0175, g: 0.024, b: 0, a: 0}
-    - _RangeB: {r: 0.0175, g: 0.024, b: 0, a: 0}
-    - _Wiggler: {r: 0, g: 0, b: 0, a: 0}
-    - _WigglerRange: {r: 0.024, g: 0.024, b: 0, a: 0}
+    - _RangeA: {r: 0.075, g: 0.083000004, b: 0, a: 0}
+    - _RangeB: {r: 0.075, g: 0.083000004, b: 0, a: 0}
+    - _Wiggler: {r: -0, g: -0, b: -0, a: -0}
+    - _WigglerRange: {r: 0.083000004, g: 0.083000004, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
