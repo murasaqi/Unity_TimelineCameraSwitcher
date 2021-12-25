@@ -357,6 +357,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
+  - component: {fileID: 963194232}
   m_Layer: 0
   m_Name: CameraA
   m_TagString: MainCamera
@@ -379,7 +380,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -405,7 +406,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -483,6 +484,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1183024399 &963194232
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 0
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_IsContraintActive: 0
+  m_IsLocked: 0
+  m_Sources: []
 --- !u!1 &982157257
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,8 +537,6 @@ PlayableDirector:
     value: {fileID: 963194231}
   - key: {fileID: 5727623575404651694, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
     value: {fileID: 2013416893}
-  - key: {fileID: 3762772346518662691, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
-    value: {fileID: 2084785982}
   - key: {fileID: 7861742808868575473, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
     value: {fileID: 1538500716905344973}
   - key: {fileID: -3682720750609048926, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
@@ -535,6 +551,8 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: -3022350100769882221, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
     value: {fileID: 0}
+  - key: {fileID: -2436591418247940708, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
+    value: {fileID: 2084785982}
   m_ExposedReferences:
     m_References:
     - fa272815b66d6014cb9b675ac05f1458: {fileID: 1598200452}
@@ -556,6 +574,7 @@ PlayableDirector:
     - 84db636353c063f4383ecec97bfed2c8: {fileID: 963194227}
     - a6c3af01429b4214d8e7dc12dd38e2a4: {fileID: 963194227}
     - c40ee0de8a9b5124dae7e59a01e6cfcf: {fileID: 1598200452}
+    - 12871c492cfe21f4aa4f627601296438: {fileID: 5927396954247894498}
     - 421cc219fd3a80842a5edd25c61e24f0: {fileID: 2084785978}
     - abb494cd3cc87dd42a545932f185bf51: {fileID: 1719454283}
     - f713ec99ae81ee84eab6a39f1a50541c: {fileID: 963194227}
@@ -1804,6 +1823,7 @@ GameObject:
   - component: {fileID: 2084785979}
   - component: {fileID: 2084785981}
   - component: {fileID: 2084785982}
+  - component: {fileID: 2084785983}
   m_Layer: 0
   m_Name: CameraD
   m_TagString: MainCamera
@@ -1818,7 +1838,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1844,7 +1864,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1869,14 +1889,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_LocalRotation: {x: -0.112077154, y: -0.98780864, z: 0.06252007, w: 0.08811385}
-  m_LocalPosition: {x: 1.25, y: 2.76, z: 5.6}
+  m_LocalRotation: {x: 0.04174633, y: -0.9710172, z: 0.08422231, w: 0.21974877}
+  m_LocalPosition: {x: 2.61, y: 2.98, z: 5.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 482666909}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 5.956, y: -169.099, z: 373.515}
+  m_LocalEulerAnglesHint: {x: 0.167695, y: 0.006725744, z: -0.004418695}
 --- !u!114 &2084785981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1930,6 +1950,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1183024399 &2084785983
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084785977}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: -7.5, y: -1.8, z: 0}
+  m_Roll: 3.07
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_IsContraintActive: 1
+  m_IsLocked: 0
+  m_Sources:
+  - sourceTransform: {fileID: 5927396954247894498}
+    weight: 1
 --- !u!4 &12700851813838165
 Transform:
   m_ObjectHideFlags: 0

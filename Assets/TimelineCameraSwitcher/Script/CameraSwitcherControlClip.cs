@@ -10,6 +10,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 {
     [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
     [SerializeField] ExposedReference<Camera> camera;
+    [SerializeField] public bool lookAt = false;
+    [SerializeField] ExposedReference<Transform> target;
     private CameraSwitcherControlBehaviour clone;
    
     public ClipCaps clipCaps
@@ -22,6 +24,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template);
         clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
+        clone.target = target.Resolve(graph.GetResolver());
         return playable;
         
     }

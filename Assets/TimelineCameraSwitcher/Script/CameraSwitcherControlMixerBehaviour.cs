@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -186,8 +187,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(inputPort);
             var playableBehaviour = scriptPlayable.GetBehaviour();
 
-          
-        
+
+            var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
            if (inputWeight > 0)
            {
                if (playableBehaviour.dofOverride)
@@ -201,6 +202,41 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    bladeRotation += playableBehaviour.dofControlProps.bladeRotation * inputWeight;
                
                    currentClips.Add(playableBehaviour);     
+               }
+
+               var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
+               if (cameraSwitcherControlClip.lookAt)
+               {
+                   
+                   if (lookAt == null) lookAt = playableBehaviour.camera.gameObject.AddComponent<LookAtConstraint>();
+                   if (lookAt && playableBehaviour.target)
+                   {
+                       if (lookAt.GetSource(0).sourceTransform != playableBehaviour.target)
+                       {
+                           lookAt.enabled = true;
+                           while (lookAt.sourceCount > 0)
+                           {
+                               lookAt.RemoveSource(0);
+                           }
+                           var source = new ConstraintSource();
+                           source.sourceTransform = playableBehaviour.target;
+                           lookAt.SetSource(1,source);
+
+                       }
+
+                       lookAt.enabled = true;
+                       lookAt.locked = playableBehaviour.lookAtProps.Lock;
+                       lookAt.constraintActive = playableBehaviour.lookAtProps.IsActive;
+                       lookAt.weight = playableBehaviour.lookAtProps.Weight;
+                       lookAt.roll = playableBehaviour.lookAtProps.Roll;
+                       lookAt.useUpObject = playableBehaviour.lookAtProps.UseUpObject;
+                       lookAt.rotationOffset = playableBehaviour.lookAtProps.RotationOffset;
+                       lookAt.rotationAtRest = playableBehaviour.lookAtProps.RotationAtReset;
+                   }
+               }
+               else
+               {
+                   if (lookAt) lookAt.enabled = false;
                }
               
            }
