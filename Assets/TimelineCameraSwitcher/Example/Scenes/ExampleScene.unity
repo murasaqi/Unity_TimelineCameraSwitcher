@@ -562,11 +562,13 @@ PlayableDirector:
     - d272460241c08284f9ce4d9baa3f4ab6: {fileID: 963194227}
     - cb2c0998131d254429b7638d37a65ddd: {fileID: 2013416889}
     - 447a7664a01d1bc4e9d8c1e89d838aeb: {fileID: 1719454283}
+    - 36f0ae3adfc121c4ea0361ec757a892c: {fileID: 0}
     - dbbbb691a342a1c4dac325971c4938e5: {fileID: 963194227}
     - 384eb563b7282f0489e255dcd56d0ecb: {fileID: 963194227}
     - c8e9f8c0a03806f41aca4646cc16e4fd: {fileID: 2082829445}
     - c3206c7b6720fa24c868b22c23e6d5c4: {fileID: 963194227}
     - 3072d423c7884fb4b8513b897a1125e9: {fileID: 1598200452}
+    - 56c6ac24ae21d0e4c8afd13d0e4677c7: {fileID: 2082829445}
     - 239698a3471548c4eb1f1253d6dbe9f3: {fileID: 1598200452}
     - 7fe02850450d70a4a9c3a1bfb52914db: {fileID: 1719454283}
     - 3a583377d34a51b43a101920c2bf5856: {fileID: 5620586369429494632}
@@ -576,7 +578,10 @@ PlayableDirector:
     - c40ee0de8a9b5124dae7e59a01e6cfcf: {fileID: 1598200452}
     - 12871c492cfe21f4aa4f627601296438: {fileID: 5927396954247894498}
     - 421cc219fd3a80842a5edd25c61e24f0: {fileID: 2084785978}
+    - 63cf065b3318fac4399070cf6b89ccad: {fileID: 1719454283}
     - abb494cd3cc87dd42a545932f185bf51: {fileID: 1719454283}
+    - 3660e6b5969d8f449840a036c398db0e: {fileID: 1719454283}
+    - 7161179d5d13f88468caadc29c7bcbc0: {fileID: 2084785978}
     - f713ec99ae81ee84eab6a39f1a50541c: {fileID: 963194227}
 --- !u!4 &982157259
 Transform:
@@ -1255,7 +1260,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719454281}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1281,7 +1286,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1838,7 +1843,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1864,7 +1869,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1889,7 +1894,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_LocalRotation: {x: 0.04174633, y: -0.9710172, z: 0.08422231, w: 0.21974877}
+  m_LocalRotation: {x: 0.047831137, y: -0.974217, z: 0.079407476, w: 0.20568877}
   m_LocalPosition: {x: 2.61, y: 2.98, z: 5.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

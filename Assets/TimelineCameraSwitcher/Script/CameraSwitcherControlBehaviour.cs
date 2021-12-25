@@ -46,6 +46,7 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public float roughness = 1;
     [SerializeField] public Vector2 wiggleRange  = new Vector2(5,5);
     [SerializeField] public bool dofOverride = false;
+    [SerializeField] public Color multiplyColor = Color.white;
     // [SerializeField] public DepthOfFieldMode depthOfFieldMode;
     // [SerializeField] public float focusDistance;
     // [SerializeField, Range(1, 300)] public float focalLength;

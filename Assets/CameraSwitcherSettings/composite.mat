@@ -123,16 +123,16 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 6
+    - _PlayableDirectorTime: 15.983334
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TimeScaleA: 0.93
-    - _TimeScaleB: 0.93
+    - _TimeScaleA: 3.44
+    - _TimeScaleB: 0
     - _UVSec: 0
-    - _WigglePowerA: 0
+    - _WigglePowerA: 1
     - _WigglePowerB: 0
     - _ZWrite: 1
     m_Colors:
@@ -143,18 +143,24 @@ Material:
     - Vector2_85d14bb10d4647948d9689a1f356f36a: {r: 0.33, g: 0.26, b: 0, a: 0}
     - Vector2_8702686b77fe47e6bee7286a126dc481: {r: 0.45, g: 0.54, b: 0, a: 0}
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
+    - _ClipSizeA: {r: 0, g: 0, b: 0, a: 0}
+    - _ClipSizeB: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoiseScaleA: {r: 26.22, g: 80.1, b: 0, a: 0}
-    - _NoiseScaleB: {r: 26.22, g: 80.1, b: 0, a: 0}
-    - _NoiseSeedA: {r: 0.11, g: 0.21, b: 0, a: 0}
-    - _NoiseSeedB: {r: 0.11, g: 0.21, b: 0, a: 0}
+    - _MultiplyColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _MultiplyColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _NoiseScaleA: {r: 4.14, g: 7.53, b: 0, a: 0}
+    - _NoiseScaleB: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseSeedA: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseSeedB: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetPositionA: {r: 0, g: 0, b: 0, a: 0}
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
-    - _RangeA: {r: 0.075, g: 0.083000004, b: 0, a: 0}
-    - _RangeB: {r: 0.075, g: 0.083000004, b: 0, a: 0}
-    - _Wiggler: {r: -0, g: -0, b: -0, a: -0}
-    - _WigglerRange: {r: 0.083000004, g: 0.083000004, b: 0, a: 0}
+    - _RangeA: {r: 0.0887, g: 0.1041, b: 0, a: 0}
+    - _RangeB: {r: 0, g: 0, b: 0, a: 0}
+    - _Wiggler: {r: -0, g: -0, b: 0.00000873554, a: 0.000010393328}
+    - _WigglerRange: {r: 0, g: 0.00033718944, b: 0, a: 0}
+    - _WigglerValueA: {r: 0, g: 0, b: 0, a: 0}
+    - _WigglerValueB: {r: -0, g: -0, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []

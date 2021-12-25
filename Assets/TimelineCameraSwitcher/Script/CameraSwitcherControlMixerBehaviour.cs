@@ -265,68 +265,70 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    
                     if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time < nextClip.start + clip.duration )
                     {
+                        
+                        // blending中で、次のカメラが同じじゃないとき
                         if (_playableBehaviour.camera != playableBehaviour.camera)
                         {
                             _playableBehaviour.camera.enabled = true;
                             _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
                             m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
-                           
-                            m_TrackBinding.material.SetFloat("_WigglePowerA", playableBehaviour.wiggle ? 1f : 0f);
-                            m_TrackBinding.material.SetVector("_NoiseSeedA", playableBehaviour.noiseSeed);
-                            m_TrackBinding.material.SetVector("_NoiseScaleA", playableBehaviour.noiseScale);
-                            m_TrackBinding.material.SetFloat("_TimeScaleA", playableBehaviour.roughness);
-                            m_TrackBinding.material.SetVector("_RangeA", playableBehaviour.wiggleRange / 100f);
-                           
                             m_TrackBinding.material.SetTexture("_TextureB", m_TrackBinding.renderTextureB);
-                            m_TrackBinding.material.SetFloat("_WigglePowerB", _playableBehaviour.wiggle ? 1f : 0f);
-                            m_TrackBinding.material.SetVector("_NoiseSeedB", _playableBehaviour.noiseSeed);
-                            m_TrackBinding.material.SetVector("_NoiseScaleB", _playableBehaviour.noiseScale);
-                            m_TrackBinding.material.SetFloat("_TimeScaleB", _playableBehaviour.roughness);
-                            m_TrackBinding.material.SetVector("_RangeB", _playableBehaviour.wiggleRange / 100f);
+                            m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour,currentTime));
+                            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wiggleRange/ 100f);
+                            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.multiplyColor);
+                            m_TrackBinding.material.SetVector("_ClipSizeB", _playableBehaviour.wiggleRange / 100f);
+                            m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(_playableBehaviour,currentTime));
+                            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.multiplyColor);
                             m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
-                            // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionB);
-
-                            // DofControl(m_TrackBinding.volume);
-
-                            wigglerRange = new Vector2(
-                                Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                                Math.Max(_playableBehaviour.wiggleRange.x, _playableBehaviour.wiggleRange.y)
-                            );
-                            wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime);
-
+                          
                         }
+                        // blending中で、次のカメラが同じときは値もBlendingしてあげる
                         else
                         {
-                            SelectSingleCamera(playableBehaviour, inputWeight);
-                            wigglerRange = new Vector2(
-                                Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                                Math.Max(_playableBehaviour.wiggleRange.x, _playableBehaviour.wiggleRange.y)
-                            );
-                            wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime);
+                            // var nextInputWeight = Mathf.Clamp(1f - inputWeight,0f,1f);
+                            SelectSingleCamera(playableBehaviour, inputWeight, currentTime,_playableBehaviour);
+                            // if (playableBehaviour.wiggle || _playableBehaviour.wiggle)
+                            // {
+                            //     wigglerRange = new Vector2(
+                            //         Math.Max(playableBehaviour.wiggleRange.x*inputWeight, playableBehaviour.wiggleRange.y*inputWeight),
+                            //         Math.Max(_playableBehaviour.wiggleRange.x*nextInputWeight, _playableBehaviour.wiggleRange.y*nextInputWeight)
+                            //     );
+                            //     wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime,inputWeight);
+                            // }
+                            // else
+                            // {
+                            //     wigglerRange = new Vector2(
+                            //         Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
+                            //         Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
+                            //     );
+                            //     wiggler = CalcNoise(playableBehaviour, _playableBehaviour, currentTime);
+                            // }
+                           
+                           
                         }
 
                     }
                     else
                     {
-                        SelectSingleCamera(playableBehaviour,inputWeight);
+                        SelectSingleCamera(playableBehaviour,inputWeight,currentTime,_playableBehaviour);
                       
-                        wigglerRange = new Vector2(
-                            Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                            Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
-                        );
-                        wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
+                        // wigglerRange = new Vector2(
+                        //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
+                        //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
+                        // );
+                        // wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
                     }
                    
                 }
                 else
                 {
-                    SelectSingleCamera(playableBehaviour,inputWeight);
+                    SelectSingleCamera(playableBehaviour,inputWeight,currentTime);
                    
-                    wigglerRange = new Vector2(
-                        Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                        Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
-                    );
-                    wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
+                    // wigglerRange = new Vector2(
+                    //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
+                    //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
+                    // );
+                    // wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
                 }
 
                 break;
@@ -335,8 +337,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             inputPort++;
         }
 
-        m_TrackBinding.material.SetVector("_Wiggler",wiggler);
-        m_TrackBinding.material.SetVector("_WigglerRange",wigglerRange/100f);
+        // m_TrackBinding.material.SetVector("_Wiggler",wiggler);
+        // m_TrackBinding.material.SetVector("_WigglerRange",wigglerRange/100f);
 
         if (dof)
         {
@@ -372,43 +374,80 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
     }
   
-    private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour,float inputWeight )
+    private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour,float inputWeight,float currentTime, CameraSwitcherControlBehaviour nextPlayableBehaviour = null)
     {
-         m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
-        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-        m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
-        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-        m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
-      
-        m_TrackBinding.material.SetFloat("_WigglePowerA",playableBehaviour.wiggle ? 1f:0f);
-        m_TrackBinding.material.SetVector("_NoiseSeedA",playableBehaviour.noiseSeed);
-        m_TrackBinding.material.SetVector("_NoiseScaleA",playableBehaviour.noiseScale);
-        m_TrackBinding.material.SetFloat("_TimeScaleA",playableBehaviour.roughness);
-        m_TrackBinding.material.SetVector("_RangeA",playableBehaviour.wiggleRange/100f);
-        // m_TrackBinding.material.SetVector("_OffsetPositionA",offsetPositionA);
         
-        m_TrackBinding.material.SetFloat("_WigglePowerB",playableBehaviour.wiggle ? 1f:0f);
-        m_TrackBinding.material.SetVector("_NoiseSeedB",playableBehaviour.noiseSeed);
-        m_TrackBinding.material.SetVector("_NoiseScaleB",playableBehaviour.noiseScale);
-        m_TrackBinding.material.SetFloat("_TimeScaleB",playableBehaviour.roughness);
-        m_TrackBinding.material.SetVector("_RangeB",playableBehaviour.wiggleRange/100f);
+        
+        m_TrackBinding.material.SetTexture("_TextureA",m_TrackBinding.renderTextureA);
+        m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
+        m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
+       
+ 
+        if (nextPlayableBehaviour != null)
+        {
+            var nextInputWeight = Mathf.Clamp(1f - inputWeight,0,1);
+            var wiggleRange = playableBehaviour.wiggleRange * inputWeight + nextPlayableBehaviour.wiggleRange * nextInputWeight;
+            var noise = CalcNoise(playableBehaviour, nextPlayableBehaviour, currentTime, inputWeight);
+            var color =playableBehaviour.multiplyColor*inputWeight+nextPlayableBehaviour.multiplyColor* nextInputWeight;
+            // Debug.Log(nextInputWeight);
+
+            m_TrackBinding.material.SetVector("_WigglerValueA", noise);
+            m_TrackBinding.material.SetVector("_ClipSizeA", wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorA", color);
+            m_TrackBinding.material.SetVector("_WigglerValueB", noise);
+            m_TrackBinding.material.SetVector("_ClipSizeB", wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorB", color);
+
+        }
+        else
+        {
+            
+            m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour,currentTime));
+            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.multiplyColor);
+            m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(playableBehaviour,currentTime));
+            m_TrackBinding.material.SetVector("_ClipSizeB", playableBehaviour.wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.multiplyColor);
+
+        }
+       
         // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
         
     }
 
 
-    public Vector4 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime)
+    // public Vector4 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime)
+    // {
+    //     var isWiggle = new Vector2(
+    //         a.wiggle ? 1 : 0,
+    //         b.wiggle ? 1 : 0
+    //     );
+    //     var wiggler = new Vector4(
+    //         (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x, currentTime*a.roughness + a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.x/100f*isWiggle.x,
+    //         (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x + currentTime*a.roughness, a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.y/100f*isWiggle.x,
+    //         (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x, currentTime*b.roughness + b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.x/100f*isWiggle.y,
+    //         (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x + currentTime*b.roughness, b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.y/100f*isWiggle.y
+    //     );
+    //
+    //     return wiggler;
+    // }
+    
+    
+    public Vector2 CalcNoise(CameraSwitcherControlBehaviour a, float currentTime)
     {
-        var isWiggle = new Vector2(
-            a.wiggle ? 1 : 0,
-            b.wiggle ? 1 : 0
+
+        var isWiggle = a.wiggle ? 1 : 0f;
+        var wiggler = new Vector2(
+            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x, currentTime*a.roughness + a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.x/100f*isWiggle,
+            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x + currentTime*a.roughness, a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.y/100f*isWiggle
         );
-        var wiggler = new Vector4(
-            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x, currentTime*a.roughness + a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.x/100f*isWiggle.x,
-            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x + currentTime*a.roughness, a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.y/100f*isWiggle.x,
-            (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x, currentTime*b.roughness + b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.x/100f*isWiggle.y,
-            (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x + currentTime*b.roughness, b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.y/100f*isWiggle.y
-        );
+
+        return wiggler;
+    }
+
+    public Vector2 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime,float inputWeight)
+    {
+        var wiggler =Vector2.Lerp(CalcNoise(a, currentTime), CalcNoise(b, currentTime), 1f-inputWeight);
 
         return wiggler;
     }

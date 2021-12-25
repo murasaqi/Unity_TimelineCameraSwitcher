@@ -8,8 +8,9 @@ using UnityEngine.Timeline;
 
 public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 {
-    [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
+    
     [SerializeField] ExposedReference<Camera> camera;
+    [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
     [SerializeField] public bool lookAt = false;
     [SerializeField] ExposedReference<Transform> target;
     private CameraSwitcherControlBehaviour clone;
