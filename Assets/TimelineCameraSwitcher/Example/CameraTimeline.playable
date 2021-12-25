@@ -23,8 +23,8 @@ MonoBehaviour:
     noiseScale: {x: 1, y: 1}
     roughness: 1.48
     wiggleRange: {x: 1, y: 1}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 0.9
@@ -615,8 +615,8 @@ MonoBehaviour:
     noiseScale: {x: 0.65, y: 0.65}
     roughness: 0.47
     wiggleRange: {x: 3.3, y: 9.35}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 4.28
@@ -793,8 +793,8 @@ MonoBehaviour:
     noiseScale: {x: 0, y: 0}
     roughness: 0
     wiggleRange: {x: 0, y: 0}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 0.78
@@ -978,7 +978,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0.6666666666666661
-    m_BlendOutDuration: 1.216666666666665
+    m_BlendOutDuration: 1.6499999999999986
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1050,49 +1050,13 @@ MonoBehaviour:
     m_BlendOutDuration: 0.6666666666666661
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1170,49 +1134,13 @@ MonoBehaviour:
     m_BlendOutDuration: 0.3000000000000007
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1227,15 +1155,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CameraF
   - m_Version: 1
-    m_Start: 19.55
+    m_Start: 19.116666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 6788877611262295958}
-    m_Duration: 1.216666666666665
+    m_Duration: 1.6499999999999986
     m_TimeScale: 1
     m_ParentTrack: {fileID: -6808278027765936826}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 1.216666666666665
+    m_BlendInDuration: 1.6499999999999986
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -1326,8 +1254,8 @@ MonoBehaviour:
     noiseScale: {x: 4.14, y: 7.53}
     roughness: 3.44
     wiggleRange: {x: 1, y: 3.52}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 5.31
@@ -3176,8 +3104,8 @@ MonoBehaviour:
     noiseScale: {x: 26.22, y: 80.1}
     roughness: 0.93
     wiggleRange: {x: 7.5, y: 8.3}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 3.9
@@ -3243,8 +3171,8 @@ MonoBehaviour:
     noiseScale: {x: 1.5, y: 1.57}
     roughness: 0.1
     wiggleRange: {x: 1.75, y: 2.4}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 0.96
@@ -3420,8 +3348,8 @@ MonoBehaviour:
     noiseScale: {x: 2, y: 2.35}
     roughness: 1.33
     wiggleRange: {x: 5, y: 5.24}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 6.09
@@ -3506,8 +3434,8 @@ MonoBehaviour:
     noiseScale: {x: 0, y: 0}
     roughness: 0
     wiggleRange: {x: 0, y: 0}
-    dofOverride: 1
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 2.36
@@ -3718,8 +3646,8 @@ MonoBehaviour:
     noiseScale: {x: 0, y: 0}
     roughness: 0
     wiggleRange: {x: 0, y: 0}
-    dofOverride: 1
     multiplyColor: {r: 0, g: 0, b: 0, a: 1}
+    dofOverride: 1
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 2.36
