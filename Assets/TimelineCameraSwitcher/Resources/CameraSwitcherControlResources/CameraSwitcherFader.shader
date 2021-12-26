@@ -43,10 +43,10 @@ Shader "Unlit/CameraSwitcherFader"
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _TextureA;
+            sampler2D_float _TextureA;
             float4 _TextureA_ST;
 
-            sampler2D _TextureB;
+            sampler2D_float _TextureB;
             float4 _TextureB_ST;
 
             float _CrossFade;

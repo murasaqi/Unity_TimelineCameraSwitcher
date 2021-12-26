@@ -12,6 +12,7 @@ public class CameraSwitcherSettings : ScriptableObject
     [SerializeField] public RenderTexture renderTextureA;
     [SerializeField] public RenderTexture renderTextureB;
     [SerializeField] public Vector2 resolution = new Vector2(1920, 1080);
-
+    // [SerializeField] public Camera cameraA;
+    // [SerializeField] public Camera cameraB;
 
 }

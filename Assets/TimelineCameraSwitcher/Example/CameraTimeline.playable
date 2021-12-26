@@ -25,6 +25,31 @@ MonoBehaviour:
     wiggleRange: {x: 1, y: 1}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 0.9
@@ -81,19 +106,37 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 2.6333332
-        value: {x: 4.4769793, y: 18.96343, z: 1.025436}
-        inSlope: {x: -0.09955254, y: 1.6366588, z: 1.3160676}
-        outSlope: {x: -0.09955254, y: 1.6366588, z: 1.3160676}
+        time: 2.6333334
+        value: {x: 4.4769793, y: 14.273153, z: 0.5540004}
+        inSlope: {x: -0.09955254, y: 1.6366588, z: 0.29853535}
+        outSlope: {x: -0.09955254, y: 1.6366588, z: 0.29853535}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 3.8000002
-        value: {x: 4.3744025, y: 20.23866, z: 4.391113}
-        inSlope: {x: -0.06861309, y: 2.2839954, z: 4.82549}
-        outSlope: {x: -0.06861309, y: 2.2839954, z: 4.82549}
+        time: 2.65
+        value: {x: 4.475321, y: 14.299894, z: 0.5589393}
+        inSlope: {x: -0.09943494, y: 1.5726308, z: 0.29411322}
+        outSlope: {x: -0.09943494, y: 1.5726308, z: 0.29411322}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 3.8
+        value: {x: 4.374403, y: 15.548384, z: 0.91080755}
+        inSlope: {x: -0.0686131, y: 2.2839956, z: 0.63539076}
+        outSlope: {x: -0.0686131, y: 2.2839956, z: 0.63539076}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      - serializedVersion: 3
+        time: 3.8166666
+        value: {x: 4.3732657, y: 15.606753, z: 0.92155474}
+        inSlope: {x: -0.067837305, y: 4.7073474, z: 0.6543439}
+        outSlope: {x: -0.067837305, y: 4.7073474, z: 0.6543439}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -470,8 +513,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.6333332
-        value: 18.96343
+        time: 2.6333334
+        value: 14.273153
         inSlope: 1.6366588
         outSlope: 1.6366588
         tangentMode: 136
@@ -479,10 +522,10 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 3.8000002
-        value: 20.23866
-        inSlope: 2.2839954
-        outSlope: 2.2839954
+        time: 3.8
+        value: 15.548384
+        inSlope: 2.2839956
+        outSlope: 2.2839956
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -525,19 +568,19 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.6333332
-        value: 1.025436
-        inSlope: 1.3160676
-        outSlope: 1.3160676
+        time: 2.65
+        value: 0.5589393
+        inSlope: 0.29411322
+        outSlope: 0.29411322
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 3.8000002
-        value: 4.391113
-        inSlope: 4.82549
-        outSlope: 4.82549
+        time: 3.8166666
+        value: 0.92155474
+        inSlope: 0.6543439
+        outSlope: 0.6543439
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -617,6 +660,31 @@ MonoBehaviour:
     wiggleRange: {x: 3.3, y: 9.35}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 3.1033237
+        outSlope: 3.1033237
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.15432097
+      - serializedVersion: 3
+        time: 0.9938202
+        value: 1.0061798
+        inSlope: -0.13253172
+        outSlope: -0.13253172
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.5155246
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 4.28
@@ -795,6 +863,31 @@ MonoBehaviour:
     wiggleRange: {x: 0, y: 0}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 0.78
@@ -849,13 +942,49 @@ MonoBehaviour:
     m_BlendOutDuration: 0.33333333333333304
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -882,7 +1011,25 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -921,7 +1068,25 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -948,13 +1113,49 @@ MonoBehaviour:
     m_BlendOutDuration: 0.6500000000000004
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1050,13 +1251,49 @@ MonoBehaviour:
     m_BlendOutDuration: 0.6666666666666661
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1107,7 +1344,25 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1134,13 +1389,49 @@ MonoBehaviour:
     m_BlendOutDuration: 0.3000000000000007
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1167,25 +1458,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1228,8 +1501,8 @@ MonoBehaviour:
   findMissingCameraInHierarchy: 0
   fixMissingPrefabByCameraName: 0
   m_resolution: {x: 3840, y: 2160}
-  m_prerenderingFrameCount: 3
-  m_renderTextureFormat: 10
+  m_prerenderingFrameCount: 0
+  m_renderTextureFormat: 9
   m_depth: 24
 --- !u!114 &-6481175405222720147
 MonoBehaviour:
@@ -1256,6 +1529,31 @@ MonoBehaviour:
     wiggleRange: {x: 1, y: 3.52}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 5.31
@@ -3102,17 +3400,42 @@ MonoBehaviour:
     target: {fileID: 0}
     noiseSeed: {x: 0.11, y: 0.21}
     noiseScale: {x: 26.22, y: 80.1}
-    roughness: 0.93
+    roughness: 1.27
     wiggleRange: {x: 7.5, y: 8.3}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 3.9
       focalLength: 73
       aperture: 12.3
-      bladeCount: 4
-      bladeCurvature: 0.06
+      bladeCount: 3
+      bladeCurvature: 0.094
       bladeRotation: 0
     lookAtProps:
       IsActive: 0
@@ -3173,6 +3496,31 @@ MonoBehaviour:
     wiggleRange: {x: 1.75, y: 2.4}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 0.96
@@ -3350,6 +3698,31 @@ MonoBehaviour:
     wiggleRange: {x: 5, y: 5.24}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 2
       focusDistance: 6.09
@@ -3436,6 +3809,31 @@ MonoBehaviour:
     wiggleRange: {x: 0, y: 0}
     multiplyColor: {r: 1, g: 1, b: 1, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 2.36
@@ -3648,6 +4046,31 @@ MonoBehaviour:
     wiggleRange: {x: 0, y: 0}
     multiplyColor: {r: 0, g: 0, b: 0, a: 1}
     dofOverride: 1
+    fadeCurveOverride: 0
+    fadeCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     dofControlProps:
       depthOfFieldMode: 0
       focusDistance: 2.36

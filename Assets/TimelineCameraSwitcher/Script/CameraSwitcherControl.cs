@@ -36,7 +36,10 @@ public class CameraSwitcherControl : MonoBehaviour
     public int widht => (int)cameraSwitcherSettings.resolution.x;
     public int height =>(int) cameraSwitcherSettings.resolution.y;
 
-    
+
+
+    public Camera cameraA;
+    public Camera cameraB;
     
     public Material material => cameraSwitcherSettings.material;
     
@@ -76,35 +79,26 @@ public class CameraSwitcherControl : MonoBehaviour
         {
             outputRawImage.material = material;
             outputRawImage.texture = null;
-        }
+        } 
         
-        if (outPutRenderTarget)
-        {
-            Graphics.Blit(Texture2D.whiteTexture,outPutRenderTarget,cameraSwitcherSettings.material,cameraSwitcherSettings.material.FindPass("Universal Forward"));
-        }
-
-    }
-
-    private void LateUpdate()
-    {
+        Blit();
+        
        
-
-
+    }
+    
+    public void ReleaseRenderTarget()
+    {
+        if (cameraA) cameraA.targetTexture = null;
+        if(cameraB) cameraB.targetTexture = null;
+        
+        renderTextureA.Release();
+        renderTextureB.Release();
+        // cameraA = null;
+        // cameraB = null;
     }
 
     public void Blit()
     {
-      
-       
-       
-            // if (outputRawImage != null)
-            // {
-            //     outputRawImage.material = material;
-            //     outputRawImage.texture = null;
-            // }
-            
-            
-            
-        
+        if(material != null && outPutRenderTarget != null)Graphics.Blit(Texture2D.blackTexture, outPutRenderTarget, material, material.FindPass("Universal Forward"));
     }
 }

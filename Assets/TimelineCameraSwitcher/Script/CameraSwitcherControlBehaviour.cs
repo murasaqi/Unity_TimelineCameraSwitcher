@@ -47,7 +47,8 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public Vector2 wiggleRange  = new Vector2(5,5);
     [SerializeField] public Color multiplyColor = Color.white;
     [SerializeField] public bool dofOverride = false;
-  
+    [SerializeField] public bool fadeCurveOverride = false;
+    public AnimationCurve fadeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
     [SerializeField] public DofControlProps dofControlProps;
     [SerializeField] public LookAtProps lookAtProps;
     public override void OnPlayableCreate (Playable playable)
