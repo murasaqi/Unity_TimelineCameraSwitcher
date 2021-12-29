@@ -203,27 +203,31 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    currentClips.Add(playableBehaviour);     
                }
 
-               var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
+              
                if (cameraSwitcherControlClip.lookAt)
                {
+                   var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
                    
                    if (lookAt == null) lookAt = playableBehaviour.camera.gameObject.AddComponent<LookAtConstraint>();
                    if (lookAt && playableBehaviour.target)
                    {
-                       if (lookAt.GetSource(0).sourceTransform != playableBehaviour.target)
+
+
+                       if (lookAt.sourceCount > 0 &&  lookAt.GetSource(0).sourceTransform != playableBehaviour.target)
                        {
-                           // lookAt.enabled = true;
                            while (lookAt.sourceCount > 0)
                            {
                                lookAt.RemoveSource(0);
                            }
                            var source = new ConstraintSource();
                            source.sourceTransform = playableBehaviour.target;
-                           lookAt.SetSource(1,source);
-
+                           source.weight = 1;
+                           lookAt.AddSource(source);
                        }
-
-                       // lookAt.enabled = true;
+                           // lookAt.enabled = true;
+                      
+                           
+                       lookAt.enabled = true;
                        lookAt.locked = playableBehaviour.lookAtProps.Lock;
                        lookAt.constraintActive = playableBehaviour.lookAtProps.IsActive;
                        lookAt.weight = playableBehaviour.lookAtProps.Weight;
@@ -235,7 +239,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                }
                else
                {
-                   if (lookAt) lookAt.enabled = false;
+                   // if (lookAt) lookAt.enabled = false;
                }
               
            }

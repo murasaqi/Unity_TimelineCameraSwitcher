@@ -1511,7 +1511,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719454281}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1537,7 +1537,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1773,8 +1773,8 @@ MonoBehaviour:
     bladeCount: 5
     bladeCurvature: 0
     bladeRotation: -165
-  cameraA: {fileID: 1719454283}
-  cameraB: {fileID: 1719454283}
+  cameraA: {fileID: 2084785978}
+  cameraB: {fileID: 2082829445}
 --- !u!4 &1813787477
 Transform:
   m_ObjectHideFlags: 0
@@ -2218,7 +2218,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -2244,7 +2244,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -2269,7 +2269,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_LocalRotation: {x: 0.058928557, y: -0.9636436, z: 0.14389758, w: 0.21728314}
+  m_LocalRotation: {x: 0.031662162, y: -0.9658859, z: 0.143352, w: 0.21333586}
   m_LocalPosition: {x: 2.61, y: 2.98, z: 5.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2340,12 +2340,12 @@ LookAtConstraint:
   m_Enabled: 1
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: -7.5, y: -1.8, z: 0}
-  m_Roll: 3.07
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_Roll: 3.11
   m_WorldUpObject: {fileID: 0}
   m_UseUpObject: 0
   m_IsContraintActive: 1
-  m_IsLocked: 0
+  m_IsLocked: 1
   m_Sources:
   - sourceTransform: {fileID: 5927396954247894498}
     weight: 1
