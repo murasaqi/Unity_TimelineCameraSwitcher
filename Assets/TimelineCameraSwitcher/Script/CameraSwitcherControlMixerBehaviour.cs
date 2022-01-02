@@ -181,6 +181,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
            if (inputWeight > 0)
            {
+               
+               
                if (playableBehaviour.dofOverride)
                {
                    depthOfFieldMode = playableBehaviour.dofControlProps.depthOfFieldMode;
@@ -260,7 +262,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    
                     if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time < nextClip.start + clip.duration )
                     {
-                        
+                        currentClips.Add(_playableBehaviour);     
                         m_TrackBinding.cameraB = _playableBehaviour.camera;
                         // blending中で、次のカメラが同じじゃないとき
                         if (_playableBehaviour.camera != playableBehaviour.camera)
@@ -294,8 +296,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             // var nextInputWeight = Mathf.Clamp(1f - inputWeight,0f,1f);
                             SelectSingleCamera(playableBehaviour, inputWeight, currentTime,_playableBehaviour);
                             m_TrackBinding.cameraB = _playableBehaviour.camera;
-                           
-                           
+                            var invWeight = 1f - inputWeight;
+                            if (_playableBehaviour.dofOverride)
+                            {
+                                depthOfFieldMode = _playableBehaviour.dofControlProps.depthOfFieldMode;
+                                focusDistance += _playableBehaviour.dofControlProps.focusDistance*invWeight;
+                                focalLength += _playableBehaviour.dofControlProps.focalLength*invWeight;
+                                aperture += _playableBehaviour.dofControlProps.aperture * invWeight;
+                                bladeCount += Mathf.FloorToInt(_playableBehaviour.dofControlProps.bladeCount*invWeight);
+                                bladeCurvature += _playableBehaviour.dofControlProps.bladeCurvature * invWeight;
+                                bladeRotation += _playableBehaviour.dofControlProps.bladeRotation * invWeight;
+               
+
+                            }
                         }
 
                     }
