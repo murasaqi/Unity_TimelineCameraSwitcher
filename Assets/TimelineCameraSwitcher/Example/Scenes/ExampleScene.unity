@@ -1177,7 +1177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1567861879
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1268,7 +1268,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598200450}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1294,7 +1294,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1764,6 +1764,10 @@ MonoBehaviour:
   volume: {fileID: 1350045710}
   outputRawImage: {fileID: 1567861880}
   outPutRenderTarget: {fileID: 8400000, guid: 9d8a9e46800a8664cb7fa4646deccbc7, type: 2}
+  m_resolution: {x: 3840, y: 2160}
+  m_prerenderingFrameCount: 3
+  m_renderTextureFormat: 9
+  m_depth: 24
   dofControl: 1
   baseDofValues:
     depthOfFieldMode: 2
@@ -1773,8 +1777,8 @@ MonoBehaviour:
     bladeCount: 5
     bladeCurvature: 0
     bladeRotation: -165
-  cameraA: {fileID: 2084785978}
-  cameraB: {fileID: 2082829445}
+  cameraA: {fileID: 1598200452}
+  cameraB: {fileID: 2013416889}
 --- !u!4 &1813787477
 Transform:
   m_ObjectHideFlags: 0
@@ -2218,7 +2222,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -2244,7 +2248,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -2269,7 +2273,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2084785977}
-  m_LocalRotation: {x: 0.031662162, y: -0.9658859, z: 0.143352, w: 0.21333586}
+  m_LocalRotation: {x: 0.059264883, y: -0.96362305, z: 0.14382163, w: 0.21733338}
   m_LocalPosition: {x: 2.61, y: 2.98, z: 5.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

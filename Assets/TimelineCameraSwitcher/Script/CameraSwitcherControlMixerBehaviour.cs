@@ -68,36 +68,27 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private void InitRenderTexture(bool isA)
     {
         var depth = 0;
-        if (m_track.depthList == DepthList.AtLeast16) depth = 16;
-        if (m_track.depthList == DepthList.AtLeast24_WidthStencil) depth = 24;
+        if (m_TrackBinding.depthList == DepthList.AtLeast16) depth = 16;
+        if (m_TrackBinding.depthList == DepthList.AtLeast24_WidthStencil) depth = 24;
         
         if (isA)
         {
             m_TrackBinding.renderTextureA.Release();
-            m_TrackBinding.renderTextureA.format= m_track.renderTextureFormat;
+            m_TrackBinding.renderTextureA.format= m_TrackBinding.renderTextureFormat;
             m_TrackBinding.renderTextureA.depth = depth;
-            m_TrackBinding.renderTextureA.width = m_track.width;
-            m_TrackBinding.renderTextureA.height = m_track.height;
+            m_TrackBinding.renderTextureA.width = m_TrackBinding.width;
+            m_TrackBinding.renderTextureA.height = m_TrackBinding.height;
         }else
         {
             m_TrackBinding.renderTextureB.Release();
-            m_TrackBinding.renderTextureB.format= m_track.renderTextureFormat;
+            m_TrackBinding.renderTextureB.format= m_TrackBinding.renderTextureFormat;
             m_TrackBinding.renderTextureB.depth = depth;
-            m_TrackBinding.renderTextureB.width = m_track.width;
-            m_TrackBinding.renderTextureB.height = m_track.height;
+            m_TrackBinding.renderTextureB.width = m_TrackBinding.width;
+            m_TrackBinding.renderTextureB.height = m_TrackBinding.height;
             // m_TrackBinding.material.SetTexture("");
         }
 
-        // if (m_TrackBinding.outPutRenderTarget != null)
-        // {
-            // m_TrackBinding.outPutRenderTarget.Release();
-            // m_TrackBinding.outPutRenderTarget.format= m_track.renderTextureFormat;
-            // m_TrackBinding.outPutRenderTarget.depth = depth;
-            // m_TrackBinding.outPutRenderTarget.width = m_track.width;
-            // m_TrackBinding.outPutRenderTarget.height = m_track.height;
-        // }
-        
-        
+
     }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
@@ -112,11 +103,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             m_FirstFrameHappened = true;
         }
         
-        if(m_TrackBinding.renderTextureA.format != m_track.renderTextureFormat) InitRenderTexture(true);
-        if(m_TrackBinding.renderTextureB.format != m_track.renderTextureFormat) InitRenderTexture(false);
-        if(m_TrackBinding.renderTextureA.width != m_track.width || m_TrackBinding.cameraSwitcherSettings.renderTextureA.height != m_track.height) InitRenderTexture(true);
-        if(m_TrackBinding.renderTextureB.width != m_track.width || m_TrackBinding.cameraSwitcherSettings.renderTextureB.height != m_track.height) InitRenderTexture(false);
-        if (m_track.m_prerenderingFrameCount != m_TrackBinding.preRenderingFrameCount) m_TrackBinding.preRenderingFrameCount = m_track.m_prerenderingFrameCount;
+        if(m_TrackBinding.renderTextureA.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(true);
+        if(m_TrackBinding.renderTextureB.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(false);
+        if(m_TrackBinding.renderTextureA.width != m_TrackBinding.width || m_TrackBinding.cameraSwitcherSettings.renderTextureA.height != m_TrackBinding.height) InitRenderTexture(true);
+        if(m_TrackBinding.renderTextureB.width != m_TrackBinding.width || m_TrackBinding.cameraSwitcherSettings.renderTextureB.height != m_TrackBinding.height) InitRenderTexture(false);
+        if (m_TrackBinding.m_prerenderingFrameCount != m_TrackBinding.preRenderingFrameCount) m_TrackBinding.preRenderingFrameCount = m_TrackBinding.m_prerenderingFrameCount;
         
         var timelineAsset = director.playableAsset as TimelineAsset;
        

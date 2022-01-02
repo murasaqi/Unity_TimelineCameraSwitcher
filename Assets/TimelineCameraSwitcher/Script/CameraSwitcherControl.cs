@@ -24,17 +24,34 @@ public class CameraSwitcherControl : MonoBehaviour
     // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
+    
+    [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
+    [SerializeField] public int m_prerenderingFrameCount = 3;
+    [SerializeField] private RenderTextureFormat m_renderTextureFormat;
+    // [SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
+    [SerializeField]public DepthList m_depth;
+    
     [SerializeField] public bool dofControl = false;
     [SerializeField] public DofControlProps baseDofValues;
     
 
+    
+        
+    // public int width => (int)m_resolution.x;
+    // public int height => (int)m_resolution.y;
+    public RenderTextureFormat renderTextureFormat => m_renderTextureFormat;
+
+    // public CameraSwitcherSettings cameraSwitcherSettings => m_cameraSwitcherSettings;
+    public DepthList depthList => m_depth;
+    
+    
     // [SerializeField] private Texture tex;
     private float m_fader;
     public RenderTexture renderTextureA => cameraSwitcherSettings.renderTextureA;
     public RenderTexture renderTextureB => cameraSwitcherSettings.renderTextureB;
     
-    public int widht => (int)cameraSwitcherSettings.resolution.x;
-    public int height =>(int) cameraSwitcherSettings.resolution.y;
+    public int width => (int)m_resolution.x;
+    public int height =>(int) m_resolution.y;
 
 
 
@@ -75,6 +92,18 @@ public class CameraSwitcherControl : MonoBehaviour
 
     private void Update()
     {
+
+        if (cameraSwitcherSettings.resolution != m_resolution)
+        {
+            cameraSwitcherSettings.resolution = m_resolution;
+        }
+
+        if (cameraSwitcherSettings.preRenderingFrameCount != m_prerenderingFrameCount)
+        {
+            cameraSwitcherSettings.preRenderingFrameCount = m_prerenderingFrameCount;
+        }
+        
+        // if(cameraSwitcherSettings.de)
         if (outputRawImage != null)
         {
             outputRawImage.material = material;
