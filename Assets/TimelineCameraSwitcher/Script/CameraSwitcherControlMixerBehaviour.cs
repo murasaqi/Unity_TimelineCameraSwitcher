@@ -120,16 +120,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         if (dof == null && m_TrackBinding.volume != null)
         {
-            foreach (var profileComponent in m_TrackBinding.volume.profile.components)
-            {
-                if (profileComponent as DepthOfField)
-                {
-                    dof = profileComponent as DepthOfField;
-                }
-            }
+            m_TrackBinding.volume.TryGet<DepthOfField>(out dof);
         }
-       
-        
         
 
         int i = 0;
@@ -137,7 +129,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
             var playableBehaviour = scriptPlayable.GetBehaviour();
-            // m_TrackBinding.cameraA = 
             if (playableBehaviour.camera != null)
             {
                 _cameras.Add(playableBehaviour.camera);
@@ -145,8 +136,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             }
             i++;
         }
-
-        
         i = 0;
 
 #if UNITY_EDITOR

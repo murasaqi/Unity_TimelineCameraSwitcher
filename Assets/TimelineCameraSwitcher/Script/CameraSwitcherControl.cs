@@ -20,7 +20,7 @@ public class CameraSwitcherControl : MonoBehaviour
     
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
-    [SerializeField] public Volume volume;
+    [SerializeField] public VolumeProfile volume;
     // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
