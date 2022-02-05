@@ -105,14 +105,14 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
         if(m_TrackBinding.renderTextureA.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(true);
         if(m_TrackBinding.renderTextureB.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(false);
-        if(m_TrackBinding.renderTextureA.width != m_TrackBinding.width || m_TrackBinding.cameraSwitcherSettings.renderTextureA.height != m_TrackBinding.height) InitRenderTexture(true);
-        if(m_TrackBinding.renderTextureB.width != m_TrackBinding.width || m_TrackBinding.cameraSwitcherSettings.renderTextureB.height != m_TrackBinding.height) InitRenderTexture(false);
-        if (m_TrackBinding.m_prerenderingFrameCount != m_TrackBinding.preRenderingFrameCount) m_TrackBinding.preRenderingFrameCount = m_TrackBinding.m_prerenderingFrameCount;
+        if(m_TrackBinding.renderTextureA.width != m_TrackBinding.width || m_TrackBinding.renderTextureA.height != m_TrackBinding.height) InitRenderTexture(true);
+        if(m_TrackBinding.renderTextureB.width != m_TrackBinding.width || m_TrackBinding.renderTextureB.height != m_TrackBinding.height) InitRenderTexture(false);
+        if (m_TrackBinding.prerenderingFrameCount != m_TrackBinding.prerenderingFrameCount) m_TrackBinding.prerenderingFrameCount = m_TrackBinding.prerenderingFrameCount;
         
         var timelineAsset = director.playableAsset as TimelineAsset;
        
         fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
-        var offsetStartTime = (1f / fps) * m_TrackBinding.preRenderingFrameCount;
+        var offsetStartTime = (1f / fps) * m_TrackBinding.prerenderingFrameCount;
         
         
         m_TrackBinding.material.SetFloat("_PlayableDirectorTime",(float)director.time);

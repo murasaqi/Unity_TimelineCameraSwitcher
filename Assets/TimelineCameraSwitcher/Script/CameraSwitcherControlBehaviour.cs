@@ -18,6 +18,10 @@ public class DofControlProps
     [SerializeField, Range(1,9)] public int bladeCount;
     [SerializeField, Range(0, 1)] public float bladeCurvature;
     [SerializeField, Range(-180, 180)] public float bladeRotation;
+    [SerializeField] public float start;
+    [SerializeField] public float end;
+    [SerializeField, Range(0.5f, 1.5f)] public float maxRadius;
+    [SerializeField] public bool highQualitySampling;
 }
 
 [Serializable]

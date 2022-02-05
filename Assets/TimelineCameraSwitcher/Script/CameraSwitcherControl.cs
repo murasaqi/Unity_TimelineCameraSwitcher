@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 
@@ -21,44 +22,33 @@ public class CameraSwitcherControl : MonoBehaviour
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
     [SerializeField] public VolumeProfile volume;
-    // [SerializeField] public CameraSwitcherOutputTarget outputTarget = CameraSwitcherOutputTarget.RenderTexture;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
-    
-    [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
-    [SerializeField] public int m_prerenderingFrameCount = 3;
-    [SerializeField] private RenderTextureFormat m_renderTextureFormat;
-    // [SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
-    [SerializeField]public DepthList m_depth;
-    
+    [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
+    [SerializeField, Range(0,10)] public int prerenderingFrameCount = 3;
+    [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
+    [SerializeField] public DepthList depth;
+    [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
     [SerializeField] public DofControlProps baseDofValues;
-    
-
-    
-        
-    // public int width => (int)m_resolution.x;
-    // public int height => (int)m_resolution.y;
-    public RenderTextureFormat renderTextureFormat => m_renderTextureFormat;
-
-    // public CameraSwitcherSettings cameraSwitcherSettings => m_cameraSwitcherSettings;
-    public DepthList depthList => m_depth;
+   
+    public DepthList depthList => depth;
     
     
     // [SerializeField] private Texture tex;
     private float m_fader;
-    public RenderTexture renderTextureA => cameraSwitcherSettings.renderTextureA;
-    public RenderTexture renderTextureB => cameraSwitcherSettings.renderTextureB;
+    public RenderTexture renderTextureA;
+    public RenderTexture renderTextureB;
     
-    public int width => (int)m_resolution.x;
-    public int height =>(int) m_resolution.y;
+    public int width => (int)resolution.x;
+    public int height =>(int) resolution.y;
 
 
 
     public Camera cameraA;
     public Camera cameraB;
     
-    public Material material => cameraSwitcherSettings.material;
+    // public Material material => material;
     
     #if UNITY_EDITOR
     [MenuItem("GameObject/Camera Switcher Control/Camera Switcher Control", false, 10)]
@@ -78,32 +68,10 @@ public class CameraSwitcherControl : MonoBehaviour
     #endif
     
     
-    public int preRenderingFrameCount
-    {
-        get
-        {
-            return cameraSwitcherSettings.preRenderingFrameCount;
-        }
-        set
-        {
-            cameraSwitcherSettings.preRenderingFrameCount = value;
-        }
-    }
-
+ 
     private void Update()
     {
 
-        if (cameraSwitcherSettings.resolution != m_resolution)
-        {
-            cameraSwitcherSettings.resolution = m_resolution;
-        }
-
-        if (cameraSwitcherSettings.preRenderingFrameCount != m_prerenderingFrameCount)
-        {
-            cameraSwitcherSettings.preRenderingFrameCount = m_prerenderingFrameCount;
-        }
-        
-        // if(cameraSwitcherSettings.de)
         if (outputRawImage != null)
         {
             outputRawImage.material = material;
@@ -114,7 +82,31 @@ public class CameraSwitcherControl : MonoBehaviour
         
        
     }
-    
+
+    private DepthOfField dof;
+
+
+    public void ChangeDofMode()
+    {
+        dof.mode.value = baseDofValues.depthOfFieldMode;
+    }
+    public void SetBaseDofValues()
+    {
+        if(volume == null) return;
+        
+        volume.TryGet<DepthOfField>(out dof);
+        baseDofValues.depthOfFieldMode = dof.mode.value;
+        baseDofValues.focusDistance = dof.focusDistance.value;
+        baseDofValues.focalLength = dof.focalLength.value;
+        baseDofValues.aperture = dof.aperture.value;
+        baseDofValues.bladeCount = dof.bladeCount.value;
+        baseDofValues.bladeRotation = dof.bladeRotation.value;
+        baseDofValues.start = dof.gaussianStart.value;
+        baseDofValues.end = dof.gaussianEnd.value;
+        baseDofValues.maxRadius = dof.gaussianMaxRadius.value;
+        baseDofValues.highQualitySampling = dof.highQualitySampling.value;
+
+    }
     public void ReleaseRenderTarget()
     {
         if (cameraA) cameraA.targetTexture = null;
