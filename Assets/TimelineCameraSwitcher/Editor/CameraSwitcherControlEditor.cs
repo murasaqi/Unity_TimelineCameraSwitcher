@@ -34,6 +34,12 @@ public class CameraSwitcherControlEditor : Editor
 
         var profileField = container.Q<ObjectField>("ProfileField");
         profileField.objectType = typeof(CameraSwitcherSettings);
+        profileField.RegisterValueChangedCallback((evt) =>
+        {
+            InitResolutionListButton(cameraSwitcherControl);
+            cameraSwitcherControl.ChangeDofMode();
+            
+        });
         if (cameraSwitcherControl.cameraSwitcherSettings != null) createButton.SetEnabled(false);
         createButton.clicked += () =>
         {

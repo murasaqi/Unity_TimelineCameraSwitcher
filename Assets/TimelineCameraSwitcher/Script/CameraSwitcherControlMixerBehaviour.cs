@@ -129,6 +129,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         if (dof == null && m_TrackBinding.volume != null)
         {
             m_TrackBinding.volume.TryGet<DepthOfField>(out dof);
+            
+          
         }
         
 
@@ -336,6 +338,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         if (dof)
         {
+           
             if (m_TrackBinding.dofControl)
             {
                
@@ -350,6 +353,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     dof.bladeCount.value = bladeCount;
                     dof.bladeCurvature.value = bladeCurvature;
                     dof.bladeRotation.value = bladeRotation;
+                    
 #elif USE_HDRP
 #endif    
                 }

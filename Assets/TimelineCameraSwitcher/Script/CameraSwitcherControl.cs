@@ -31,7 +31,7 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public DepthList depth;
     [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
-    [SerializeField] public DofControlProps baseDofValues;
+    [SerializeField] public DofControlProps baseDofValues= new DofControlProps();
    
     public DepthList depthList => depth;
     
@@ -89,16 +89,15 @@ public class CameraSwitcherControl : MonoBehaviour
     public void ChangeDofMode()
     {
 #if USE_URP
+        if(dof == null) return;
         dof.mode.value = baseDofValues.depthOfFieldMode;
 #endif
     }
     public void SetBaseDofValues()
     {
+#if USE_URP
         if(volume == null) return;
         volume.TryGet<DepthOfField>(out dof);
-
-#if USE_URP
-
         baseDofValues.depthOfFieldMode = dof.mode.value;
         baseDofValues.focusDistance = dof.focusDistance.value;
         baseDofValues.focalLength = dof.focalLength.value;

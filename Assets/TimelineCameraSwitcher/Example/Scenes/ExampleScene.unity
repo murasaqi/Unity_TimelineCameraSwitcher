@@ -153,7 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa65a2e85f947bc49b4253ed4952880d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraSwitcherSettings: {fileID: 0}
+  cameraSwitcherSettings: {fileID: 11400000, guid: c287b2b55928c3042a62d35dd9a2d06e,
+    type: 2}
   volume: {fileID: 11400000, guid: 6e1fae58a7f300d459a875a0eed1fe3a, type: 2}
   outputRawImage: {fileID: 1567861880}
   outPutRenderTarget: {fileID: 0}
@@ -164,9 +165,9 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
   dofControl: 1
   baseDofValues:
-    depthOfFieldMode: 1
+    depthOfFieldMode: 2
     focusDistance: 0.96
-    focalLength: 79
+    focalLength: 71
     aperture: 6
     bladeCount: 4
     bladeCurvature: 0
@@ -177,8 +178,8 @@ MonoBehaviour:
     highQualitySampling: 1
   renderTextureA: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   renderTextureB: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
-  cameraA: {fileID: 1598200452}
-  cameraB: {fileID: 2013416889}
+  cameraA: {fileID: 1719454283}
+  cameraB: {fileID: 1719454283}
 --- !u!4 &174959408
 Transform:
   m_ObjectHideFlags: 0
@@ -1267,7 +1268,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598200450}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1293,7 +1294,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1510,7 +1511,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719454281}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.09426757, g: 0.063056245, b: 0.122641504, a: 0}
@@ -1536,7 +1537,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 23
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
