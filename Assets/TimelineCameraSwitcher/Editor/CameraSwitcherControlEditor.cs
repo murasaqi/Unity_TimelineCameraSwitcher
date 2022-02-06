@@ -127,11 +127,9 @@ public class CameraSwitcherControlEditor : Editor
         var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
         dofControlField.RegisterValueChangedCallback((evt => dofParameterElement.SetEnabled(evt.newValue)));
         
-        var dofParameters = container.Q<VisualElement>("DofParametersField");
-        var dofMode = dofParameters.Q<EnumField>("DepthOfFieldMode");
-        var bokeh = dofParameters.Q<Foldout>("Bokeh");
-        var gaussian = dofParameters.Q<Foldout>("Gaussian");
-        
+        var dofParameters = container.Q<VisualElement>("DoFParameterElement");
+        var dofMode = container.Q<EnumField>("DepthOfFieldMode");
+      
 
         if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
 
@@ -161,15 +159,19 @@ public class CameraSwitcherControlEditor : Editor
     private void CheckDofMode(CameraSwitcherControl cameraSwitcherControl)
     {
 #if USE_URP
-        var dofParameters = container.Q<VisualElement>("DofParametersField");
-        var dofMode = dofParameters.Q<EnumField>("DepthOfFieldMode");
-        var bokeh = dofParameters.Q<Foldout>("Bokeh");
-        var gaussian = dofParameters.Q<Foldout>("Gaussian");
+        var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
+        var dofMode = dofParameterElement.Q<EnumField>("DepthOfFieldMode");
+        var bokeh = dofParameterElement.Q<Foldout>("Bokeh");
+        var gaussian = dofParameterElement.Q<Foldout>("Gaussian");
 
-        bokeh.value = cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Bokeh;
-        bokeh.SetEnabled(cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Bokeh);
-        gaussian.value = cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Gaussian;
-        gaussian.SetEnabled(cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Gaussian);
+       
+        bokeh.value = cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh;
+        bokeh.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh);    
+    
+ 
+        gaussian.value =cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian;
+        gaussian.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian);
+        
 #endif
     }
 

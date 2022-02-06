@@ -24,14 +24,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 2
-      focusDistance: 0.9
-      focalLength: 195
-      aperture: 15.3
+    bokehProps:
+      focusDistance: 0.42
+      focalLength: 113
+      aperture: 10.7
       bladeCount: 4
-      bladeCurvature: 0
+      bladeCurvature: 0.351
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -642,14 +642,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 0
-      focusDistance: 4.28
-      focalLength: 129
-      aperture: 14.1
-      bladeCount: 3
-      bladeCurvature: 0
+    bokehProps:
+      focusDistance: 3.22
+      focalLength: 121
+      aperture: 13.8
+      bladeCount: 5
+      bladeCurvature: 0.307
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -828,14 +828,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 0
-      focusDistance: 0.78
-      focalLength: 151
-      aperture: 21.2
-      bladeCount: 4
-      bladeCurvature: 0.496
+    bokehProps:
+      focusDistance: 0
+      focalLength: 0
+      aperture: 0
+      bladeCount: 0
+      bladeCurvature: 0
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -1490,29 +1490,29 @@ MonoBehaviour:
       noiseScale: {x: 1, y: 1}
       roughness: 1.19
       wiggleRange: {x: 4.83, y: 6.48}
-    dofOverride: 0
-    dofControlProps:
-      depthOfFieldMode: 0
-      focusDistance: 5.31
-      focalLength: 158
-      aperture: 11.3
+    dofOverride: 1
+    bokehProps:
+      focusDistance: 2.92
+      focalLength: 113
+      aperture: 12.7
       bladeCount: 4
-      bladeCurvature: 0
+      bladeCurvature: 0.326
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
       highQualitySampling: 0
-    lookAt: 0
+    lookAt: 1
     lookAtProps:
       target:
-        exposedName: 
+        exposedName: 12e17fbee2c168a4b9de501c0891b486
         defaultValue: {fileID: 0}
-      IsActive: 0
-      Weight: 0
+      IsActive: 1
+      Weight: 1
       Roll: 0
-      UseUpObject: 0
-      Lock: 0
+      UseUpObject: 1
+      Lock: 1
       RotationAtReset: {x: 0, y: 0, z: 0}
       RotationOffset: {x: 0, y: 0, z: 0}
     colorBlend: 0
@@ -3349,14 +3349,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 2
-      focusDistance: 3.9
-      focalLength: 104
-      aperture: 18
-      bladeCount: 4
-      bladeCurvature: 0.302
+    bokehProps:
+      focusDistance: 0
+      focalLength: 0
+      aperture: 0
+      bladeCount: 0
+      bladeCurvature: 0
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -3424,14 +3424,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 2
-      focusDistance: 0.96
-      focalLength: 71
-      aperture: 6
-      bladeCount: 4
-      bladeCurvature: 0.501
+    bokehProps:
+      focusDistance: 1.01
+      focalLength: 151
+      aperture: 15
+      bladeCount: 5
+      bladeCurvature: 0.464
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -3609,14 +3609,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 2
-      focusDistance: 6.09
-      focalLength: 288
-      aperture: 10.2
-      bladeCount: 5
-      bladeCurvature: 0
+    bokehProps:
+      focusDistance: 4.87
+      focalLength: 189
+      aperture: 12.7
+      bladeCount: 4
+      bladeCurvature: 0.376
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -3703,14 +3703,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 0
-      focusDistance: 2.36
-      focalLength: 45
-      aperture: 3.4
-      bladeCount: 4
-      bladeCurvature: 0.51
+    bokehProps:
+      focusDistance: 0
+      focalLength: 0
+      aperture: 0
+      bladeCount: 0
+      bladeCurvature: 0
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0
@@ -3923,14 +3923,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    dofControlProps:
-      depthOfFieldMode: 0
-      focusDistance: 2.36
-      focalLength: 45
-      aperture: 3.4
-      bladeCount: 4
-      bladeCurvature: 0.51
+    bokehProps:
+      focusDistance: 0
+      focalLength: 0
+      aperture: 0
+      bladeCount: 0
+      bladeCurvature: 0
       bladeRotation: 0
+    gaussianProps:
       start: 0
       end: 0
       maxRadius: 0

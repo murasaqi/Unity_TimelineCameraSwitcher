@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -184,13 +185,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                
                if (playableBehaviour.dofOverride)
                {
-                   depthOfFieldMode = playableBehaviour.dofControlProps.depthOfFieldMode;
-                   focusDistance += playableBehaviour.dofControlProps.focusDistance*inputWeight;
-                   focalLength += playableBehaviour.dofControlProps.focalLength*inputWeight;
-                   aperture += playableBehaviour.dofControlProps.aperture * inputWeight;
-                   bladeCount += Mathf.FloorToInt(playableBehaviour.dofControlProps.bladeCount*inputWeight);
-                   bladeCurvature += playableBehaviour.dofControlProps.bladeCurvature * inputWeight;
-                   bladeRotation += playableBehaviour.dofControlProps.bladeRotation * inputWeight;
+                   // depthOfFieldMode = playableBehaviour.depthOfFieldMode;
+                   focusDistance += playableBehaviour.bokehProps.focusDistance*inputWeight;
+                   focalLength += playableBehaviour.bokehProps.focalLength*inputWeight;
+                   aperture += playableBehaviour.bokehProps.aperture * inputWeight;
+                   bladeCount += Mathf.FloorToInt(playableBehaviour.bokehProps.bladeCount*inputWeight);
+                   bladeCurvature += playableBehaviour.bokehProps.bladeCurvature * inputWeight;
+                   bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
                
                    currentClips.Add(playableBehaviour);     
                }
@@ -201,9 +202,15 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
                    
                    if (lookAt == null) lookAt = playableBehaviour.camera.gameObject.AddComponent<LookAtConstraint>();
-                   if (lookAt && cameraSwitcherControlClip.target)
+                   var target = playableBehaviour.lookAtProps.target.Resolve(playable.GetGraph().GetResolver());
+                   if (lookAt && target)
                    {
 
+
+                       // for (int index = 0; index <lookAt.sourceCount; index++)
+                       // {
+                       //    Debug.Log(lookAt.GetSource(index).sourceTransform.name);
+                       // }
 
                        if (lookAt.sourceCount > 0 )
                        {
@@ -212,16 +219,23 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                lookAt.RemoveSource(0);
                            }
 
-                           if (lookAt.GetSource(0).sourceTransform != cameraSwitcherControlClip.target)
+                           if (lookAt.GetSource(0).sourceTransform != target)
                            {
-                               lookAt.RemoveSource(0);
+                               // lookAt.RemoveSource(0);
                                var source = new ConstraintSource();
-                               source.sourceTransform = cameraSwitcherControlClip.target;
+                               source.sourceTransform = target;
                                source.weight = 1;
-                               lookAt.AddSource(source);
+                               lookAt.SetSource(0,source);
                            }
                            
                           
+                       }
+                       else
+                       {
+                           var source = new ConstraintSource();
+                           source.sourceTransform = target;
+                           source.weight = 1;
+                           lookAt.AddSource(source);
                        }
 
                        lookAt.enabled = true;
@@ -303,13 +317,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             var invWeight = 1f - inputWeight;
                             if (_playableBehaviour.dofOverride)
                             {
-                                depthOfFieldMode = _playableBehaviour.dofControlProps.depthOfFieldMode;
-                                focusDistance += _playableBehaviour.dofControlProps.focusDistance*invWeight;
-                                focalLength += _playableBehaviour.dofControlProps.focalLength*invWeight;
-                                aperture += _playableBehaviour.dofControlProps.aperture * invWeight;
-                                bladeCount += Mathf.FloorToInt(_playableBehaviour.dofControlProps.bladeCount*invWeight);
-                                bladeCurvature += _playableBehaviour.dofControlProps.bladeCurvature * invWeight;
-                                bladeRotation += _playableBehaviour.dofControlProps.bladeRotation * invWeight;
+                                // depthOfFieldMode = _playableBehaviour.bokehProps.depthOfFieldMode;
+                                focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
+                                focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
+                                aperture += _playableBehaviour.bokehProps.aperture * invWeight;
+                                bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
+                                bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
+                                bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
                
 
                             }
@@ -345,27 +359,36 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 if (currentClips.Count > 0)
                 {
                     
-                    dof.focusDistance.value = focusDistance;
+                    
 #if USE_URP
-    
-                    dof.focalLength.value = focalLength;
-                    dof.aperture.value = aperture;
-                    dof.bladeCount.value = bladeCount;
-                    dof.bladeCurvature.value = bladeCurvature;
-                    dof.bladeRotation.value = bladeRotation;
+
+                    if (dof.mode == DepthOfFieldMode.Bokeh)
+                    {
+                        dof.focusDistance.value = focusDistance;
+                        dof.focalLength.value = focalLength;
+                        dof.aperture.value = aperture;
+                        dof.bladeCount.value = bladeCount;
+                        dof.bladeCurvature.value = bladeCurvature;
+                        dof.bladeRotation.value = bladeRotation;      
+                    }
+                  
                     
 #elif USE_HDRP
 #endif    
                 }
                 else
                 {
-                    dof.focusDistance.value = m_TrackBinding.baseDofValues.focusDistance;
+                    
 #if USE_URP
-                    dof.focalLength.value = m_TrackBinding.baseDofValues.focalLength;
-                    dof.aperture.value = m_TrackBinding.baseDofValues.aperture;
-                    dof.bladeCount.value = m_TrackBinding.baseDofValues.bladeCount;
-                    dof.bladeCurvature.value = m_TrackBinding.baseDofValues.bladeCurvature;
-                    dof.bladeRotation.value = m_TrackBinding.baseDofValues.bladeRotation;
+                    if (dof.mode == DepthOfFieldMode.Bokeh)
+                    {
+                        dof.focusDistance.value = m_TrackBinding.bokehBaseValues.focusDistance;
+                        dof.focalLength.value = m_TrackBinding.bokehBaseValues.focalLength;
+                        dof.aperture.value = m_TrackBinding.bokehBaseValues.aperture;
+                        dof.bladeCount.value = m_TrackBinding.bokehBaseValues.bladeCount;
+                        dof.bladeCurvature.value = m_TrackBinding.bokehBaseValues.bladeCurvature;
+                        dof.bladeRotation.value = m_TrackBinding.bokehBaseValues.bladeRotation;
+                    }
 #elif USE_HDRP
 #endif   
                 }

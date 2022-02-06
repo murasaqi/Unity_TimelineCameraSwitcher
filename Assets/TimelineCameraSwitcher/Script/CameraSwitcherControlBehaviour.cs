@@ -3,6 +3,7 @@ using System.Collections.Generic;using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 #if USE_URP
 using UnityEngine.Rendering.Universal;
@@ -14,20 +15,26 @@ using Random = System.Random;
 
 
 [Serializable]
-public class DofControlProps
+public class BokehProp
 {
-    [SerializeField] public DepthOfFieldMode depthOfFieldMode;
-    [SerializeField] public float focusDistance;
-    [SerializeField, Range(1, 300)] public float focalLength;
-    [SerializeField, Range(1,32)] public float aperture;
-    [SerializeField, Range(1,9)] public int bladeCount;
-    [SerializeField, Range(0, 1)] public float bladeCurvature;
-    [SerializeField, Range(-180, 180)] public float bladeRotation;
-    [SerializeField] public float start;
-    [SerializeField] public float end;
-    [SerializeField, Range(0.5f, 1.5f)] public float maxRadius;
-    [SerializeField] public bool highQualitySampling;
+    // [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+    [SerializeField] public float focusDistance = 1;
+    [SerializeField, Range(1, 300)] public float focalLength = 20;
+    [SerializeField, Range(1,32)] public float aperture = 10;
+    [SerializeField, Range(1,9)] public int bladeCount =4;
+    [SerializeField, Range(0, 1)] public float bladeCurvature = 0;
+    [SerializeField, Range(-180, 180)] public float bladeRotation = 0;
 }
+
+[Serializable]
+public class GaussianProp
+{
+    [SerializeField] public float start =1;
+    [SerializeField] public float end =10;
+    [SerializeField, Range(0.5f, 1.5f)] public float maxRadius = 1;
+    [SerializeField] public bool highQualitySampling = false;
+}
+
 
 [Serializable]
 public class LookAtProps
@@ -81,7 +88,11 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public bool wiggle;
     [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
-    [SerializeField] public DofControlProps dofControlProps;
+#if USE_URP
+    
+    [SerializeField] public BokehProp bokehProps;
+    [SerializeField] public GaussianProp gaussianProps;
+#endif
     // [SerializeField] public bool fadeCurveOverride = false;
     [SerializeField] public bool lookAt;
     [SerializeField] public LookAtProps lookAtProps;

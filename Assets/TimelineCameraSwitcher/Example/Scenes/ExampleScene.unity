@@ -164,14 +164,15 @@ MonoBehaviour:
   depth: 0
   material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
   dofControl: 1
-  baseDofValues:
-    depthOfFieldMode: 2
-    focusDistance: 0.96
-    focalLength: 71
-    aperture: 6
-    bladeCount: 4
+  depthOfFieldMode: 1
+  bokehBaseValues:
+    focusDistance: 0.1
+    focalLength: 1
+    aperture: 1
+    bladeCount: 3
     bladeCurvature: 0
     bladeRotation: 0
+  gaussianBaseValues:
     start: 10
     end: 30
     maxRadius: 1
@@ -655,6 +656,7 @@ PlayableDirector:
     - 3660e6b5969d8f449840a036c398db0e: {fileID: 1719454283}
     - 7161179d5d13f88468caadc29c7bcbc0: {fileID: 2084785978}
     - f713ec99ae81ee84eab6a39f1a50541c: {fileID: 963194227}
+    - 12e17fbee2c168a4b9de501c0891b486: {fileID: 5927396954247894498}
     - 254d64b15e4f7b646ac4de09072603ba: {fileID: 0}
 --- !u!4 &982157259
 Transform:
@@ -2158,7 +2160,7 @@ LookAtConstraint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082829440}
   m_Enabled: 1
-  m_Weight: 1
+  m_Weight: 0
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_RotationOffset: {x: 0, y: 0, z: 0}
   m_Roll: 0

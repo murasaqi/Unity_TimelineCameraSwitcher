@@ -31,7 +31,12 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public DepthList depth;
     [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
-    [SerializeField] public DofControlProps baseDofValues= new DofControlProps();
+    
+    [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+    [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
+    [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
+    
+    
    
     public DepthList depthList => depth;
     
@@ -90,7 +95,7 @@ public class CameraSwitcherControl : MonoBehaviour
     {
 #if USE_URP
         if(dof == null) return;
-        dof.mode.value = baseDofValues.depthOfFieldMode;
+        // dof.mode.value = baseDofValues.depthOfFieldMode;
 #endif
     }
     public void SetBaseDofValues()
@@ -98,16 +103,16 @@ public class CameraSwitcherControl : MonoBehaviour
 #if USE_URP
         if(volume == null) return;
         volume.TryGet<DepthOfField>(out dof);
-        baseDofValues.depthOfFieldMode = dof.mode.value;
-        baseDofValues.focusDistance = dof.focusDistance.value;
-        baseDofValues.focalLength = dof.focalLength.value;
-        baseDofValues.aperture = dof.aperture.value;
-        baseDofValues.bladeCount = dof.bladeCount.value;
-        baseDofValues.bladeRotation = dof.bladeRotation.value;
-        baseDofValues.start = dof.gaussianStart.value;
-        baseDofValues.end = dof.gaussianEnd.value;
-        baseDofValues.maxRadius = dof.gaussianMaxRadius.value;
-        baseDofValues.highQualitySampling = dof.highQualitySampling.value;
+        // bokehBaseValues.depthOfFieldMode = dof.mode.value;
+        bokehBaseValues.focusDistance = dof.focusDistance.value;
+        bokehBaseValues.focalLength = dof.focalLength.value;
+        bokehBaseValues.aperture = dof.aperture.value;
+        bokehBaseValues.bladeCount = dof.bladeCount.value;
+        bokehBaseValues.bladeRotation = dof.bladeRotation.value;
+        gaussianBaseValues.start = dof.gaussianStart.value;
+        gaussianBaseValues.end = dof.gaussianEnd.value;
+        gaussianBaseValues.maxRadius = dof.gaussianMaxRadius.value;
+        gaussianBaseValues.highQualitySampling = dof.highQualitySampling.value;
 #elif USE_HDRP
 #endif
     }

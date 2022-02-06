@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Template name="ResolutionListButton" src="project://database/Assets/TimelineCameraSwitcher/Resources/CameraSwitcherControlResources/ResolutionListButton.uxml?fileID=9197481963319205126&amp;guid=090df76da2b20ea4fa8ffdb54ccbf70d&amp;type=3#ResolutionListButton" />
-    <ui:Template name="DofParameters" src="project://database/Assets/TimelineCameraSwitcher/Resources/CameraSwitcherControlResources/DofParameters.uxml?fileID=9197481963319205126&amp;guid=2e73b3d1250e75c44bc915dd26cd39a3&amp;type=3#DofParameters" />
+    <ui:Template name="DofParameters_Bokeh" src="project://database/Assets/TimelineCameraSwitcher/Resources/CameraSwitcherControlResources/DofParameters_Bokeh.uxml?fileID=9197481963319205126&amp;guid=231740f5359e16f43a1b9fde0c778249&amp;type=3#DofParameters_Bokeh" />
+    <ui:Template name="DofParameters" src="project://database/Assets/TimelineCameraSwitcher/Resources/CameraSwitcherControlResources/DofParameters_Gaussian.uxml?fileID=9197481963319205126&amp;guid=2e73b3d1250e75c44bc915dd26cd39a3&amp;type=3#DofParameters_Gaussian" />
     <ui:Button text="Create Settings" display-tooltip-when-elided="true" name="CreateSettingsButton" />
     <uie:ObjectField label="Profile" name="ProfileField" binding-path="cameraSwitcherSettings" style="justify-content: center;" />
     <ui:Foldout text="Settings" name="Settings" focusable="false" value="false" usage-hints="None" tabindex="0">
@@ -17,6 +18,8 @@
     <ui:Toggle label="Dof Control" name="DofControlField" binding-path="dofControl" />
     <ui:VisualElement name="DoFParameterElement" style="padding-left: 8px;">
         <uie:PropertyField binding-path="volume" label="Volume" name="VolumeField" />
-        <ui:Instance template="DofParameters" name="DofParametersField" binding-path="baseDofValues" />
+        <uie:EnumField label="Mode" value="Center" binding-path="depthOfFieldMode" name="DepthOfFieldMode" />
+        <ui:Instance template="DofParameters_Bokeh" name="DofParameters_Bokeh" />
+        <ui:Instance template="DofParameters" name="DofParameters_Gaussian" binding-path="baseDofValues" style="justify-content: center;" />
     </ui:VisualElement>
 </ui:UXML>

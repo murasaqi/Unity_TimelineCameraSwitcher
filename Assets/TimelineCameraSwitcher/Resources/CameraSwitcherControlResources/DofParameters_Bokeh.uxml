@@ -1,18 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="DoFParameterElement" style="padding-left: 0;">
-        <uie:EnumField label="Mode" value="Center" name="DepthOfFieldMode" binding-path="depthOfFieldMode" />
         <ui:Foldout text="Bokeh" name="Bokeh" value="true">
             <ui:SliderInt picking-mode="Ignore" label="Focal Length" value="42" high-value="300" binding-path="focalLength" name="FocalLengthField" low-value="1" />
             <ui:SliderInt picking-mode="Ignore" label="Aperture" value="10" high-value="32" binding-path="aperture" name="ApatureField" low-value="1" />
             <ui:SliderInt picking-mode="Ignore" label="BladeCount" value="4" high-value="9" binding-path="bladeCount" name="BladeCountField" low-value="1" />
             <ui:Slider picking-mode="Ignore" label="bladeCurvature" value="0" high-value="1" name="BladeCurvatureField" />
             <uie:FloatField label="Focus Distance" value="42.2" binding-path="focusDistance" name="FocusDistanceField" />
-        </ui:Foldout>
-        <ui:Foldout text="Gaussian" name="Gaussian">
-            <uie:FloatField label="End" value="30" binding-path="end" name="EndField" />
-            <ui:Slider picking-mode="Ignore" label="Max Radius" value="1" high-value="1.5" name="MaxRadiusField" low-value="0.5" binding-path="maxRadius" />
-            <ui:Toggle label="HighQualitySampling" binding-path="highQualitySampling" name="highQualitySamplingField" />
-            <uie:FloatField label="Start" value="10" binding-path="start" name="StartField" text="Bokeh" />
         </ui:Foldout>
     </ui:VisualElement>
 </ui:UXML>
