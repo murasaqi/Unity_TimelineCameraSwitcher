@@ -7,7 +7,14 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
+
+#if USE_URP
 using UnityEngine.Rendering.Universal;
+#endif
+
+#if USE_HDRP
+using UnityEngine.Rendering.HighDefinition;
+#endif
 using UnityEngine.Timeline;
 
 
@@ -62,6 +69,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             camera.targetTexture = null;
         }
     }
+
 
     private DepthOfField dof;
     
@@ -335,21 +343,27 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 {
                     
                     dof.focusDistance.value = focusDistance;
+#if USE_URP
+    
                     dof.focalLength.value = focalLength;
                     dof.aperture.value = aperture;
                     dof.bladeCount.value = bladeCount;
                     dof.bladeCurvature.value = bladeCurvature;
                     dof.bladeRotation.value = bladeRotation;
-                
+#elif USE_HDRP
+#endif    
                 }
                 else
                 {
                     dof.focusDistance.value = m_TrackBinding.baseDofValues.focusDistance;
+#if USE_URP
                     dof.focalLength.value = m_TrackBinding.baseDofValues.focalLength;
                     dof.aperture.value = m_TrackBinding.baseDofValues.aperture;
                     dof.bladeCount.value = m_TrackBinding.baseDofValues.bladeCount;
                     dof.bladeCurvature.value = m_TrackBinding.baseDofValues.bladeCurvature;
                     dof.bladeRotation.value = m_TrackBinding.baseDofValues.bladeRotation;
+#elif USE_HDRP
+#endif   
                 }
             }
         }

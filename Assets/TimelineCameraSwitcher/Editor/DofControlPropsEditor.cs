@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+
+#if USE_URP
 using UnityEngine.Rendering.Universal;
+#elif USE_HDRP
+using UnityEngine.Rendering.HighDefinition;
+#endif
 using UnityEngine.UIElements;
 
 
@@ -30,10 +35,13 @@ public class DofControlPropsEditor : Editor
 
     private void CheckDofMode(Foldout bokeh, Foldout gaussian, DepthOfFieldMode mode)
     {
+#if USE_URP
         bokeh.value = mode == DepthOfFieldMode.Bokeh;
         bokeh.SetEnabled(mode == DepthOfFieldMode.Bokeh);
         gaussian.value = mode == DepthOfFieldMode.Gaussian;
         gaussian.SetEnabled(mode == DepthOfFieldMode.Gaussian);
+#elif USE_HDRP
+#endif
 
     }
 

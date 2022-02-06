@@ -3,7 +3,12 @@ using System.Collections.Generic;using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+
+#if USE_URP
 using UnityEngine.Rendering.Universal;
+#elif USE_HDRP
+using UnityEngine.Rendering.HighDefinition;
+#endif
 using UnityEngine.Timeline;
 using Random = System.Random;
 

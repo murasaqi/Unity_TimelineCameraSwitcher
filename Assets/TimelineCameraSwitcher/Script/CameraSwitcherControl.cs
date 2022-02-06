@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
+#elif USE_HDRP
+using UnityEngine.Rendering.HighDefinition;
 #endif
 using UnityEngine.UI;
 
@@ -81,19 +83,22 @@ public class CameraSwitcherControl : MonoBehaviour
         
        
     }
-#if USE_URP
-    private DepthOfField dof;
 
+    private DepthOfField dof;
 
     public void ChangeDofMode()
     {
+#if USE_URP
         dof.mode.value = baseDofValues.depthOfFieldMode;
+#endif
     }
     public void SetBaseDofValues()
     {
         if(volume == null) return;
-        
         volume.TryGet<DepthOfField>(out dof);
+
+#if USE_URP
+
         baseDofValues.depthOfFieldMode = dof.mode.value;
         baseDofValues.focusDistance = dof.focusDistance.value;
         baseDofValues.focalLength = dof.focalLength.value;
@@ -104,9 +109,10 @@ public class CameraSwitcherControl : MonoBehaviour
         baseDofValues.end = dof.gaussianEnd.value;
         baseDofValues.maxRadius = dof.gaussianMaxRadius.value;
         baseDofValues.highQualitySampling = dof.highQualitySampling.value;
-
-    }
+#elif USE_HDRP
 #endif
+    }
+
     public void ReleaseRenderTarget()
     {
         if (cameraA) cameraA.targetTexture = null;

@@ -124,6 +124,76 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &174959406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174959408}
+  - component: {fileID: 174959407}
+  m_Layer: 0
+  m_Name: Camera Switcher Control
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &174959407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174959406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa65a2e85f947bc49b4253ed4952880d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSwitcherSettings: {fileID: 0}
+  volume: {fileID: 11400000, guid: 6e1fae58a7f300d459a875a0eed1fe3a, type: 2}
+  outputRawImage: {fileID: 1567861880}
+  outPutRenderTarget: {fileID: 0}
+  resolution: {x: 3840, y: 2160}
+  prerenderingFrameCount: 3
+  renderTextureFormat: 9
+  depth: 0
+  material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
+  dofControl: 1
+  baseDofValues:
+    depthOfFieldMode: 1
+    focusDistance: 0.96
+    focalLength: 79
+    aperture: 6
+    bladeCount: 4
+    bladeCurvature: 0
+    bladeRotation: 0
+    start: 10
+    end: 30
+    maxRadius: 1
+    highQualitySampling: 1
+  renderTextureA: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  renderTextureB: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
+  cameraA: {fileID: 1598200452}
+  cameraB: {fileID: 2013416889}
+--- !u!4 &174959408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174959406}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &482666908
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +616,7 @@ PlayableDirector:
   - key: {fileID: 4199777513023321348, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
     value: {fileID: 2082829442}
   - key: {fileID: -6808278027765936826, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
-    value: {fileID: 1813787478}
+    value: {fileID: 174959407}
   - key: {fileID: -8205782741111711184, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
     value: {fileID: 0}
   - key: {fileID: -3022350100769882221, guid: 7a2e18d22b5c6614f9b2840fa12f7b62, type: 2}
@@ -1678,77 +1748,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!1 &1813787475
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1813787477}
-  - component: {fileID: 1813787478}
-  m_Layer: 0
-  m_Name: Camera Switcher Control
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1813787477
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1813787475}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1813787478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1813787475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa65a2e85f947bc49b4253ed4952880d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraSwitcherSettings: {fileID: 11400000, guid: c287b2b55928c3042a62d35dd9a2d06e,
-    type: 2}
-  volume: {fileID: 11400000, guid: 6e1fae58a7f300d459a875a0eed1fe3a, type: 2}
-  outputRawImage: {fileID: 1567861880}
-  outPutRenderTarget: {fileID: 0}
-  resolution: {x: 3840, y: 2160}
-  prerenderingFrameCount: 3
-  renderTextureFormat: 9
-  depth: 0
-  material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
-  dofControl: 1
-  baseDofValues:
-    depthOfFieldMode: 2
-    focusDistance: 6.09
-    focalLength: 288
-    aperture: 10.2
-    bladeCount: 5
-    bladeCurvature: 0
-    bladeRotation: 0
-    start: 10
-    end: 30
-    maxRadius: 1
-    highQualitySampling: 1
-  renderTextureA: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
-  renderTextureB: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
-  cameraA: {fileID: 1598200452}
-  cameraB: {fileID: 2013416889}
 --- !u!1 &1816081935
 GameObject:
   m_ObjectHideFlags: 0

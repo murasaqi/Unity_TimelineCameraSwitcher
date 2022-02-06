@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-695415716828199327
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -123,7 +110,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 0
+    - _PlayableDirectorTime: 6.1833334
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
@@ -157,8 +144,8 @@ Material:
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
     - _RangeA: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _RangeB: {r: 0.0232, g: 0.024, b: 0, a: 0}
-    - _WigglerValueA: {r: 0, g: 0, b: 0, a: 0}
-    - _WigglerValueB: {r: 0, g: 0, b: 0, a: 0}
+    - _WigglerValueA: {r: -0.007633689, g: -0.0017363459, b: 0, a: 0}
+    - _WigglerValueB: {r: -0.007633689, g: -0.0017363459, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []

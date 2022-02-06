@@ -4,7 +4,12 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
+
+#if USE_URP
+
 using UnityEngine.Rendering.Universal;
+
+#endif
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UIElements.Button;
@@ -15,21 +20,26 @@ public class CameraSwitcherControlEditor : Editor
 {
 
 
+    
+
     private List<Toggle> toggles = new List<Toggle>();
+    private TemplateContainer container;
     public override VisualElement CreateInspectorGUI(){
         
         
         CameraSwitcherControl cameraSwitcherControl = target as CameraSwitcherControl;
         var treeAsset = Resources.Load<VisualTreeAsset>("CameraSwitcherControlResources/TimelineCameraSwitcherUI");
-        var container = treeAsset.Instantiate();
+        container = treeAsset.Instantiate();
         var createButton = container.Q<Button>("CreateSettingsButton");
 
+        var profileField = container.Q<ObjectField>("ProfileField");
+        profileField.objectType = typeof(CameraSwitcherSettings);
         if (cameraSwitcherControl.cameraSwitcherSettings != null) createButton.SetEnabled(false);
         createButton.clicked += () =>
         {
             
             CreateAssets(cameraSwitcherControl);
-            
+            InitResolutionListButton(cameraSwitcherControl);
         };
 
         var settingsFoldout = container.Q<Foldout>("Settings");
@@ -63,7 +73,7 @@ public class CameraSwitcherControlEditor : Editor
         var removeButton = container.Q<Button>("RemoveButton");
         if (cameraSwitcherControl.cameraSwitcherSettings != null)
         {
-            InitResolutionListButton(resolutionListField, cameraSwitcherControl, widthField, heightField,removeButton);
+            InitResolutionListButton(cameraSwitcherControl);
         }
 
         var customWidthField = resolutionListButton.Q<IntegerField>("CustomWidthField");
@@ -81,7 +91,7 @@ public class CameraSwitcherControlEditor : Editor
                     if (res == newResolution) return;
                 }
                 cameraSwitcherControl.cameraSwitcherSettings.resolutionList.Add(newResolution);
-                InitResolutionListButton(resolutionListField, cameraSwitcherControl, widthField, heightField, removeButton);
+                InitResolutionListButton(cameraSwitcherControl);
             }
         };
 
@@ -95,7 +105,7 @@ public class CameraSwitcherControlEditor : Editor
                 count++;
             }
             
-            if(cameraSwitcherControl.cameraSwitcherSettings.resolutionList.Count != toggles.Count) InitResolutionListButton(resolutionListField, cameraSwitcherControl, widthField, heightField, removeButton);
+            if(cameraSwitcherControl.cameraSwitcherSettings.resolutionList.Count != toggles.Count) InitResolutionListButton(cameraSwitcherControl);
         };
         
         var rowImageField = container.Q<ObjectField>("RawImageField");
@@ -115,6 +125,8 @@ public class CameraSwitcherControlEditor : Editor
         var dofMode = dofParameters.Q<EnumField>("DepthOfFieldMode");
         var bokeh = dofParameters.Q<Foldout>("Bokeh");
         var gaussian = dofParameters.Q<Foldout>("Gaussian");
+        
+
         if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
 
      
@@ -123,13 +135,13 @@ public class CameraSwitcherControlEditor : Editor
         {
             if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
             if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
-            CheckDofMode(cameraSwitcherControl, bokeh, gaussian);
+            CheckDofMode(cameraSwitcherControl);
         });
         volumeFiled.RegisterValueChangeCallback((evt) =>
         {
             if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
             dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
-            CheckDofMode(cameraSwitcherControl, bokeh, gaussian);
+            CheckDofMode(cameraSwitcherControl);
         });
         return container;
         //targetを変換して対象を取得
@@ -140,18 +152,30 @@ public class CameraSwitcherControlEditor : Editor
 
     }
 
-    private void CheckDofMode(CameraSwitcherControl cameraSwitcherControl,Foldout bokeh, Foldout gaussian)
+    private void CheckDofMode(CameraSwitcherControl cameraSwitcherControl)
     {
+#if USE_URP
+        var dofParameters = container.Q<VisualElement>("DofParametersField");
+        var dofMode = dofParameters.Q<EnumField>("DepthOfFieldMode");
+        var bokeh = dofParameters.Q<Foldout>("Bokeh");
+        var gaussian = dofParameters.Q<Foldout>("Gaussian");
+
         bokeh.value = cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Bokeh;
         bokeh.SetEnabled(cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Bokeh);
         gaussian.value = cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Gaussian;
         gaussian.SetEnabled(cameraSwitcherControl.baseDofValues.depthOfFieldMode == DepthOfFieldMode.Gaussian);
-
+#endif
     }
 
-    private void InitResolutionListButton(ScrollView resolutionListField, CameraSwitcherControl cameraSwitcherControl, IntegerField widthField, IntegerField heightField, Button removeButton)
+    private void InitResolutionListButton(CameraSwitcherControl cameraSwitcherControl)
     {
 
+        // if (container == null) return;
+        var resolutionListField=  container.Q<ScrollView>("ResolutionListField");
+        var removeButton = container.Q<Button>("RemoveButton");
+        var resolutionListButton = container.Q<VisualElement>("ResolutionListButton");
+        var widthField = resolutionListButton.Q<IntegerField>("WidthField");
+        var heightField = resolutionListButton.Q<IntegerField>("HeightField");
         toggles.Clear();
         var resolutionButton = Resources.Load<VisualTreeAsset>("CameraSwitcherControlResources/ResolutionButton");
         resolutionListField.Clear();

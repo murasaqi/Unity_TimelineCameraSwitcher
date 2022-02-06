@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TextureCompositeMat
-  m_Shader: {fileID: -6465566751694194690, guid: d2477ab704d33954aa6c5748b66771ab,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 7d8d61752029a0f469a36f682186a972, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -144,8 +143,12 @@ Material:
     - Vector2_85d14bb10d4647948d9689a1f356f36a: {r: 0.33, g: 0.26, b: 0, a: 0}
     - Vector2_8702686b77fe47e6bee7286a126dc481: {r: 0.45, g: 0.54, b: 0, a: 0}
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
+    - _ClipSizeA: {r: 0, g: 0, b: 0, a: 0}
+    - _ClipSizeB: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MultiplyColorA: {r: 1, g: 1, b: 1, a: 1}
+    - _MultiplyColorB: {r: 1, g: 1, b: 1, a: 1}
     - _NoiseScaleA: {r: 1.5, g: 1.57, b: 0, a: 0}
     - _NoiseScaleB: {r: 1.5, g: 1.57, b: 0, a: 0}
     - _NoiseSeedA: {r: 0.36, g: 0.43, b: 0, a: 0}
@@ -154,6 +157,8 @@ Material:
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
     - _RangeA: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _RangeB: {r: 0.0232, g: 0.024, b: 0, a: 0}
+    - _WigglerValueA: {r: 0, g: 0, b: 0, a: 0}
+    - _WigglerValueB: {r: 0, g: 0, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
