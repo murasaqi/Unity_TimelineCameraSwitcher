@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: row; justify-content: center; width: 100%; align-items: stretch;">
+        <ui:Toggle name="ToggleEdit" style="min-width: auto; min-height: auto;" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" name="ResolutionButton" style="min-width: 200px; align-items: auto; min-height: auto; max-width: none; max-height: none; width: 100px;" />
+    </ui:VisualElement>
+</ui:UXML>

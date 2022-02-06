@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="DoFParameterElement" style="padding-left: 0;">
-        <uie:PropertyField binding-path="depthOfFieldMode" name="DepthOfFieldMode" />
+        <uie:EnumField label="Mode" value="Center" name="DepthOfFieldMode" binding-path="depthOfFieldMode" />
         <ui:Foldout text="Bokeh" name="Bokeh" value="true">
             <ui:SliderInt picking-mode="Ignore" label="Focal Length" value="42" high-value="300" binding-path="focalLength" name="FocalLengthField" low-value="1" />
             <ui:SliderInt picking-mode="Ignore" label="Aperture" value="10" high-value="32" binding-path="aperture" name="ApatureField" low-value="1" />

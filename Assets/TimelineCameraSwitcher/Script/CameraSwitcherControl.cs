@@ -1,11 +1,10 @@
 ﻿
-using System;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
+#if USE_URP
 using UnityEngine.Rendering.Universal;
+#endif
 using UnityEngine.UI;
 
 
@@ -82,7 +81,7 @@ public class CameraSwitcherControl : MonoBehaviour
         
        
     }
-
+#if USE_URP
     private DepthOfField dof;
 
 
@@ -107,6 +106,7 @@ public class CameraSwitcherControl : MonoBehaviour
         baseDofValues.highQualitySampling = dof.highQualitySampling.value;
 
     }
+#endif
     public void ReleaseRenderTarget()
     {
         if (cameraA) cameraA.targetTexture = null;

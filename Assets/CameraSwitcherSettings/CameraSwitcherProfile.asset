@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b658b8f90533d0040bfde6811b76345b, type: 3}
   m_Name: CameraSwitcherProfile
   m_EditorClassIdentifier: 
-  material: {fileID: 0}
-  renderTextureA: {fileID: 0}
-  renderTextureB: {fileID: 0}
+  material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
+  renderTextureA: {fileID: 8400000, guid: 0c9325063514e27438e46f7ecb358041, type: 2}
+  renderTextureB: {fileID: 8400000, guid: 83d5a523c02051c4ca15b5bd6ca072d1, type: 2}
+  volume: {fileID: 0}
+  resolution: {x: 0, y: 0}
+  resolutionList:
+  - {x: 1280, y: 720}
+  - {x: 1600, y: 900}
+  - {x: 1920, y: 1080}
+  - {x: 3840, y: 2160}

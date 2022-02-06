@@ -186,29 +186,34 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                }
 
               
-               if (cameraSwitcherControlClip.lookAt)
+               if (playableBehaviour.lookAt)
                {
                    var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
                    
                    if (lookAt == null) lookAt = playableBehaviour.camera.gameObject.AddComponent<LookAtConstraint>();
-                   if (lookAt && playableBehaviour.target)
+                   if (lookAt && cameraSwitcherControlClip.target)
                    {
 
 
-                       if (lookAt.sourceCount > 0 &&  lookAt.GetSource(0).sourceTransform != playableBehaviour.target)
+                       if (lookAt.sourceCount > 0 )
                        {
-                           while (lookAt.sourceCount > 0)
+                           while (lookAt.sourceCount > 1)
                            {
                                lookAt.RemoveSource(0);
                            }
-                           var source = new ConstraintSource();
-                           source.sourceTransform = playableBehaviour.target;
-                           source.weight = 1;
-                           lookAt.AddSource(source);
-                       }
-                           // lookAt.enabled = true;
-                      
+
+                           if (lookAt.GetSource(0).sourceTransform != cameraSwitcherControlClip.target)
+                           {
+                               lookAt.RemoveSource(0);
+                               var source = new ConstraintSource();
+                               source.sourceTransform = cameraSwitcherControlClip.target;
+                               source.weight = 1;
+                               lookAt.AddSource(source);
+                           }
                            
+                          
+                       }
+
                        lookAt.enabled = true;
                        lookAt.locked = playableBehaviour.lookAtProps.Lock;
                        lookAt.constraintActive = playableBehaviour.lookAtProps.IsActive;
@@ -261,20 +266,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
                             m_TrackBinding.material.SetTexture("_TextureB", m_TrackBinding.renderTextureB);
                             m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour,currentTime));
-                            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wiggleRange/ 100f);
-                            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.multiplyColor);
-                            m_TrackBinding.material.SetVector("_ClipSizeB", _playableBehaviour.wiggleRange / 100f);
+                            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wigglerProps.wiggleRange/ 100f);
+                            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
+                            m_TrackBinding.material.SetVector("_ClipSizeB", _playableBehaviour.wigglerProps.wiggleRange / 100f);
                             m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(_playableBehaviour,currentTime));
-                            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.multiplyColor);
+                            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
                             
-                            if (playableBehaviour.fadeCurveOverride)
-                            {
-                                m_TrackBinding.material.SetFloat("_CrossFade", 1f - playableBehaviour.fadeCurve.Evaluate(inputWeight));
-                            }
-                            else
-                            {
+                            // if (playableBehaviour.fadeCurveOverride)
+                            // {
+                            //     m_TrackBinding.material.SetFloat("_CrossFade", 1f - playableBehaviour.fadeCurve.Evaluate(inputWeight));
+                            // }
+                            // else
+                            // {
                                 m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
-                            }
+                            // }
                           
                             
                           
@@ -305,11 +310,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     {
                         SelectSingleCamera(playableBehaviour,inputWeight,currentTime,_playableBehaviour);
                         m_TrackBinding.cameraB = _playableBehaviour.camera;
-                        // wigglerRange = new Vector2(
-                        //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                        //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
-                        // );
-                        // wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
                     }
                    
                 }
@@ -317,11 +317,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 {
                     SelectSingleCamera(playableBehaviour,inputWeight,currentTime);
                     m_TrackBinding.cameraB = playableBehaviour.camera;
-                    // wigglerRange = new Vector2(
-                    //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y),
-                    //     Math.Max(playableBehaviour.wiggleRange.x, playableBehaviour.wiggleRange.y)
-                    // );
-                    // wiggler = CalcNoise(playableBehaviour, playableBehaviour,currentTime);
                 }
 
                 break;
@@ -378,9 +373,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         if (nextPlayableBehaviour != null)
         {
             var nextInputWeight = Mathf.Clamp(1f - inputWeight,0,1);
-            var wiggleRange = playableBehaviour.wiggleRange * inputWeight + nextPlayableBehaviour.wiggleRange * nextInputWeight;
+            var wiggleRange = playableBehaviour.wigglerProps.wiggleRange * inputWeight + nextPlayableBehaviour.wigglerProps.wiggleRange * nextInputWeight;
             var noise = CalcNoise(playableBehaviour, nextPlayableBehaviour, currentTime, inputWeight);
-            var color =playableBehaviour.multiplyColor*inputWeight+nextPlayableBehaviour.multiplyColor* nextInputWeight;
+            var color =playableBehaviour.colorBlendProps.color*inputWeight+nextPlayableBehaviour.colorBlendProps.color* nextInputWeight;
             // Debug.Log(nextInputWeight);
 
             m_TrackBinding.material.SetVector("_WigglerValueA", noise);
@@ -395,11 +390,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             
             m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour,currentTime));
-            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wiggleRange/100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.multiplyColor);
+            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wigglerProps.wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
             m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(playableBehaviour,currentTime));
-            m_TrackBinding.material.SetVector("_ClipSizeB", playableBehaviour.wiggleRange/100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.multiplyColor);
+            m_TrackBinding.material.SetVector("_ClipSizeB", playableBehaviour.wigglerProps.wiggleRange/100f);
+            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
 
         }
        
@@ -430,8 +425,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         var isWiggle = a.wiggle ? 1 : 0f;
         var wiggler = new Vector2(
-            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x, currentTime*a.roughness + a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.x/100f*isWiggle,
-            (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x + currentTime*a.roughness, a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.y/100f*isWiggle
+            (Mathf.PerlinNoise(a.wigglerProps.noiseSeed.x * a.wigglerProps.noiseScale.x, currentTime*a.wigglerProps.roughness + a.wigglerProps.noiseScale.y*a.wigglerProps.noiseSeed.y)-0.5f) * a.wigglerProps.wiggleRange.x/100f*isWiggle,
+            (Mathf.PerlinNoise(a.wigglerProps.noiseSeed.x * a.wigglerProps.noiseScale.x + currentTime*a.wigglerProps.roughness, a.wigglerProps.noiseScale.y*a.wigglerProps.noiseSeed.y)-0.5f) * a.wigglerProps.wiggleRange.y/100f*isWiggle
         );
 
         return wiggler;

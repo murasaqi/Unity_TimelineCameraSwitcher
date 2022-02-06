@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic;using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -27,6 +27,7 @@ public class DofControlProps
 [Serializable]
 public class LookAtProps
 {
+    [SerializeField] public ExposedReference<Transform> target;
     [SerializeField] public bool IsActive = false;
     [SerializeField, Range(0f,1f)] public float Weight;
     [SerializeField] public float Roll;
@@ -38,23 +39,51 @@ public class LookAtProps
     // [SerializeField] public List<ExposedReference<Transform>> Sources;
 
 }
+
 [Serializable]
-public class CameraSwitcherControlBehaviour : PlayableBehaviour
+public class WigglerProps
 {
-    
-    public bool wiggle;
-    [HideInInspector][SerializeField] public Camera camera;
-    [HideInInspector][SerializeField] public Transform target;
     [SerializeField] public Vector2 noiseSeed = Vector2.one;
     [SerializeField] public Vector2 noiseScale = Vector2.one;
     [SerializeField] public float roughness = 1;
     [SerializeField] public Vector2 wiggleRange  = new Vector2(5,5);
-    [SerializeField] public Color multiplyColor = Color.white;
+    // [SerializeField] public List<ExposedReference<Transform>> Sources;
+
+}
+
+[Serializable]
+public enum BlendMode
+{
+    Multiply,
+    Add,
+    Sub,
+    Overwrite
+}
+
+[Serializable]
+public class ColorBlendProps
+{
+    public BlendMode blendMode = BlendMode.Multiply;
+    public Color color = Color.white;
+}
+
+
+
+[Serializable]
+public class CameraSwitcherControlBehaviour : PlayableBehaviour
+{
+    [HideInInspector][SerializeField] public Camera camera;
+    [SerializeField] public bool wiggle;
+    [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
-    [SerializeField] public bool fadeCurveOverride = false;
-    public AnimationCurve fadeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
     [SerializeField] public DofControlProps dofControlProps;
+    // [SerializeField] public bool fadeCurveOverride = false;
+    [SerializeField] public bool lookAt;
     [SerializeField] public LookAtProps lookAtProps;
+
+    [SerializeField] public bool colorBlend;
+    [SerializeField] public ColorBlendProps colorBlendProps;
+    // public AnimationCurve fadeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
     public override void OnPlayableCreate (Playable playable)
     {
        
