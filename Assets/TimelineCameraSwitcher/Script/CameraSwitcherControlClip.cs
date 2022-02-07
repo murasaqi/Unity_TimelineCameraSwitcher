@@ -2,7 +2,12 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Playables;
+
+#if USE_URP
 using UnityEngine.Rendering.Universal;
+#elif USE_HDRP
+#endif
+
 using UnityEngine.Timeline;
 
 [Serializable]
@@ -16,6 +21,9 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [HideInInspector] public Transform target;
     // public CameraSwitcherControlBehaviour clone;
 
+#if USE_URP
+    
+
     public DepthOfFieldMode mode
     {
         set
@@ -23,7 +31,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
             template.mode = value;
         }
     }
-   
+#elif USE_HDRP
+#endif 
     public ClipCaps clipCaps
     {
         get { return ClipCaps.Blending; }
@@ -35,7 +44,6 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
-        Debug.Log(clone.mode);
         return playable;
         
     }
