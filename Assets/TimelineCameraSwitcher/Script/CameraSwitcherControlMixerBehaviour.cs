@@ -179,12 +179,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
 
             var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
+
+#if USE_URP
+            cameraSwitcherControlClip.mode = m_TrackBinding.depthOfFieldMode;
+#endif
+           
            if (inputWeight > 0)
            {
                
                
                if (playableBehaviour.dofOverride)
                {
+
+#if USE_URP
+           
                    // depthOfFieldMode = playableBehaviour.depthOfFieldMode;
                    focusDistance += playableBehaviour.bokehProps.focusDistance*inputWeight;
                    focalLength += playableBehaviour.bokehProps.focalLength*inputWeight;
@@ -192,7 +200,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    bladeCount += Mathf.FloorToInt(playableBehaviour.bokehProps.bladeCount*inputWeight);
                    bladeCurvature += playableBehaviour.bokehProps.bladeCurvature * inputWeight;
                    bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
-               
+                       
+#elif USE_HDRP
+#endif
                    currentClips.Add(playableBehaviour);     
                }
 
@@ -317,6 +327,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             var invWeight = 1f - inputWeight;
                             if (_playableBehaviour.dofOverride)
                             {
+
+#if USE_URP
+
                                 // depthOfFieldMode = _playableBehaviour.bokehProps.depthOfFieldMode;
                                 focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
                                 focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
@@ -324,7 +337,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                 bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
                                 bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
                                 bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
-               
+
+#elif USE_HDRP
+#endif               
 
                             }
                         }
@@ -410,21 +425,31 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         m_TrackBinding.material.SetTexture("_TextureB",m_TrackBinding.renderTextureA);
         m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
        
- 
+        var blendNumA = playableBehaviour.colorBlend ? 1 : 0;
+        blendNumA += blendNumA == 0 ? 0:(int) playableBehaviour.colorBlendProps.blendMode;
+        
         if (nextPlayableBehaviour != null)
         {
+            m_TrackBinding.material.SetFloat("_CrossFade", 1f-inputWeight);
             var nextInputWeight = Mathf.Clamp(1f - inputWeight,0,1);
             var wiggleRange = playableBehaviour.wigglerProps.wiggleRange * inputWeight + nextPlayableBehaviour.wigglerProps.wiggleRange * nextInputWeight;
             var noise = CalcNoise(playableBehaviour, nextPlayableBehaviour, currentTime, inputWeight);
-            var color =playableBehaviour.colorBlendProps.color*inputWeight+nextPlayableBehaviour.colorBlendProps.color* nextInputWeight;
+            // var color =playableBehaviour.colorBlendProps.color*inputWeight+nextPlayableBehaviour.colorBlendProps.color* nextInputWeight;
             // Debug.Log(nextInputWeight);
 
+            
+            
+            var blendNumB = nextPlayableBehaviour.colorBlend ? 1 : 0;
+            // Debug.Log((int) nextPlayableBehaviour.colorBlendProps.blendMode);
+            blendNumB += blendNumB==0? 0 : (int) nextPlayableBehaviour.colorBlendProps.blendMode;
             m_TrackBinding.material.SetVector("_WigglerValueA", noise);
             m_TrackBinding.material.SetVector("_ClipSizeA", wiggleRange/100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorA", color);
+            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
+            m_TrackBinding.material.SetInt("_BlendA", blendNumA);
             m_TrackBinding.material.SetVector("_WigglerValueB", noise);
             m_TrackBinding.material.SetVector("_ClipSizeB", wiggleRange/100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorB", color);
+            m_TrackBinding.material.SetColor("_MultiplyColorB", nextPlayableBehaviour.colorBlendProps.color);
+            m_TrackBinding.material.SetInt("_BlendB", blendNumB);
 
         }
         else
@@ -433,9 +458,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour,currentTime));
             m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wigglerProps.wiggleRange/100f);
             m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
+            m_TrackBinding.material.SetInt("_BlendA", blendNumA);
             m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(playableBehaviour,currentTime));
             m_TrackBinding.material.SetVector("_ClipSizeB", playableBehaviour.wigglerProps.wiggleRange/100f);
             m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
+            m_TrackBinding.material.SetInt("_BlendB", blendNumA);
 
         }
        

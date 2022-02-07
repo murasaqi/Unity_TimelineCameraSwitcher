@@ -85,11 +85,12 @@ public class ColorBlendProps
 public class CameraSwitcherControlBehaviour : PlayableBehaviour
 {
     [HideInInspector][SerializeField] public Camera camera;
+    
     [SerializeField] public bool wiggle;
     [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
 #if USE_URP
-    
+    [HideInInspector] public DepthOfFieldMode mode;
     [SerializeField] public BokehProp bokehProps;
     [SerializeField] public GaussianProp gaussianProps;
 #endif

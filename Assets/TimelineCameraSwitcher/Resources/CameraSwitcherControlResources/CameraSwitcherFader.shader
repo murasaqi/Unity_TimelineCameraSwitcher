@@ -3,7 +3,7 @@ Shader "Unlit/CameraSwitcherFader"
     Properties
     {
         _TextureA ("_TextureA", 2D) = "white" {}
-        _TextureB ("_TextureA", 2D) = "white" {}
+        _TextureB ("_TextureB", 2D) = "white" {}
         _CrossFade("CrossFade", Range(0,1)) = 0
         _WigglerValueA("WigglerA", Vector) = (0,0,0,0)
         _ClipSizeA("_WigglerRangeA",Vector) = (0,0,0,0)
@@ -12,6 +12,8 @@ Shader "Unlit/CameraSwitcherFader"
         _WigglerValueB("WigglerB", Vector) = (0,0,0,0)
         _ClipSizeB("_WigglerRangeB",Vector) = (0,0,0,0)
         _MultiplyColorB("MultiplyColorB",Color) = (1,1,1,1)
+        _BlendA("Blend A", int) = 0
+        _BlendB("Blend B", int) = 0
     }
     SubShader
     {
@@ -57,6 +59,8 @@ Shader "Unlit/CameraSwitcherFader"
             float2 _ClipSizeB;
             float4 _MultiplyColorA;
             float4 _MultiplyColorB;
+            int _BlendA;
+            int _BlendB;
             v2f vert (appdata v)
             {
                 v2f o;
@@ -85,7 +89,38 @@ Shader "Unlit/CameraSwitcherFader"
                 float4  colA = tex2D(_TextureA, uv_a+_WigglerValueA);
                 float4  colB = tex2D(_TextureB, uv_b+_WigglerValueB);
                 // sample the texture
-                fixed4 col = lerp(colA*_MultiplyColorA,colB*_MultiplyColorB,_CrossFade);
+               
+                if(_BlendA == 1)
+                {
+                    colA *= _MultiplyColorA;
+                }else if(_BlendA == 2)
+                {
+                     colA += _MultiplyColorA;
+                }else if(_BlendA == 3)
+                {
+                     colA -=_MultiplyColorA;
+                }
+                else if(_BlendA == 4)
+                {
+                    colA =_MultiplyColorA;
+                }
+
+                 if(_BlendB == 1)
+                {
+                    colB *=_MultiplyColorB;
+                }else if(_BlendB == 2)
+                {
+                    colB += _MultiplyColorB;
+                }else if(_BlendB == 3)
+                {
+                    colB -=_MultiplyColorB;
+                }
+                else if(_BlendB == 4)
+                {
+                    colB =_MultiplyColorB;
+                }
+
+                 float4 col = lerp(colA,colB,_CrossFade);
 
                 
                 // apply fog

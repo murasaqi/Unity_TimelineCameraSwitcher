@@ -24,6 +24,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 0.42
       focalLength: 113
@@ -642,6 +643,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 3.22
       focalLength: 121
@@ -828,6 +830,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 0
       focalLength: 0
@@ -1491,6 +1494,7 @@ MonoBehaviour:
       roughness: 1.19
       wiggleRange: {x: 4.83, y: 6.48}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 2.92
       focalLength: 113
@@ -1509,12 +1513,12 @@ MonoBehaviour:
         exposedName: 12e17fbee2c168a4b9de501c0891b486
         defaultValue: {fileID: 0}
       IsActive: 1
-      Weight: 1
-      Roll: 0
-      UseUpObject: 1
+      Weight: 0.986
+      Roll: 0.36
+      UseUpObject: 0
       Lock: 1
-      RotationAtReset: {x: 0, y: 0, z: 0}
-      RotationOffset: {x: 0, y: 0, z: 0}
+      RotationAtReset: {x: 1.63, y: 0, z: 0}
+      RotationOffset: {x: 0.5, y: 1.84, z: 0}
     colorBlend: 0
     colorBlendProps:
       blendMode: 0
@@ -3349,6 +3353,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 0
       focalLength: 0
@@ -3424,6 +3429,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 1.01
       focalLength: 151
@@ -3609,6 +3615,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 4.87
       focalLength: 189
@@ -3696,13 +3703,14 @@ MonoBehaviour:
     defaultValue: {fileID: 0}
   template:
     camera: {fileID: 0}
-    wiggle: 0
+    wiggle: 1
     wigglerProps:
       noiseSeed: {x: 1, y: 1}
       noiseScale: {x: 1, y: 1}
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 0
       focalLength: 0
@@ -3923,6 +3931,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
+    mode: 2
     bokehProps:
       focusDistance: 0
       focalLength: 0
@@ -3947,7 +3956,7 @@ MonoBehaviour:
       Lock: 0
       RotationAtReset: {x: 0, y: 0, z: 0}
       RotationOffset: {x: 0, y: 0, z: 0}
-    colorBlend: 0
+    colorBlend: 1
     colorBlendProps:
       blendMode: 0
       color: {r: 0, g: 0, b: 0, a: 1}

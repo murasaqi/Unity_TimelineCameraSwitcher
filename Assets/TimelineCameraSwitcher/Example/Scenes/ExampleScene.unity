@@ -164,7 +164,7 @@ MonoBehaviour:
   depth: 0
   material: {fileID: 2100000, guid: 01651fb9090184b49a5f30c5931b355a, type: 2}
   dofControl: 1
-  depthOfFieldMode: 1
+  depthOfFieldMode: 2
   bokehBaseValues:
     focusDistance: 0.1
     focalLength: 1
@@ -2040,7 +2040,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082829440}
-  m_LocalRotation: {x: 0.029323999, y: 0, z: 0, w: 0.99956995}
+  m_LocalRotation: {x: 0.057451114, y: 0.12568147, z: -0.007290685, w: 0.9903789}
   m_LocalPosition: {x: -1.07, y: 1.51, z: -4.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2160,15 +2160,17 @@ LookAtConstraint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082829440}
   m_Enabled: 1
-  m_Weight: 0
+  m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_RotationOffset: {x: 0, y: 0, z: 0}
   m_Roll: 0
   m_WorldUpObject: {fileID: 0}
   m_UseUpObject: 0
-  m_IsContraintActive: 0
-  m_IsLocked: 0
-  m_Sources: []
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5927396954247894498}
+    weight: 1
 --- !u!1 &2084785977
 GameObject:
   m_ObjectHideFlags: 0

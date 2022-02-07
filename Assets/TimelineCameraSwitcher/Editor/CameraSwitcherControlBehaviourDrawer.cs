@@ -1,18 +1,107 @@
-using System.Collections;
-using System.Collections.Generic;
+using PlasticGui.Configuration.CloudEdition.Welcome;
 using UnityEngine;
+using UnityEditor;
 
-public class CameraSwitcherControlBehaviourDrawer : MonoBehaviour
+[CustomPropertyDrawer(typeof(CameraSwitcherControlBehaviour))]
+public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    
+    // GUIContent m_TweenPositionContent = new GUIContent("Tween Position", "This should be true if the transformToMove to change position.  This causes recalulations each frame which are more CPU intensive.");
+    // GUIContent m_wigglerPropsContent = new GUIContent("Tween Rotation", "This should be true if the transformToMove to change rotation.");
+    // private GUIContent m_bokehPropsContent = new GUIContent("Tween Type");
+    public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
     {
-        
+        int fieldCount = 30;
+        return fieldCount * (EditorGUIUtility.singleLineHeight);
     }
+    
+    public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
+    {
+        SerializedProperty wiggleProp = property.FindPropertyRelative ("wiggle");
+        SerializedProperty wigglePropsProp = property.FindPropertyRelative("wigglerProps");
+        var dofModeProp = property.FindPropertyRelative ("mode");
+        SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
+        SerializedProperty bokehProp = property.FindPropertyRelative ("bokehProps");
+        SerializedProperty gaussianProp = property.FindPropertyRelative ("gaussianProps");
+        SerializedProperty lookAtProp = property.FindPropertyRelative ("lookAt");
+        SerializedProperty lookAtPropsProp = property.FindPropertyRelative ("lookAtProps");
+        
+        SerializedProperty colorBlendProp = property.FindPropertyRelative ("colorBlend");
+        SerializedProperty colorBlendPropsProp = property.FindPropertyRelative ("colorBlendProps");
+        
+        Rect singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        EditorGUI.PropertyField (singleFieldRect, wiggleProp);
+        position.y += EditorGUIUtility.singleLineHeight;
 
-    // Update is called once per frame
-    void Update()
-    {
+        EditorGUI.BeginDisabledGroup(!wiggleProp.boolValue);
+        // wigglePropsProp.isExpanded = wiggleProp.boolValue;
+        PropertyDrawerUtility.DrawDefaultGUI(position, wigglePropsProp, new GUIContent("Wiggler values"));
+        position.y += wigglePropsProp.isExpanded ? EditorGUIUtility.singleLineHeight * 6 : EditorGUIUtility.singleLineHeight;
+        EditorGUI.EndDisabledGroup();
         
+        
+        // EditorGUILayout.bar
+        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        EditorGUI.PropertyField (singleFieldRect, dofProp);
+        position.y += EditorGUIUtility.singleLineHeight;
+        
+        EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
+            EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 2);
+            PropertyDrawerUtility.DrawDefaultGUI(position, bokehProp, new GUIContent("Bokeh"));
+            position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 8 : EditorGUIUtility.singleLineHeight;
+            EditorGUI.EndDisabledGroup();
+        
+            EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 1);
+            PropertyDrawerUtility.DrawDefaultGUI(position, gaussianProp, new GUIContent("Gaussian"));   
+            position.y += gaussianProp.isExpanded ? EditorGUIUtility.singleLineHeight * 6 : EditorGUIUtility.singleLineHeight;
+            EditorGUI.EndDisabledGroup();  
+        EditorGUI.EndDisabledGroup();
+        
+        
+        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        EditorGUI.PropertyField (singleFieldRect, lookAtProp);
+
+        // lookAtPropsProp.isExpanded = lookAtProp.boolValue;
+        position.y += EditorGUIUtility.singleLineHeight;
+
+        // lookAtPropsProp. = lookAtProp.boolValue;
+        EditorGUI.BeginDisabledGroup(!lookAtProp.boolValue);
+        PropertyDrawerUtility.DrawDefaultGUI(position, lookAtPropsProp, new GUIContent("LookAt values"));
+        position.y += lookAtPropsProp.isExpanded ? EditorGUIUtility.singleLineHeight * 10 :EditorGUIUtility.singleLineHeight;
+       EditorGUI.EndDisabledGroup();
+       
+       
+       singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+       EditorGUI.PropertyField (singleFieldRect, colorBlendProp);
+       position.y += EditorGUIUtility.singleLineHeight;
+       EditorGUI.BeginDisabledGroup(!colorBlendProp.boolValue);
+       PropertyDrawerUtility.DrawDefaultGUI(position, colorBlendPropsProp, new GUIContent("Blend color values"));   
+       EditorGUI.EndDisabledGroup();
     }
+    
+    
+    // public override Login.ValidateData
+    
+    
+   
+    
+
+    // public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    // {
+    //     // Create property container element.
+    //     var container = new VisualElement();
+    //
+    //     // Create property fields.
+    //     var amountField = new PropertyField(property.FindPropertyRelative("camera"));
+    //     var unitField = new PropertyField(property.FindPropertyRelative("wiggle"));
+    //     // var nameField = new PropertyField(property.FindPropertyRelative("name"), "Fancy Name");
+    //
+    //     // Add fields to the container.
+    //     container.Add(amountField);
+    //     container.Add(unitField);
+    //     // container.Add(nameField);
+    //
+    //     return container;
+    // }
 }

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Timeline;
 
 [Serializable]
@@ -13,7 +14,15 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
     // [SerializeField] public bool lookAt = false;
     [HideInInspector] public Transform target;
-    private CameraSwitcherControlBehaviour clone;
+    // public CameraSwitcherControlBehaviour clone;
+
+    public DepthOfFieldMode mode
+    {
+        set
+        {
+            template.mode = value;
+        }
+    }
    
     public ClipCaps clipCaps
     {
@@ -22,10 +31,11 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 
     public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
     {
-        var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template);
-        clone = playable.GetBehaviour ();
+        var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template); 
+        var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
+        Debug.Log(clone.mode);
         return playable;
         
     }
