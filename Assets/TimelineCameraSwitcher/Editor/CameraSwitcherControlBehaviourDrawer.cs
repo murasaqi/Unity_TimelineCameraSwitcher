@@ -12,7 +12,7 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
     // private GUIContent m_bokehPropsContent = new GUIContent("Tween Type");
     public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
     {
-        int fieldCount = 30;
+        int fieldCount = 54;
         return fieldCount * (EditorGUIUtility.singleLineHeight);
     }
     
@@ -22,8 +22,14 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         SerializedProperty wigglePropsProp = property.FindPropertyRelative("wigglerProps");
         var dofModeProp = property.FindPropertyRelative ("mode");
         SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
+#if USE_URP
         SerializedProperty bokehProp = property.FindPropertyRelative ("bokehProps");
         SerializedProperty gaussianProp = property.FindPropertyRelative ("gaussianProps");
+#elif USE_HDRP
+        
+        SerializedProperty physicalCameraProp = property.FindPropertyRelative ("physicalCameraProps");
+        SerializedProperty manualRangeProp = property.FindPropertyRelative ("manualRangeProps");
+#endif
         SerializedProperty lookAtProp = property.FindPropertyRelative ("lookAt");
         SerializedProperty lookAtPropsProp = property.FindPropertyRelative ("lookAtProps");
         
@@ -45,18 +51,48 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
         EditorGUI.PropertyField (singleFieldRect, dofProp);
         position.y += EditorGUIUtility.singleLineHeight;
-        
+#if USE_URP        
         EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 2);
+
             PropertyDrawerUtility.DrawDefaultGUI(position, bokehProp, new GUIContent("Bokeh"));
             position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 8 : EditorGUIUtility.singleLineHeight;
+
             EditorGUI.EndDisabledGroup();
         
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 1);
             PropertyDrawerUtility.DrawDefaultGUI(position, gaussianProp, new GUIContent("Gaussian"));   
             position.y += gaussianProp.isExpanded ? EditorGUIUtility.singleLineHeight * 6 : EditorGUIUtility.singleLineHeight;
+            position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 8 : EditorGUIUtility.singleLineHeight;
+        
+
+
             EditorGUI.EndDisabledGroup();  
         EditorGUI.EndDisabledGroup();
+
+#elif USE_HDRP
+        
+        EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
+            // Debug.Log(dofModeProp.enumValueIndex);
+            EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex == 2);
+
+            PropertyDrawerUtility.DrawDefaultGUI(position, physicalCameraProp, new GUIContent("Physical Camera"));
+            position.y += physicalCameraProp.isExpanded
+                ? EditorGUIUtility.singleLineHeight * 12
+                : EditorGUIUtility.singleLineHeight;
+
+            EditorGUI.EndDisabledGroup();
+            
+            EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex == 1);
+            PropertyDrawerUtility.DrawDefaultGUI(position, manualRangeProp, new GUIContent("Manual Range"));   
+            position.y += manualRangeProp.isExpanded ? EditorGUIUtility.singleLineHeight * 16 : EditorGUIUtility.singleLineHeight;
+            position.y += physicalCameraProp.isExpanded
+                ? EditorGUIUtility.singleLineHeight *  1
+                : 0;
+            EditorGUI.EndDisabledGroup();  
+        EditorGUI.EndDisabledGroup();
+        
+#endif
         
         
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);

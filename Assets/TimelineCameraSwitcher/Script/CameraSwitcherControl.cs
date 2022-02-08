@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using System;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #elif USE_HDRP
@@ -31,11 +32,15 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public DepthList depth;
     [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
-    
     [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+#if USE_URP
     [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
     [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
-    
+#elif USE_HDRP
+    [SerializeField] public PhysicalCameraProps physicalCameraBaseValues= new PhysicalCameraProps();
+    [SerializeField] public ManualRangeProps manualRangeBaseValues= new ManualRangeProps();
+#endif
+  
     
    
     public DepthList depthList => depth;
@@ -91,18 +96,44 @@ public class CameraSwitcherControl : MonoBehaviour
 
     private DepthOfField dof;
 
+    public void ApplyProfileSettings()
+    {
+        if (cameraSwitcherSettings == null) return;
+
+        renderTextureA = cameraSwitcherSettings.renderTextureA;
+        renderTextureB = cameraSwitcherSettings.renderTextureB;
+        resolution = cameraSwitcherSettings.resolution;
+        volume = cameraSwitcherSettings.volume;
+    }
+
+    public void SaveProfile()
+    {
+        if(cameraSwitcherSettings == null) return;
+
+        cameraSwitcherSettings.resolution = resolution;
+        cameraSwitcherSettings.volume = volume;
+        
+    }
     public void ChangeDofMode()
     {
-#if USE_URP
+
+
+        if (dof == null)
+        {
+            if (volume != null) volume.TryGet<DepthOfField>(out dof);
+        }
+        
         if(dof == null) return;
-        // dof.mode.value = baseDofValues.depthOfFieldMode;
-#endif
+        dof.focusMode.value = depthOfFieldMode;
+        // dof.quality.value = 0;
     }
     public void SetBaseDofValues()
     {
-#if USE_URP
         if(volume == null) return;
+        cameraSwitcherSettings.volume = volume;
         volume.TryGet<DepthOfField>(out dof);
+#if USE_URP
+        
         // bokehBaseValues.depthOfFieldMode = dof.mode.value;
         bokehBaseValues.focusDistance = dof.focusDistance.value;
         bokehBaseValues.focalLength = dof.focalLength.value;
@@ -114,6 +145,73 @@ public class CameraSwitcherControl : MonoBehaviour
         gaussianBaseValues.maxRadius = dof.gaussianMaxRadius.value;
         gaussianBaseValues.highQualitySampling = dof.highQualitySampling.value;
 #elif USE_HDRP
+        depthOfFieldMode = dof.focusMode.value;
+        physicalCameraBaseValues.focusDistanceMode = dof.focusDistanceMode.value;
+        physicalCameraBaseValues.focusDistance = dof.focusDistance.value;
+        physicalCameraBaseValues.nearBluer.maxRadius = dof.nearMaxBlur;
+        physicalCameraBaseValues.nearBluer.sampleCount = dof.nearSampleCount;
+        physicalCameraBaseValues.farBluer.maxRadius = dof.farMaxBlur;
+        physicalCameraBaseValues.farBluer.sampleCount = dof.farSampleCount;
+
+        manualRangeBaseValues.nearRange.start = dof.nearFocusStart.value;
+        manualRangeBaseValues.nearRange.end = dof.nearFocusEnd.value;
+        manualRangeBaseValues.farRange.start = dof.farFocusStart.value;
+        manualRangeBaseValues.farRange.end = dof.farFocusEnd.value;
+        manualRangeBaseValues.quality = (QualitySetting)Enum.ToObject(typeof(QualitySetting), dof.quality.value);
+        manualRangeBaseValues.nearBluer.maxRadius = dof.nearMaxBlur;
+        manualRangeBaseValues.nearBluer.sampleCount = dof.nearSampleCount;
+        manualRangeBaseValues.farBluer.maxRadius = dof.farMaxBlur;
+        manualRangeBaseValues.farBluer.sampleCount = dof.farSampleCount;
+        
+#endif
+    }
+    
+     public void ApplyBaseDofValuesToVolumeProfile()
+    {
+        Debug.Log("Update dof value");
+        if(volume == null) return;
+        volume.TryGet<DepthOfField>(out dof);
+#if USE_URP
+        
+        // // bokehBaseValues.depthOfFieldMode = dof.mode.value;
+        // bokehBaseValues.focusDistance = dof.focusDistance.value;
+        // bokehBaseValues.focalLength = dof.focalLength.value;
+        // bokehBaseValues.aperture = dof.aperture.value;
+        // bokehBaseValues.bladeCount = dof.bladeCount.value;
+        // bokehBaseValues.bladeRotation = dof.bladeRotation.value;
+        // gaussianBaseValues.start = dof.gaussianStart.value;
+        // gaussianBaseValues.end = dof.gaussianEnd.value;
+        // gaussianBaseValues.maxRadius = dof.gaussianMaxRadius.value;
+        // gaussianBaseValues.highQualitySampling = dof.highQualitySampling.value;
+#elif USE_HDRP
+        
+        
+        dof.quality.value = (int) physicalCameraBaseValues.quality;
+        
+        
+        if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+        {
+            dof.focusMode.value = depthOfFieldMode;
+            dof.focusDistanceMode.value = physicalCameraBaseValues.focusDistanceMode;
+            dof.focusDistance.value = physicalCameraBaseValues.focusDistance;
+            dof.nearMaxBlur = physicalCameraBaseValues.nearBluer.maxRadius;
+            dof.nearSampleCount = physicalCameraBaseValues.nearBluer.sampleCount;
+            dof.farMaxBlur = physicalCameraBaseValues.farBluer.maxRadius;
+            dof.farSampleCount = physicalCameraBaseValues.farBluer.sampleCount;    
+        }
+
+        if (dof.focusMode == DepthOfFieldMode.Manual)
+        {
+            dof.nearFocusStart.value = manualRangeBaseValues.nearRange.start;
+            dof.nearFocusEnd.value = manualRangeBaseValues.nearRange.end;
+            dof.farFocusStart.value = manualRangeBaseValues.farRange.start;
+            dof.farFocusEnd.value = manualRangeBaseValues.farRange.end;
+            dof.nearMaxBlur = manualRangeBaseValues.nearBluer.maxRadius;
+            dof.nearSampleCount = manualRangeBaseValues.nearBluer.sampleCount;
+            dof.farMaxBlur = manualRangeBaseValues.farBluer.maxRadius;
+            dof.farSampleCount = manualRangeBaseValues.farBluer.sampleCount;
+        }
+
 #endif
     }
 

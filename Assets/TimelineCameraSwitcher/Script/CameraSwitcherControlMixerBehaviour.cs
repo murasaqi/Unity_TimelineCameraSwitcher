@@ -154,13 +154,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         var currentTime = (float)m_Director.time;
         var wiggler = Vector4.zero;
         var wigglerRange = Vector2.zero;
-        DepthOfFieldMode depthOfFieldMode;
+#if USE_URP
         var focusDistance = 0f;
         var focalLength = 0f;
         var aperture = 0f;
         var bladeCount = 0;
         var bladeCurvature = 0f;
         var bladeRotation = 0f;
+
+#elif USE_HDRP
+        var physicalCameraProps = new PhysicalCameraProps();
+        physicalCameraProps.Reset();
+        var manualRangeProps = new ManualRangeProps();
+        manualRangeProps.Reset();
+#endif
 
 
         var currentClips = new List<CameraSwitcherControlBehaviour>();
@@ -176,9 +183,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
             var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
 
-#if USE_URP
-            cameraSwitcherControlClip.mode = m_TrackBinding.depthOfFieldMode;
-#endif
+            if(m_TrackBinding.volume != null)cameraSwitcherControlClip.mode = m_TrackBinding.depthOfFieldMode;
+
            
            if (inputWeight > 0)
            {
@@ -198,6 +204,38 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
                        
 #elif USE_HDRP
+
+                   physicalCameraProps.focusDistanceMode = playableBehaviour.physicalCameraProps.focusDistanceMode;
+                   physicalCameraProps.focusDistance +=
+                       playableBehaviour.physicalCameraProps.focusDistance * inputWeight;
+                   physicalCameraProps.nearBluer.sampleCount +=
+                       Mathf.FloorToInt(playableBehaviour.physicalCameraProps.nearBluer.sampleCount * inputWeight);
+                   physicalCameraProps.nearBluer.maxRadius +=
+                       Mathf.FloorToInt( playableBehaviour.physicalCameraProps.nearBluer.maxRadius * inputWeight);
+                   
+                   physicalCameraProps.farBluer.sampleCount +=
+                       Mathf.FloorToInt(playableBehaviour.physicalCameraProps.farBluer.sampleCount * inputWeight);
+                   physicalCameraProps.farBluer.maxRadius +=
+                       Mathf.FloorToInt( playableBehaviour.physicalCameraProps.farBluer.maxRadius * inputWeight);
+
+
+                   manualRangeProps.nearRange.start += playableBehaviour.manualRangeProps.nearRange.start * inputWeight;
+                   manualRangeProps.nearRange.end += playableBehaviour.manualRangeProps.nearRange.end * inputWeight;
+                   
+                   manualRangeProps.farRange.start += playableBehaviour.manualRangeProps.farRange.start * inputWeight;
+                   manualRangeProps.farRange.end += playableBehaviour.manualRangeProps.farRange.end * inputWeight;
+                   manualRangeProps.quality = playableBehaviour.manualRangeProps.quality;
+                   
+                   manualRangeProps.nearBluer.sampleCount +=
+                       Mathf.FloorToInt(playableBehaviour.manualRangeProps.nearBluer.sampleCount * inputWeight);
+                   manualRangeProps.nearBluer.maxRadius +=
+                       Mathf.FloorToInt( playableBehaviour.manualRangeProps.nearBluer.maxRadius * inputWeight);
+                   
+                   manualRangeProps.farBluer.sampleCount +=
+                       Mathf.FloorToInt(playableBehaviour.manualRangeProps.farBluer.sampleCount * inputWeight);
+                   manualRangeProps.farBluer.maxRadius +=
+                       Mathf.FloorToInt( playableBehaviour.manualRangeProps.farBluer.maxRadius * inputWeight);
+                   
 #endif
                    currentClips.Add(playableBehaviour);     
                }
@@ -301,7 +339,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             m_TrackBinding.material.SetVector("_ClipSizeB", _playableBehaviour.wigglerProps.wiggleRange / 100f);
                             m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(_playableBehaviour,currentTime));
                             m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
-                            
+                            var invWeight = 1f - inputWeight;
                             // if (playableBehaviour.fadeCurveOverride)
                             // {
                             //     m_TrackBinding.material.SetFloat("_CrossFade", 1f - playableBehaviour.fadeCurve.Evaluate(inputWeight));
@@ -310,7 +348,38 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             // {
                                 m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
                             // }
-                          
+#if USE_HDRP
+                                physicalCameraProps.focusDistanceMode = _playableBehaviour.physicalCameraProps.focusDistanceMode;
+                               physicalCameraProps.focusDistance +=
+                                   _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
+                               physicalCameraProps.nearBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.nearBluer.sampleCount * invWeight);
+                               physicalCameraProps.nearBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.nearBluer.maxRadius * invWeight);
+                               
+                               physicalCameraProps.farBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.farBluer.sampleCount * invWeight);
+                               physicalCameraProps.farBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.farBluer.maxRadius * invWeight);
+
+
+                               manualRangeProps.nearRange.start += _playableBehaviour.manualRangeProps.nearRange.start * invWeight;
+                               manualRangeProps.nearRange.end += _playableBehaviour.manualRangeProps.nearRange.end * invWeight;
+                               
+                               manualRangeProps.farRange.start += _playableBehaviour.manualRangeProps.farRange.start * invWeight;
+                               manualRangeProps.farRange.end += _playableBehaviour.manualRangeProps.farRange.end * invWeight;
+                               manualRangeProps.quality = _playableBehaviour.manualRangeProps.quality;
+                               
+                               manualRangeProps.nearBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.manualRangeProps.nearBluer.sampleCount * invWeight);
+                               manualRangeProps.nearBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.manualRangeProps.nearBluer.maxRadius * invWeight);
+                               
+                               manualRangeProps.farBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.sampleCount * invWeight);
+                               manualRangeProps.farBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.manualRangeProps.farBluer.maxRadius * invWeight);
+#endif               
                             
                           
                         }
@@ -335,6 +404,36 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                 bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
 
 #elif USE_HDRP
+                                physicalCameraProps.focusDistanceMode = _playableBehaviour.physicalCameraProps.focusDistanceMode;
+                               physicalCameraProps.focusDistance +=
+                                   _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
+                               physicalCameraProps.nearBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.nearBluer.sampleCount * invWeight);
+                               physicalCameraProps.nearBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.nearBluer.maxRadius * invWeight);
+                               
+                               physicalCameraProps.farBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.farBluer.sampleCount * invWeight);
+                               physicalCameraProps.farBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.farBluer.maxRadius * invWeight);
+
+
+                               manualRangeProps.nearRange.start += _playableBehaviour.manualRangeProps.nearRange.start * invWeight;
+                               manualRangeProps.nearRange.end += _playableBehaviour.manualRangeProps.nearRange.end * invWeight;
+                               
+                               manualRangeProps.farRange.start += _playableBehaviour.manualRangeProps.farRange.start * invWeight;
+                               manualRangeProps.farRange.end += _playableBehaviour.manualRangeProps.farRange.end * invWeight;
+                               manualRangeProps.quality = _playableBehaviour.manualRangeProps.quality;
+                               
+                               manualRangeProps.nearBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.manualRangeProps.nearBluer.sampleCount * invWeight);
+                               manualRangeProps.nearBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.manualRangeProps.nearBluer.maxRadius * invWeight);
+                               
+                               manualRangeProps.farBluer.sampleCount +=
+                                   Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.sampleCount * invWeight);
+                               manualRangeProps.farBluer.maxRadius +=
+                                   Mathf.FloorToInt( _playableBehaviour.manualRangeProps.farBluer.maxRadius * invWeight);
 #endif               
 
                             }
@@ -366,12 +465,12 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
            
             if (m_TrackBinding.dofControl)
             {
-               
+                    
+#if USE_URP               
                 if (currentClips.Count > 0)
                 {
                     
-                    
-#if USE_URP
+
 
                     if (dof.mode == DepthOfFieldMode.Bokeh)
                     {
@@ -382,15 +481,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                         dof.bladeCurvature.value = bladeCurvature;
                         dof.bladeRotation.value = bladeRotation;      
                     }
-                  
-                    
-#elif USE_HDRP
-#endif    
+
                 }
                 else
                 {
                     
-#if USE_URP
                     if (dof.mode == DepthOfFieldMode.Bokeh)
                     {
                         dof.focusDistance.value = m_TrackBinding.bokehBaseValues.focusDistance;
@@ -400,9 +495,67 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                         dof.bladeCurvature.value = m_TrackBinding.bokehBaseValues.bladeCurvature;
                         dof.bladeRotation.value = m_TrackBinding.bokehBaseValues.bladeRotation;
                     }
-#elif USE_HDRP
-#endif   
+
                 }
+#elif USE_HDRP
+                
+                if (currentClips.Count > 0)
+                {
+                    
+                    if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                    {
+                        dof.focusDistanceMode.value = physicalCameraProps.focusDistanceMode;
+                        dof.focusDistance.value = physicalCameraProps.focusDistance;
+                        dof.quality.value = (int) physicalCameraProps.quality;
+                        dof.nearMaxBlur = physicalCameraProps.nearBluer.maxRadius;
+                        dof.nearSampleCount = physicalCameraProps.nearBluer.sampleCount;
+                        dof.farMaxBlur = physicalCameraProps.farBluer.maxRadius;
+                        dof.farSampleCount = physicalCameraProps.farBluer.sampleCount;
+                        
+                    }
+
+                    if (dof.focusMode == DepthOfFieldMode.Manual)
+                    {
+                        dof.nearFocusStart.value = manualRangeProps.nearRange.start;
+                        dof.nearFocusEnd.value = manualRangeProps.nearRange.end;
+                        dof.farFocusStart.value = manualRangeProps.farRange.start;
+                        dof.farFocusEnd.value = manualRangeProps.farRange.end;
+                        dof.nearMaxBlur = manualRangeProps.nearBluer.maxRadius;
+                        dof.nearSampleCount = manualRangeProps.nearBluer.sampleCount;
+                        dof.farMaxBlur = manualRangeProps.farBluer.maxRadius;
+                        dof.farSampleCount = manualRangeProps.farBluer.sampleCount;
+                        dof.quality.value = (int)manualRangeProps.quality;
+                    }
+
+                }
+                else
+                {
+                    if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                    {
+                        dof.focusDistanceMode.value = m_TrackBinding.physicalCameraBaseValues.focusDistanceMode;
+                        dof.focusDistance.value = m_TrackBinding.physicalCameraBaseValues.focusDistance;
+                        dof.quality.value = (int) m_TrackBinding.physicalCameraBaseValues.quality;
+                        dof.nearMaxBlur = m_TrackBinding.physicalCameraBaseValues.nearBluer.maxRadius;
+                        dof.nearSampleCount = m_TrackBinding.physicalCameraBaseValues.nearBluer.sampleCount;
+                        dof.farMaxBlur = m_TrackBinding.physicalCameraBaseValues.farBluer.maxRadius;
+                        dof.farSampleCount = m_TrackBinding.physicalCameraBaseValues.farBluer.sampleCount;
+                    }
+                    
+                    if (dof.focusMode == DepthOfFieldMode.Manual)
+                    {
+                        dof.nearFocusStart.value = m_TrackBinding.manualRangeBaseValues.nearRange.start;
+                        dof.nearFocusEnd.value = m_TrackBinding.manualRangeBaseValues.nearRange.end;
+                        dof.farFocusStart.value = m_TrackBinding.manualRangeBaseValues.farRange.start;
+                        dof.farFocusEnd.value = m_TrackBinding.manualRangeBaseValues.farRange.end;
+                        dof.nearMaxBlur = m_TrackBinding.manualRangeBaseValues.nearBluer.maxRadius;
+                        dof.nearSampleCount = m_TrackBinding.manualRangeBaseValues.nearBluer.sampleCount;
+                        dof.farMaxBlur = m_TrackBinding.manualRangeBaseValues.farBluer.maxRadius;
+                        dof.farSampleCount = m_TrackBinding.manualRangeBaseValues.farBluer.sampleCount;
+                        dof.quality.value = (int)m_TrackBinding.manualRangeBaseValues.quality;
+                    }
+
+                }
+#endif   
             }
         }
         

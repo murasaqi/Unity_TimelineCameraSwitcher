@@ -40,6 +40,8 @@ public static class PropertyDrawerUtility
                         if (property.depth != depth) {
                             break;
                         }
+
+                        property.isExpanded = true;
                         EditorGUI.PropertyField(fieldRect, property, true);
                         fieldRect.y += EditorGUI.GetPropertyHeight(property, true);
                         fieldRect.y += EditorGUIUtility.standardVerticalSpacing;

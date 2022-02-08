@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering.HighDefinition;
 
 #if USE_URP
 using UnityEngine.Rendering.Universal;
@@ -20,10 +21,6 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     // [SerializeField] public bool lookAt = false;
     [HideInInspector] public Transform target;
     // public CameraSwitcherControlBehaviour clone;
-
-#if USE_URP
-    
-
     public DepthOfFieldMode mode
     {
         set
@@ -31,8 +28,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
             template.mode = value;
         }
     }
-#elif USE_HDRP
-#endif 
+
     public ClipCaps clipCaps
     {
         get { return ClipCaps.Blending; }

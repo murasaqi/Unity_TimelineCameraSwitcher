@@ -10,8 +10,8 @@ public class CameraSwitcherSettings : ScriptableObject
     [SerializeField] public Material material;
     [SerializeField] public RenderTexture renderTextureA;
     [SerializeField] public RenderTexture renderTextureB;
-    [SerializeField] public Volume volume;
-    [SerializeField] public Vector2Int resolution;
+    [SerializeField] public VolumeProfile volume;
+    [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
     [SerializeField] public List<Vector2Int> resolutionList = new List<Vector2Int>()
     {
         new Vector2Int(1280,720),

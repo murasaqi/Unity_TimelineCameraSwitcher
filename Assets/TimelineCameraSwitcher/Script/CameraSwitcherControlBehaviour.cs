@@ -35,6 +35,95 @@ public class GaussianProp
     [SerializeField] public bool highQualitySampling = false;
 }
 
+[Serializable]
+public enum QualitySetting
+{
+    Custom = 3,
+    Low = 0,
+    Medium = 1,
+    High =2
+}
+
+[Serializable]
+public class BluerProps
+{
+    [Range(3,10)]public int sampleCount =5;
+    [Range(0,8)]public float maxRadius = 0;
+}
+
+[Serializable]
+public class RangeProps
+{
+    public float start =0;
+    public float end = 10;
+}
+
+
+
+#if USE_HDRP
+[Serializable]
+public class PhysicalCameraProps
+{
+    // [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+
+    public void Reset()
+    {
+        nearBluer.sampleCount = 0;
+        nearBluer.maxRadius = 0;
+        farBluer.sampleCount = 0;
+        farBluer.maxRadius = 0;
+    }
+    [SerializeField] public FocusDistanceMode focusDistanceMode = FocusDistanceMode.Volume;
+    [SerializeField] public float focusDistance = 10;
+    [SerializeField] public QualitySetting quality = QualitySetting.Custom;
+    [SerializeField] public BluerProps nearBluer =new BluerProps()
+    {
+        sampleCount = 4,
+        maxRadius = 5,
+    };
+    [SerializeField] public BluerProps farBluer =new BluerProps()
+    {
+        sampleCount = 9,
+        maxRadius = 8,
+    };
+    
+}
+[Serializable]
+public class ManualRangeProps
+{
+    
+    public void Reset()
+    {
+        farRange.start = 0;
+        farRange.end = 0;
+        nearRange.start = 0;
+        nearRange.end = 0;
+        nearBluer.sampleCount = 0;
+        nearBluer.maxRadius = 0;
+        farBluer.sampleCount = 0;
+        farBluer.maxRadius = 0;
+    }
+    [SerializeField] public RangeProps nearRange = new RangeProps();
+    [SerializeField] public RangeProps farRange = new RangeProps()
+    {
+        start = 10,
+        end =  20
+    };
+    [SerializeField] public QualitySetting quality = QualitySetting.Custom;
+    [SerializeField] public BluerProps nearBluer =new BluerProps()
+    {
+        sampleCount = 4,
+        maxRadius = 5,
+    };
+    [SerializeField] public BluerProps farBluer =new BluerProps()
+    {
+        sampleCount = 9,
+        maxRadius = 8,
+    };
+    
+}
+
+#endif
 
 [Serializable]
 public class LookAtProps
@@ -89,10 +178,13 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public bool wiggle;
     [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
-#if USE_URP
     [HideInInspector] public DepthOfFieldMode mode;
+#if USE_URP
     [SerializeField] public BokehProp bokehProps;
     [SerializeField] public GaussianProp gaussianProps;
+#elif USE_HDRP
+    [SerializeField] public PhysicalCameraProps physicalCameraProps;
+    [SerializeField] public ManualRangeProps manualRangeProps;
 #endif
     // [SerializeField] public bool fadeCurveOverride = false;
     [SerializeField] public bool lookAt;
