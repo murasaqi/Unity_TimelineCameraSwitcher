@@ -8,6 +8,7 @@
         <ui:Foldout text="Settings" name="Settings" focusable="false" value="true" usage-hints="None" tabindex="0" style="height: auto;">
             <uie:PropertyField name="RenderTextureAField" binding-path="renderTextureA" />
             <uie:PropertyField name="RenderTextureBField" binding-path="renderTextureB" />
+            <uie:PropertyField name="MaterialField" binding-path="material" label="Composit Material" />
         </ui:Foldout>
         <ui:Instance template="ResolutionListButton" name="ResolutionListButton" style="margin-top: 4px; margin-bottom: 4px; height: auto;" />
         <uie:ObjectField label="Output Raw Image" name="RawImageField" binding-path="outputRawImage" />
@@ -23,7 +24,7 @@
             <uie:PropertyField name="PhysicalCameraProps" binding-path="physicalCameraBaseValues" />
             <uie:PropertyField name="ManualRangeProps" binding-path="manualRangeBaseValues" />
             <ui:VisualElement style="flex-direction: row; align-items: flex-end; justify-content: flex-end; border-top-width: 4px; border-bottom-width: 4px;">
-                <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" />
+                <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" binding-path="material" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

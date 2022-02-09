@@ -183,6 +183,8 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public BokehProp bokehProps;
     [SerializeField] public GaussianProp gaussianProps;
 #elif USE_HDRP
+    [HideInInspector] public HDAdditionalCameraData hdAdditionalCameraData;
+
     [SerializeField] public PhysicalCameraProps physicalCameraProps;
     [SerializeField] public ManualRangeProps manualRangeProps;
 #endif

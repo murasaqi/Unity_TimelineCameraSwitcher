@@ -40,6 +40,10 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
+#if USE_HDRP
+        // clone.camera.focusDi
+        template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
+#endif
         return playable;
         
     }

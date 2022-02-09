@@ -167,6 +167,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         physicalCameraProps.Reset();
         var manualRangeProps = new ManualRangeProps();
         manualRangeProps.Reset();
+        // var focusDistance = 0f;
 #endif
 
 
@@ -205,6 +206,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                        
 #elif USE_HDRP
 
+                   
+                   if(playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera&& dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                   {
+                       playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance = playableBehaviour.physicalCameraProps.focusDistance;
+                   }
                    physicalCameraProps.focusDistanceMode = playableBehaviour.physicalCameraProps.focusDistanceMode;
                    physicalCameraProps.focusDistance +=
                        playableBehaviour.physicalCameraProps.focusDistance * inputWeight;
@@ -349,6 +355,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                 m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
                             // }
 #if USE_HDRP
+                            
+                            if(_playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                            {
+                                _playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance = _playableBehaviour.physicalCameraProps.focusDistance;
+                            }
                                 physicalCameraProps.focusDistanceMode = _playableBehaviour.physicalCameraProps.focusDistanceMode;
                                physicalCameraProps.focusDistance +=
                                    _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
@@ -363,6 +374,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                    Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.farBluer.maxRadius * invWeight);
 
 
+                               
                                manualRangeProps.nearRange.start += _playableBehaviour.manualRangeProps.nearRange.start * invWeight;
                                manualRangeProps.nearRange.end += _playableBehaviour.manualRangeProps.nearRange.end * invWeight;
                                
@@ -404,6 +416,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                 bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
 
 #elif USE_HDRP
+                                
+                                
                                 physicalCameraProps.focusDistanceMode = _playableBehaviour.physicalCameraProps.focusDistanceMode;
                                physicalCameraProps.focusDistance +=
                                    _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
@@ -434,6 +448,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                                    Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.sampleCount * invWeight);
                                manualRangeProps.farBluer.maxRadius +=
                                    Mathf.FloorToInt( _playableBehaviour.manualRangeProps.farBluer.maxRadius * invWeight);
+                               
+                               if(_playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                               {
+                                   _playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
+                                       Mathf.Lerp(playableBehaviour.physicalCameraProps.focusDistance,
+                                           _playableBehaviour.physicalCameraProps.focusDistance, invWeight);
+                               }
 #endif               
 
                             }
@@ -511,6 +532,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                         dof.nearSampleCount = physicalCameraProps.nearBluer.sampleCount;
                         dof.farMaxBlur = physicalCameraProps.farBluer.maxRadius;
                         dof.farSampleCount = physicalCameraProps.farBluer.sampleCount;
+                        
+                       
                         
                     }
 
