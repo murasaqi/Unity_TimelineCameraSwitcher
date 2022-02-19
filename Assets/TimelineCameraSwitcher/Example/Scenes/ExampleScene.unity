@@ -158,7 +158,7 @@ MonoBehaviour:
   volume: {fileID: 11400000, guid: 6e1fae58a7f300d459a875a0eed1fe3a, type: 2}
   outputRawImage: {fileID: 1567861880}
   outPutRenderTarget: {fileID: 0}
-  resolution: {x: 3840, y: 2160}
+  resolution: {x: 0, y: 0}
   prerenderingFrameCount: 3
   renderTextureFormat: 9
   depth: 0
@@ -166,10 +166,10 @@ MonoBehaviour:
   dofControl: 1
   depthOfFieldMode: 2
   bokehBaseValues:
-    focusDistance: 0.1
-    focalLength: 1
-    aperture: 1
-    bladeCount: 3
+    focusDistance: 2.92
+    focalLength: 113
+    aperture: 12.7
+    bladeCount: 4
     bladeCurvature: 0
     bladeRotation: 0
   gaussianBaseValues:

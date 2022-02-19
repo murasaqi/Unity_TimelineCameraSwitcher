@@ -124,7 +124,9 @@ public class CameraSwitcherControl : MonoBehaviour
         }
         
         if(dof == null) return;
+    #if USE_HDRP
         dof.focusMode.value = depthOfFieldMode;
+#endif
         // dof.quality.value = 0;
     }
     public void SetBaseDofValues()
