@@ -29,7 +29,7 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
     [SerializeField, Range(0,10)] public int prerenderingFrameCount = 3;
     [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
-    [SerializeField] public DepthList depth;
+    // [SerializeField] public DepthList get=> cameraSwitcherSettings.depthList;
     [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
     [SerializeField] public DepthOfFieldMode depthOfFieldMode;
@@ -43,7 +43,7 @@ public class CameraSwitcherControl : MonoBehaviour
   
     
    
-    public DepthList depthList => depth;
+    public DepthList depthList =>  cameraSwitcherSettings.depthList;
     
     
     // [SerializeField] private Texture tex;
