@@ -292,8 +292,8 @@ public class CameraSwitcherControlEditor : Editor
                 var inputCameraB = new RenderTexture(1920, 1080,24);
                 var compoMat = new Material(baseSettings.material);
                 var depth = 0;
-                if (cameraSwitcherControl.depth == DepthList.AtLeast16) depth = 16;
-                if (cameraSwitcherControl.depth == DepthList.AtLeast24_WidthStencil) depth = 24;
+                if (cameraSwitcherControl.depthList == DepthList.AtLeast16) depth = 16;
+                if (cameraSwitcherControl.depthList == DepthList.AtLeast24_WidthStencil) depth = 24;
 
                 inputCameraA.depth = depth;
                 inputCameraA.width = cameraSwitcherControl.width;
