@@ -213,7 +213,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    if (playableBehaviour.volumeProfile != null)
                    {
                        playableBehaviour.volumeProfile.TryGet<DepthOfField>(out dof);
-                       Debug.Log(dof);
+                       // Debug.Log(dof);
                        if (dof != null)
                        {
                            
