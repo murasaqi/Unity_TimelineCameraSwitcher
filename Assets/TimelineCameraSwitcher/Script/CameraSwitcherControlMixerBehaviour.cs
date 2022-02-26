@@ -217,12 +217,15 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                        if (dof != null)
                        {
                            
-                           if (playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera &&
-                               dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                           if (playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
                            {
                                // var hdAdditionalCameraData = playableBehaviour.camera.GetComponents<HDAdditionalCameraData>();
                                playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
                                    playableBehaviour.physicalCameraProps.focusDistance;
+                           }
+                           else
+                           {
+                               dof.focusDistance.value = playableBehaviour.physicalCameraProps.focusDistance;
                            }
 
                            physicalCameraProps.focusDistanceMode =
@@ -593,9 +596,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             if (behaviour.dofOverride)
             {
                 
-                if(behaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                if (behaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
                 {
                     behaviour.hdAdditionalCameraData.physicalParameters.focusDistance = behaviour.physicalCameraProps.focusDistance;
+                }
+                else
+                {
+                    dof.focusDistance.value = behaviour.physicalCameraProps.focusDistance;
                 }
 
                 if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
