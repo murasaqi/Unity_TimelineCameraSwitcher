@@ -23,13 +23,13 @@ public class CameraSwitcherControl : MonoBehaviour
     
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
-    [SerializeField] public VolumeProfile volume;
+    // [SerializeField] public VolumeProfile volume;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
     [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
     [SerializeField, Range(0,10)] public int prerenderingFrameCount = 3;
     [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
-    // [SerializeField] public DepthList get=> cameraSwitcherSettings.depthList;
+    [SerializeField] public DepthList depth;
     [HideInInspector] public Material material;
     [SerializeField] public bool dofControl = false;
     [SerializeField] public DepthOfFieldMode depthOfFieldMode;
@@ -43,7 +43,7 @@ public class CameraSwitcherControl : MonoBehaviour
   
     
    
-    public DepthList depthList =>  cameraSwitcherSettings.depthList;
+    public DepthList depthList => depth;
     
     
     // [SerializeField] private Texture tex;
@@ -83,6 +83,12 @@ public class CameraSwitcherControl : MonoBehaviour
     private void Update()
     {
 
+
+        if (renderTextureA == null && cameraSwitcherSettings.renderTextureA != null)
+            renderTextureA = cameraSwitcherSettings.renderTextureA;
+        
+        if (renderTextureB == null && cameraSwitcherSettings.renderTextureB != null)
+            renderTextureB = cameraSwitcherSettings.renderTextureB;
         if (outputRawImage != null)
         {
             outputRawImage.material = material;
@@ -103,7 +109,7 @@ public class CameraSwitcherControl : MonoBehaviour
         renderTextureA = cameraSwitcherSettings.renderTextureA;
         renderTextureB = cameraSwitcherSettings.renderTextureB;
         resolution = cameraSwitcherSettings.resolution;
-        volume = cameraSwitcherSettings.volume;
+        // volume = cameraSwitcherSettings.volume;
     }
 
     public void SaveProfile()
@@ -111,7 +117,7 @@ public class CameraSwitcherControl : MonoBehaviour
         if(cameraSwitcherSettings == null) return;
 
         cameraSwitcherSettings.resolution = resolution;
-        cameraSwitcherSettings.volume = volume;
+        // cameraSwitcherSettings.volume = volume;
         
     }
     public void ChangeDofMode()
@@ -120,20 +126,18 @@ public class CameraSwitcherControl : MonoBehaviour
 
         if (dof == null)
         {
-            if (volume != null) volume.TryGet<DepthOfField>(out dof);
+            // if (volume != null) volume.TryGet<DepthOfField>(out dof);
         }
         
         if(dof == null) return;
-    #if USE_HDRP
         dof.focusMode.value = depthOfFieldMode;
-#endif
         // dof.quality.value = 0;
     }
     public void SetBaseDofValues()
     {
-        if(volume == null) return;
-        cameraSwitcherSettings.volume = volume;
-        volume.TryGet<DepthOfField>(out dof);
+        // if(volume == null) return;
+        // cameraSwitcherSettings.volume = volume;
+        // volume.TryGet<DepthOfField>(out dof);
 #if USE_URP
         
         // bokehBaseValues.depthOfFieldMode = dof.mode.value;
@@ -170,9 +174,9 @@ public class CameraSwitcherControl : MonoBehaviour
     
      public void ApplyBaseDofValuesToVolumeProfile()
     {
-        Debug.Log("Update dof value");
-        if(volume == null) return;
-        volume.TryGet<DepthOfField>(out dof);
+        // Debug.Log("Update dof value");
+        // if(volume == null) return;
+        // volume.TryGet<DepthOfField>(out dof);
 #if USE_URP
         
         // // bokehBaseValues.depthOfFieldMode = dof.mode.value;
@@ -230,6 +234,9 @@ public class CameraSwitcherControl : MonoBehaviour
 
     public void Blit()
     {
+        #if USE_URP
         if(material != null && outPutRenderTarget != null)Graphics.Blit(Texture2D.blackTexture, outPutRenderTarget, material, material.FindPass("Universal Forward"));
+#elif USE_HDRP
+        #endif
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
 
 
 #if USE_URP
@@ -20,6 +21,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
     // [SerializeField] public bool lookAt = false;
     [HideInInspector] public Transform target;
+
+    [HideInInspector] public Volume volume;
     // public CameraSwitcherControlBehaviour clone;
     public DepthOfFieldMode mode
     {
@@ -40,6 +43,13 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
+        volume = clone.camera.GetComponent<Volume>();
+        if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
+
+        if (volume.profile != null)
+        {
+            template.volumeProfile = volume.profile;
+        }
 #if USE_HDRP
         // clone.camera.focusDi
         template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();

@@ -21,7 +21,9 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         SerializedProperty wiggleProp = property.FindPropertyRelative ("wiggle");
         SerializedProperty wigglePropsProp = property.FindPropertyRelative("wigglerProps");
         var dofModeProp = property.FindPropertyRelative ("mode");
+        var volumeProfileProp = property.FindPropertyRelative ("volumeProfile");
         SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
+        
 #if USE_URP
         SerializedProperty bokehProp = property.FindPropertyRelative ("bokehProps");
         SerializedProperty gaussianProp = property.FindPropertyRelative ("gaussianProps");
@@ -48,8 +50,11 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         
         
         // EditorGUILayout.bar
-        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
         EditorGUI.PropertyField (singleFieldRect, dofProp);
+        position.y += EditorGUIUtility.singleLineHeight;
+        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
+        EditorGUI.PropertyField (singleFieldRect, volumeProfileProp);
         position.y += EditorGUIUtility.singleLineHeight;
 #if USE_URP        
         EditorGUI.BeginDisabledGroup(!dofProp.boolValue);

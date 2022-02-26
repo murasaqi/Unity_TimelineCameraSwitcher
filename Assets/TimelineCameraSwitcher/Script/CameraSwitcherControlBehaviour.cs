@@ -3,6 +3,7 @@ using System.Collections.Generic;using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 #if USE_URP
@@ -178,6 +179,7 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public bool wiggle;
     [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
+    [SerializeField] public VolumeProfile volumeProfile;
     [HideInInspector] public DepthOfFieldMode mode;
 #if USE_URP
     [SerializeField] public BokehProp bokehProps;

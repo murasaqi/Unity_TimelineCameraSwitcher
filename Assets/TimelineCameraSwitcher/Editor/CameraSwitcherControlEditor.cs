@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.IO;
+using Codice.Client.BaseCommands.Import;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+using UnityEngine.Rendering.HighDefinition;
 
 #if USE_URP
 
 using UnityEngine.Rendering.Universal;
-#elif USE_HDRP
-using UnityEngine.Rendering.HighDefinition;
+
 #endif
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -54,7 +55,12 @@ public class CameraSwitcherControlEditor : Editor
           
             
         });
-        if (cameraSwitcherControl.cameraSwitcherSettings != null) createButton.SetEnabled(false);
+        createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings != null);
+
+        createButton.RegisterValueChangedCallback((evt) =>
+        {
+            createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings != null);
+        });
         createButton.clicked += () =>
         {
             
@@ -149,27 +155,27 @@ public class CameraSwitcherControlEditor : Editor
         var dofMode = container.Q<EnumField>("DepthOfFieldMode");
 
 
-        if (cameraSwitcherControl.volume != null)
-        { 
-            volumeFiled.value = cameraSwitcherControl.volume;
-            cameraSwitcherControl.ChangeDofMode();
-        }
+        // if (cameraSwitcherControl.volume != null)
+        // { 
+        //     volumeFiled.value = cameraSwitcherControl.volume;
+        //     cameraSwitcherControl.ChangeDofMode();
+        // }
 
         CheckDofMode(cameraSwitcherControl);
         
         dofMode.RegisterValueChangedCallback((evt) =>
         {
             CheckDofMode(cameraSwitcherControl);
-            if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
-            if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
+            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
+            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
             
         });
         volumeFiled.RegisterValueChangedCallback((evt) =>
         {
-            cameraSwitcherControl.volume = evt.newValue as VolumeProfile;
+            // cameraSwitcherControl.volume = evt.newValue as VolumeProfile;
             CheckDofMode(cameraSwitcherControl);
-            if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
-            dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
+            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
+            // dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
             
         });
         
@@ -292,8 +298,8 @@ public class CameraSwitcherControlEditor : Editor
                 var inputCameraB = new RenderTexture(1920, 1080,24);
                 var compoMat = new Material(baseSettings.material);
                 var depth = 0;
-                if (cameraSwitcherControl.depthList == DepthList.AtLeast16) depth = 16;
-                if (cameraSwitcherControl.depthList == DepthList.AtLeast24_WidthStencil) depth = 24;
+                if (cameraSwitcherControl.depth == DepthList.AtLeast16) depth = 16;
+                if (cameraSwitcherControl.depth == DepthList.AtLeast24_WidthStencil) depth = 24;
 
                 inputCameraA.depth = depth;
                 inputCameraA.width = cameraSwitcherControl.width;
@@ -310,13 +316,13 @@ public class CameraSwitcherControlEditor : Editor
                 var exportPath_compositeMat = dir+"/composite.mat";
 
                 
-                setting.material = compoMat;
-                setting.renderTextureA = inputCameraA;
-                setting.renderTextureB = inputCameraB;  
+        
                
                 setting.name = fileName;
                 AssetDatabase.CreateAsset(setting, path);
                 AssetDatabase.Refresh();
+
+                cameraSwitcherControl.cameraSwitcherSettings = setting;
 
                
                 inputCameraA.name = "inputCameraA";
@@ -338,7 +344,9 @@ public class CameraSwitcherControlEditor : Editor
 
                 cameraSwitcherControl.material = AssetDatabase.LoadAssetAtPath<Material>(exportPath_compositeMat);
 
-
+                setting.material = compoMat;
+                setting.renderTextureA = inputCameraA;
+                setting.renderTextureB = inputCameraB;  
                
 
             // }
