@@ -90,7 +90,7 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
             
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex == 1);
             PropertyDrawerUtility.DrawDefaultGUI(position, manualRangeProp, new GUIContent("Manual Range"));   
-            position.y += manualRangeProp.isExpanded ? EditorGUIUtility.singleLineHeight * 16 : EditorGUIUtility.singleLineHeight;
+            position.y += manualRangeProp.isExpanded ? EditorGUIUtility.singleLineHeight * 18 : EditorGUIUtility.singleLineHeight;
             position.y += physicalCameraProp.isExpanded
                 ? EditorGUIUtility.singleLineHeight *  1
                 : 0;

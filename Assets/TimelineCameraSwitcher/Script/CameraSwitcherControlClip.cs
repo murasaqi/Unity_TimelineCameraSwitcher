@@ -55,8 +55,11 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         // {
         //     volume.profile = template.volumeProfile;
         // }
+
+        
         
 #if USE_HDRP
+        // clone.physicalCameraProps.focusLength = clone.camera.focalLength;
         // clone.camera.focusDi
         template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
 #endif

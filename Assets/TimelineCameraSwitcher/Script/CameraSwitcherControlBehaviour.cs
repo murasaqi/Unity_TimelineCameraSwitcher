@@ -73,9 +73,12 @@ public class PhysicalCameraProps
         nearBluer.maxRadius = 0;
         farBluer.sampleCount = 0;
         farBluer.maxRadius = 0;
+        focusLength = 0f;
+        focusDistance = 0f;
     }
     [SerializeField] public FocusDistanceMode focusDistanceMode = FocusDistanceMode.Volume;
     [SerializeField] public float focusDistance = 10;
+    [SerializeField] public float focusLength = 50;
     [SerializeField] public QualitySetting quality = QualitySetting.Custom;
     [SerializeField] public BluerProps nearBluer =new BluerProps()
     {
@@ -103,7 +106,11 @@ public class ManualRangeProps
         nearBluer.maxRadius = 0;
         farBluer.sampleCount = 0;
         farBluer.maxRadius = 0;
+        focusLength = 0f;
+        focusDistance = 10f;
     }
+    [SerializeField] public float focusDistance = 10;
+    [SerializeField] public float focusLength = 50;
     [SerializeField] public RangeProps nearRange = new RangeProps();
     [SerializeField] public RangeProps farRange = new RangeProps()
     {
