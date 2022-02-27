@@ -107,7 +107,7 @@ public class ManualRangeProps
         farBluer.sampleCount = 0;
         farBluer.maxRadius = 0;
         focusLength = 0f;
-        focusDistance = 10f;
+        focusDistance = 0f;
     }
     [SerializeField] public float focusDistance = 10;
     [SerializeField] public float focusLength = 50;

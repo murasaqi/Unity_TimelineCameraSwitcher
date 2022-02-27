@@ -134,6 +134,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             {
                 _cameras.Add(playableBehaviour.camera);
                 playableBehaviour.camera.enabled = false;
+                var c = clip.asset as CameraSwitcherControlClip;
+                c.volume.enabled = false;
             }
             i++;
         }
@@ -185,9 +187,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
            var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
            if (inputWeight > 0)
            {
-               
-               
 
+
+               cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
                if (playableBehaviour.dofOverride)
                {
                   
@@ -339,6 +341,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 if (playableBehaviour.camera != null)
                 {
                     playableBehaviour.camera.enabled = true;
+                   
                     playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
                     m_TrackBinding.cameraA = playableBehaviour.camera;
 
@@ -384,6 +387,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 #if USE_HDRP
                             // var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
                             var cameraSwitcherControlNextClip = nextClip.asset as CameraSwitcherControlClip;
+                            cameraSwitcherControlNextClip.volume.enabled = _playableBehaviour.dofOverride;
+                            cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
                             CheckVolumeProfile(_playableBehaviour, cameraSwitcherControlNextClip);
                             SetVolumeValues(_playableBehaviour, _playableBehaviour.manualRangeProps, _playableBehaviour.physicalCameraProps);
                             CheckVolumeProfile(playableBehaviour, cameraSwitcherControlClip);
@@ -626,12 +631,12 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             DepthOfField dof;
             behaviour.volumeProfile.TryGet<DepthOfField>(out dof);
             if(dof == null) return;
-            
+            dof.focusMode.value = behaviour.mode;
             if (behaviour.dofOverride)
             {
                 
 
-                if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
+                if (dof.focusMode.value == DepthOfFieldMode.UsePhysicalCamera)
                 {
                     if (behaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
                     {
@@ -655,7 +660,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
                 }
 
-                if (dof.focusMode == DepthOfFieldMode.Manual)
+                if (dof.focusMode.value == DepthOfFieldMode.Manual)
                 {
                     dof.nearFocusStart.value = manualRangeProps.nearRange.start;
                     dof.nearFocusEnd.value = manualRangeProps.nearRange.end;
