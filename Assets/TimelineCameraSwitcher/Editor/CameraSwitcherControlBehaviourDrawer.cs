@@ -12,7 +12,7 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
     // private GUIContent m_bokehPropsContent = new GUIContent("Tween Type");
     public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
     {
-        int fieldCount = 54;
+        int fieldCount = 58;
         return fieldCount * (EditorGUIUtility.singleLineHeight);
     }
     
@@ -55,6 +55,10 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         position.y += EditorGUIUtility.singleLineHeight;
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
         EditorGUI.PropertyField (singleFieldRect, volumeProfileProp);
+        position.y += EditorGUIUtility.singleLineHeight;
+        
+        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
+        EditorGUI.PropertyField (singleFieldRect, dofModeProp);
         position.y += EditorGUIUtility.singleLineHeight;
 #if USE_URP        
         EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
