@@ -46,10 +46,16 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         volume = clone.camera.GetComponent<Volume>();
         if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
 
-        if (volume.profile != null)
-        {
-            template.volumeProfile = volume.profile;
-        }
+        // if (volume.profile != null && template.volumeProfile == null)
+        // {
+        //     template.volumeProfile = volume.profile;
+        // }
+        //
+        // if (volume.profile == null && template.volumeProfile != null)
+        // {
+        //     volume.profile = template.volumeProfile;
+        // }
+        
 #if USE_HDRP
         // clone.camera.focusDi
         template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
