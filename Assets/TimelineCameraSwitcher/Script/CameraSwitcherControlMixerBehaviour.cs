@@ -151,12 +151,17 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         var wiggler = Vector4.zero;
         var wigglerRange = Vector2.zero;
 #if USE_URP
-        var focusDistance = 0f;
-        var focalLength = 0f;
-        var aperture = 0f;
-        var bladeCount = 0;
-        var bladeCurvature = 0f;
-        var bladeRotation = 0f;
+        
+        // var focusDistance = 0f;
+        // var focalLength = 0f;
+        // var aperture = 0f;
+        // var bladeCount = 0;
+        // var bladeCurvature = 0f;
+        // var bladeRotation = 0f;
+        var bokehProps = new BokehProp();
+        bokehProps.Reset();
+        var gaussianProps = new GaussianProp();
+        gaussianProps.Reset();
 
 #elif USE_HDRP
         var physicalCameraProps = new PhysicalCameraProps();
@@ -192,25 +197,27 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
                if (playableBehaviour.dofOverride)
                {
-                  
+                   DepthOfField dof;
+
 #if USE_URP
-                    DepthOfField dof;
-                   if (m_TrackBinding.volume != null)
-                   {
-                       m_TrackBinding.volume.TryGet<DepthOfField>(out dof);
-                   }
+                  
 
                    // depthOfFieldMode = playableBehaviour.depthOfFieldMode;
-                   focusDistance += playableBehaviour.bokehProps.focusDistance*inputWeight;
-                   focalLength += playableBehaviour.bokehProps.focalLength*inputWeight;
-                   aperture += playableBehaviour.bokehProps.aperture * inputWeight;
-                   bladeCount += Mathf.FloorToInt(playableBehaviour.bokehProps.bladeCount*inputWeight);
-                   bladeCurvature += playableBehaviour.bokehProps.bladeCurvature * inputWeight;
-                   bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
+                   bokehProps.focusDistance += playableBehaviour.bokehProps.focusDistance*inputWeight;
+                   bokehProps.focalLength += playableBehaviour.bokehProps.focalLength*inputWeight;
+                   bokehProps.aperture += playableBehaviour.bokehProps.aperture * inputWeight;
+                   bokehProps.bladeCount += Mathf.FloorToInt(playableBehaviour.bokehProps.bladeCount*inputWeight);
+                   bokehProps.bladeCurvature += playableBehaviour.bokehProps.bladeCurvature * inputWeight;
+                   bokehProps.bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
+
+                   gaussianProps.start += playableBehaviour.gaussianProps.start * inputWeight;
+                   gaussianProps.end += playableBehaviour.gaussianProps.end * inputWeight;
+                   gaussianProps.maxRadius += playableBehaviour.gaussianProps.maxRadius * inputWeight;
+                   gaussianProps.highQualitySampling = playableBehaviour.gaussianProps.highQualitySampling;
                        
 #elif USE_HDRP
 
-                   DepthOfField dof;
+                   // DepthOfField dof;
                    if (playableBehaviour.volumeProfile != null)
                    {
                        playableBehaviour.volumeProfile.TryGet<DepthOfField>(out dof);
@@ -384,7 +391,23 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             // {
                                 m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
                             // }
-#if USE_HDRP
+
+#if  USE_URP
+                            
+                            // bokehProps.focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
+                            // bokehProps.focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
+                            // bokehProps.aperture += _playableBehaviour.bokehProps.aperture * invWeight;
+                            // bokehProps.bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
+                            // bokehProps.bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
+                            // bokehProps.bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
+                            //
+                            // gaussianProps.start += _playableBehaviour.gaussianProps.start * inputWeight;
+                            // gaussianProps.end += _playableBehaviour.gaussianProps.end * inputWeight;
+                            // gaussianProps.maxRadius += _playableBehaviour.gaussianProps.maxRadius * inputWeight;
+                            // gaussianProps.highQualitySampling = _playableBehaviour.gaussianProps.highQualitySampling;
+                            
+                            
+#elif USE_HDRP
                             // var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
                             var cameraSwitcherControlNextClip = nextClip.asset as CameraSwitcherControlClip;
                             cameraSwitcherControlNextClip.volume.enabled = _playableBehaviour.dofOverride;
@@ -448,12 +471,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 #if USE_URP
 
                                 // depthOfFieldMode = _playableBehaviour.bokehProps.depthOfFieldMode;
-                                focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
-                                focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
-                                aperture += _playableBehaviour.bokehProps.aperture * invWeight;
-                                bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
-                                bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
-                                bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
+                                bokehProps.focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
+                                bokehProps.focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
+                                bokehProps.aperture += _playableBehaviour.bokehProps.aperture * invWeight;
+                                bokehProps.bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
+                                bokehProps.bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
+                                bokehProps.bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
+                         
+                                gaussianProps.start += _playableBehaviour.gaussianProps.start * inputWeight;
+                                gaussianProps.end += _playableBehaviour.gaussianProps.end * inputWeight;
+                                gaussianProps.maxRadius += _playableBehaviour.gaussianProps.maxRadius * inputWeight;
+                                gaussianProps.highQualitySampling = _playableBehaviour.gaussianProps.highQualitySampling;
+                                CheckVolumeProfile(_playableBehaviour,cameraSwitcherControlNextClip);
+                                SetVolumeValues(_playableBehaviour,bokehProps,gaussianProps);
 
 #elif USE_HDRP
                                 
@@ -534,7 +564,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     {
                         SelectSingleCamera(playableBehaviour,inputWeight,currentTime,_playableBehaviour);
                         CheckVolumeProfile(playableBehaviour,cameraSwitcherControlClip);
-                        SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
+
+#if USE_URP
+                        SetVolumeValues(playableBehaviour,playableBehaviour.bokehProps,playableBehaviour.gaussianProps);
+#elif USE_HDRP
+SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
+#endif
+                        
                         m_TrackBinding.cameraB = _playableBehaviour.camera;
                     }
                    
@@ -621,6 +657,66 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             
         }
     }
+
+#if USE_URP
+     private void SetVolumeValues(CameraSwitcherControlBehaviour behaviour, BokehProp bokehProp, GaussianProp gaussianProp)
+    {
+        
+        
+        
+        if (behaviour.volumeProfile != null)
+        {
+            DepthOfField dof;
+            behaviour.volumeProfile.TryGet<DepthOfField>(out dof);
+            if(dof == null) return;
+            dof.mode.value = behaviour.mode;
+            if (behaviour.dofOverride)
+            {
+
+                if (dof.mode.value == DepthOfFieldMode.Bokeh)
+                {
+
+                    dof.focusDistance.value = bokehProp.focusDistance;
+                    dof.focalLength.value = bokehProp.focalLength;
+                    dof.aperture.value = bokehProp.aperture;
+                    dof.bladeCount.value = bokehProp.bladeCount;
+                    dof.bladeCurvature.value = bokehProp.bladeCurvature;
+                    dof.bladeRotation.value = bokehProp.bladeRotation;
+
+                }
+
+                if (dof.mode.value == DepthOfFieldMode.Gaussian)
+                {
+                  
+                }
+            }
+
+            else
+            {
+                
+                if (dof.mode.value == DepthOfFieldMode.Bokeh)
+                {
+                    
+                    
+                    dof.focusDistance.value = m_TrackBinding.bokehBaseValues.focusDistance;
+                    dof.focalLength.value = m_TrackBinding.bokehBaseValues.focalLength;
+                    dof.aperture.value = m_TrackBinding.bokehBaseValues.aperture;
+                    dof.bladeCount.value = m_TrackBinding.bokehBaseValues.bladeCount;
+                    dof.bladeCurvature.value = m_TrackBinding.bokehBaseValues.bladeCurvature;
+                    dof.bladeRotation.value = m_TrackBinding.bokehBaseValues.bladeRotation;
+
+                }
+
+                if (dof.mode.value == DepthOfFieldMode.Gaussian)
+                {
+                  
+                }
+
+            }
+        }
+    }
+#elif USE_HDRP
+
     private void SetVolumeValues(CameraSwitcherControlBehaviour behaviour, ManualRangeProps manualRangeProps, PhysicalCameraProps physicalCameraProps)
     {
         
@@ -711,6 +807,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             }
         }
     }
+#endif
     private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour,float inputWeight,float currentTime, CameraSwitcherControlBehaviour nextPlayableBehaviour = null)
     {
         

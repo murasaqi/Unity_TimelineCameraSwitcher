@@ -11,20 +11,19 @@
             <uie:PropertyField name="MaterialField" binding-path="material" label="Composit Material" />
         </ui:Foldout>
         <ui:Instance template="ResolutionListButton" name="ResolutionListButton" style="margin-top: 4px; margin-bottom: 4px; height: auto;" />
+        <uie:EnumField label="Depth" value="depth" binding-path="depth" />
         <uie:ObjectField label="Output Raw Image" name="RawImageField" binding-path="outputRawImage" />
         <uie:ObjectField label="Output Render Texture" name="RenderTextureField" binding-path="outPutRenderTarget" />
         <ui:Slider picking-mode="Ignore" label="Prerendering Frame Count" value="3" high-value="5" name="PrerenderingFrameCountField" binding-path="prerenderingFrameCount" show-input-field="true" />
         <uie:EnumField label="RenderTexture Format" value="Center" binding-path="renderTextureFormat" name="RenderTextureFormatField" />
-        <ui:Toggle label="Dof Control" name="DofControlField" binding-path="dofControl" />
+        <ui:Label text="Base DoF Values" display-tooltip-when-elided="true" />
         <ui:VisualElement name="DoFParameterElement" style="padding-left: 8px;">
-            <uie:ObjectField label="Volume" binding-path="volume" name="VolumeField" />
-            <uie:EnumField label="Mode" value="Center" binding-path="depthOfFieldMode" name="DepthOfFieldMode" />
             <ui:Instance template="DofParameters_Bokeh" name="DofParameters_Bokeh" />
             <ui:Instance template="DofParameters" name="DofParameters_Gaussian" binding-path="baseDofValues" style="justify-content: center;" />
             <uie:PropertyField name="PhysicalCameraProps" binding-path="physicalCameraBaseValues" />
             <uie:PropertyField name="ManualRangeProps" binding-path="manualRangeBaseValues" />
             <ui:VisualElement style="flex-direction: row; align-items: flex-end; justify-content: flex-end; border-top-width: 4px; border-bottom-width: 4px;">
-                <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" binding-path="material" />
+                <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

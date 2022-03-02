@@ -25,6 +25,16 @@ public class BokehProp
     [SerializeField, Range(1,9)] public int bladeCount =4;
     [SerializeField, Range(0, 1)] public float bladeCurvature = 0;
     [SerializeField, Range(-180, 180)] public float bladeRotation = 0;
+
+    public void Reset()
+    {
+        focusDistance = 0;
+        focalLength = 0; 
+        aperture = 0;
+        bladeCount =4;
+        bladeCurvature = 0;
+        bladeRotation = 0;
+    }
 }
 
 [Serializable]
@@ -34,6 +44,14 @@ public class GaussianProp
     [SerializeField] public float end =10;
     [SerializeField, Range(0.5f, 1.5f)] public float maxRadius = 1;
     [SerializeField] public bool highQualitySampling = false;
+
+    public void Reset()
+    {
+        start =0;
+        end =0;
+        maxRadius = 0;
+        highQualitySampling = false;
+    }
 }
 
 [Serializable]

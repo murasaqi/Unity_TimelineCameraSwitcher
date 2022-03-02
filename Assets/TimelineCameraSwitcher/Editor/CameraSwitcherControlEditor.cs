@@ -6,12 +6,14 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
 
 #if USE_URP
 
 using UnityEngine.Rendering.Universal;
 
+#elif USE_HDRP
+
+using UnityEngine.Rendering.HighDefinition;
 #endif
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -144,12 +146,12 @@ public class CameraSwitcherControlEditor : Editor
         outPutRenderTargetField.objectType = typeof(RenderTexture);
 
 
-        var dofControlField = container.Q<Toggle>("DofControlField");
-        var volumeFiled = container.Q<ObjectField>("VolumeField");
-        volumeFiled.objectType = typeof(VolumeProfile);
+        // var dofControlField = container.Q<Toggle>("DofControlField");
+        // var volumeFiled = container.Q<ObjectField>("VolumeField");
+        // volumeFiled.objectType = typeof(VolumeProfile);
         // var volume = volumeFiled.binding as VolumeProfile;
         var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
-        dofControlField.RegisterValueChangedCallback((evt => dofParameterElement.SetEnabled(evt.newValue)));
+        // dofControlField.RegisterValueChangedCallback((evt => dofParameterElement.SetEnabled(evt.newValue)));
         
         var dofParameters = container.Q<VisualElement>("DoFParameterElement");
         var dofMode = container.Q<EnumField>("DepthOfFieldMode");
@@ -170,14 +172,14 @@ public class CameraSwitcherControlEditor : Editor
             // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
             
         });
-        volumeFiled.RegisterValueChangedCallback((evt) =>
-        {
-            // cameraSwitcherControl.volume = evt.newValue as VolumeProfile;
-            CheckDofMode(cameraSwitcherControl);
-            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
-            // dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
-            
-        });
+        // volumeFiled.RegisterValueChangedCallback((evt) =>
+        // {
+        //     // cameraSwitcherControl.volume = evt.newValue as VolumeProfile;
+        //     CheckDofMode(cameraSwitcherControl);
+        //     // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
+        //     // dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
+        //     
+        // });
         
         
         
@@ -222,10 +224,10 @@ public class CameraSwitcherControlEditor : Editor
         var manual = dofParameterElement.Q<PropertyField>("ManualRangeProps");
 
 #if USE_URP
-        bokeh.value = cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh;
-        bokeh.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh);    
-        gaussian.value =cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian;
-        gaussian.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian);
+        // bokeh.value = cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh;
+        // bokeh.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh);    
+        // gaussian.value =cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian;
+        // gaussian.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian);
         physical.visible = false;
         manual.visible = false;
 

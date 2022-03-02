@@ -1,8 +1,6 @@
 ﻿
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
-using System;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #elif USE_HDRP
@@ -11,12 +9,6 @@ using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UI;
 
 
-
-// public enum CameraSwitcherOutputTarget
-// {
-//     RawImage,
-//     RenderTexture
-// }
 [ExecuteAlways]
 public class CameraSwitcherControl : MonoBehaviour
 {
@@ -29,10 +21,10 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
     [SerializeField, Range(0,10)] public int prerenderingFrameCount = 3;
     [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
-    [SerializeField] public DepthList depth;
+    [SerializeField] public DepthList depth = DepthList.AtLeast24_WidthStencil;
     [HideInInspector] public Material material;
-    [SerializeField] public bool dofControl = false;
-    [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+    // [SerializeField] public bool dofControl = false;
+    // [SerializeField] public DepthOfFieldMode depthOfFieldMode;
 #if USE_URP
     [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
     [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
@@ -130,7 +122,12 @@ public class CameraSwitcherControl : MonoBehaviour
         }
         
         if(dof == null) return;
+#if USE_HDRP
         dof.focusMode.value = depthOfFieldMode;
+#elif USE_URP
+        // dof.mode.value = depthOfFieldMode;
+#endif
+
         // dof.quality.value = 0;
     }
     public void SetBaseDofValues()
@@ -179,7 +176,7 @@ public class CameraSwitcherControl : MonoBehaviour
         // volume.TryGet<DepthOfField>(out dof);
 #if USE_URP
         
-        // // bokehBaseValues.depthOfFieldMode = dof.mode.value;
+        // bokehBaseValues.depthOfFieldMode = dof.mode.value;
         // bokehBaseValues.focusDistance = dof.focusDistance.value;
         // bokehBaseValues.focalLength = dof.focalLength.value;
         // bokehBaseValues.aperture = dof.aperture.value;
