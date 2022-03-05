@@ -1,6 +1,8 @@
-﻿
+﻿#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
+using System;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #elif USE_HDRP
@@ -24,11 +26,12 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public DepthList depth = DepthList.AtLeast24_WidthStencil;
     [HideInInspector] public Material material;
     // [SerializeField] public bool dofControl = false;
-    // [SerializeField] public DepthOfFieldMode depthOfFieldMode;
+ 
 #if USE_URP
     [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
     [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
 #elif USE_HDRP
+    [SerializeField] public DepthOfFieldMode depthOfFieldMode;
     [SerializeField] public PhysicalCameraProps physicalCameraBaseValues= new PhysicalCameraProps();
     [SerializeField] public ManualRangeProps manualRangeBaseValues= new ManualRangeProps();
 #endif
