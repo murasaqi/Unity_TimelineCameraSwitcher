@@ -578,8 +578,15 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
                 else
                 {
                     SelectSingleCamera(playableBehaviour,inputWeight,currentTime);
+#if USE_URP
+                        SetVolumeValues(playableBehaviour,playableBehaviour.bokehProps,playableBehaviour.gaussianProps);
+#elif USE_HDRP
+                    SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
+#endif
                     m_TrackBinding.cameraB = playableBehaviour.camera;
                 }
+                
+                // Debug.Log($"{physicalCameraProps.focusLength},{manualRangeProps.focusLength}");
 
                 break;
                 
@@ -769,6 +776,7 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
                     dof.quality.value = (int) manualRangeProps.quality;
                     behaviour.camera.focalLength = manualRangeProps.focusLength;
                     behaviour.hdAdditionalCameraData.physicalParameters.focusDistance = manualRangeProps.focusDistance;
+                    // Debug.Log( behaviour.camera.focalLength);
                     // behaviour.camera.
                 }
             }

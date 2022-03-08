@@ -57,11 +57,11 @@ public class CameraSwitcherControlEditor : Editor
           
             
         });
-        createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings != null);
+        createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings == null);
 
         createButton.RegisterValueChangedCallback((evt) =>
         {
-            createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings != null);
+            createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings == null);
         });
         createButton.clicked += () =>
         {

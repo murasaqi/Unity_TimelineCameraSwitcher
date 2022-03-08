@@ -16,7 +16,7 @@ public class CameraSwitcherControl : MonoBehaviour
 {
     
     
-    [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings;
+    [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings = null;
     // [SerializeField] public VolumeProfile volume;
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
@@ -77,8 +77,7 @@ public class CameraSwitcherControl : MonoBehaviour
  
     private void Update()
     {
-
-
+        if(cameraSwitcherSettings == null) return;
         if (renderTextureA == null && cameraSwitcherSettings.renderTextureA != null)
             renderTextureA = cameraSwitcherSettings.renderTextureA;
         
