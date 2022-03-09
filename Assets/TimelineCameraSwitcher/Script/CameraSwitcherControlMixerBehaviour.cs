@@ -194,7 +194,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
            {
 
 
-               cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
+               if( cameraSwitcherControlClip.volume != null)cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
                if (playableBehaviour.dofOverride)
                {
                    DepthOfField dof;

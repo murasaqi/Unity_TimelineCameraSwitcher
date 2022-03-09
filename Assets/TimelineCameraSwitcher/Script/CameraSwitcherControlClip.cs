@@ -43,8 +43,12 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
-        volume = clone.camera.GetComponent<Volume>();
-        if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
+        if (clone.camera != null)
+        {
+            volume = clone.camera.GetComponent<Volume>();
+            if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
+        }
+        
 
         // if (volume.profile != null && template.volumeProfile == null)
         // {
@@ -61,7 +65,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 #if USE_HDRP
         // clone.physicalCameraProps.focusLength = clone.camera.focalLength;
         // clone.camera.focusDi
-        template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
+        if(clone.camera != null)template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
 #endif
         return playable;
         
