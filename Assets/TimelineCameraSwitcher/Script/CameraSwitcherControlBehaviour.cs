@@ -195,7 +195,6 @@ public class ColorBlendProps
 }
 
 
-
 [Serializable]
 public class CameraSwitcherControlBehaviour : PlayableBehaviour
 {
@@ -206,6 +205,8 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public bool dofOverride = false;
     [SerializeField] public VolumeProfile volumeProfile;
     [HideInInspector] public DepthOfFieldMode mode;
+    [SerializeField] public int volumeLayerMaskIndex = 0;
+    [HideInInspector] public List<string> volumeLayerListNames = new List<string>(){"default",{"A"},{"B"}};
 #if USE_URP
     [SerializeField] public BokehProp bokehProps;
     [SerializeField] public GaussianProp gaussianProps;

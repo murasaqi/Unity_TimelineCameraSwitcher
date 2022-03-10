@@ -16,6 +16,11 @@
         <uie:ObjectField label="Output Render Texture" name="RenderTextureField" binding-path="outPutRenderTarget" />
         <ui:Slider picking-mode="Ignore" label="Prerendering Frame Count" value="3" high-value="5" name="PrerenderingFrameCountField" binding-path="prerenderingFrameCount" show-input-field="true" />
         <uie:EnumField label="RenderTexture Format" value="Center" binding-path="renderTextureFormat" name="RenderTextureFormatField" />
+        <ui:Label text="Camera Layer Settings" display-tooltip-when-elided="true" />
+        <ui:VisualElement name="CameraLayerSettings" style="padding-left: 8px;">
+            <uie:LayerField label="CameraA" binding-path="cameraALayer" />
+            <uie:LayerField label="CameraB" binding-path="cameraBLayer" />
+        </ui:VisualElement>
         <ui:Label text="Base DoF Values" display-tooltip-when-elided="true" />
         <ui:VisualElement name="DoFParameterElement" style="padding-left: 8px;">
             <ui:Instance template="DofParameters_Bokeh" name="DofParameters_Bokeh" />

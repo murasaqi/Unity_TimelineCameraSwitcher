@@ -24,6 +24,9 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         var volumeProfileProp = property.FindPropertyRelative ("volumeProfile");
         SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
         
+        SerializedProperty volumeLayerMaskProps = property.FindPropertyRelative ("volumeLayerMask");
+        // SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
+        
 #if USE_URP
         SerializedProperty bokehProp = property.FindPropertyRelative ("bokehProps");
         SerializedProperty gaussianProp = property.FindPropertyRelative ("gaussianProps");
@@ -82,6 +85,21 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
 #elif USE_HDRP
         
         EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
+        
+            // singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
+            // EditorGUI.PropertyField (singleFieldRect, volumeLayerMaskProps);
+            // position.y += EditorGUIUtility.singleLineHeight;
+            
+            // PulldownAttribute pulldownAttribute = (PulldownAttribute)attribute;
+            //
+            // if( property.propertyType == SerializedPropertyType.String ) {
+            //     // 文字列のindexを取得する
+            //     int index = Mathf.Max(ArrayUtility.IndexOf(pulldownAttribute.names,property.stringValue),0);
+            //     // EditorGUI.Popupの結果を index として使用し文字列更新する
+            //     property.stringValue = pulldownAttribute.names[EditorGUI.Popup(position,label.text,index,pulldownAttribute.names)];
+            //     return;
+            // }
+            // position.y += EditorGUIUtility.singleLineHeight;
             // Debug.Log(dofModeProp.enumValueIndex);
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex == 2);
 

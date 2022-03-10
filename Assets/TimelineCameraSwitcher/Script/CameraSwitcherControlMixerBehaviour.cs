@@ -184,10 +184,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
 
            
-            // if (playableBehaviour.volumeProfile != null)
-            // {
-            //     cameraSwitcherControlClip.mode = m_TrackBinding.depthOfFieldMode;
-            // }
+         
+            
 
            var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
            if (inputWeight > 0)
@@ -224,6 +222,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                        if (dof != null)
                        {
                            
+                          
                            if (playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
                            {
                                // var hdAdditionalCameraData = playableBehaviour.camera.GetComponents<HDAdditionalCameraData>();
@@ -351,6 +350,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                    
                     playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
                     m_TrackBinding.cameraA = playableBehaviour.camera;
+                    
+                    playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                        Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                        Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
+
 
                 }
 
@@ -369,9 +375,15 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     {
                         currentClips.Add(_playableBehaviour);     
                         m_TrackBinding.cameraB = _playableBehaviour.camera;
+                        
+                        
+                        
+                        
+                        
                         // blending中で、次のカメラが同じじゃないとき
                         if (_playableBehaviour.camera != playableBehaviour.camera)
                         {
+                           
                             _playableBehaviour.camera.enabled = true;
                             _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
                             m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
@@ -383,14 +395,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(_playableBehaviour,currentTime));
                             m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
                             var invWeight = 1f - inputWeight;
-                            // if (playableBehaviour.fadeCurveOverride)
-                            // {
-                            //     m_TrackBinding.material.SetFloat("_CrossFade", 1f - playableBehaviour.fadeCurve.Evaluate(inputWeight));
-                            // }
-                            // else
-                            // {
-                                m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
-                            // }
+                            m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
+                            
 
 #if  USE_URP
                             
@@ -412,47 +418,22 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             var cameraSwitcherControlNextClip = nextClip.asset as CameraSwitcherControlClip;
                             cameraSwitcherControlNextClip.volume.enabled = _playableBehaviour.dofOverride;
                             cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
+
+                            if (_playableBehaviour.dofOverride)
+                            {
+                                _playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
+                                _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                    Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                                _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                    Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
+     
+                            }
+                           
                             CheckVolumeProfile(_playableBehaviour, cameraSwitcherControlNextClip);
                             SetVolumeValues(_playableBehaviour, _playableBehaviour.manualRangeProps, _playableBehaviour.physicalCameraProps);
                             CheckVolumeProfile(playableBehaviour, cameraSwitcherControlClip);
                             SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
                             
-                            
-                            // if(_playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
-                            // {
-                            //     _playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance = _playableBehaviour.physicalCameraProps.focusDistance;
-                            // }
-                            //     physicalCameraProps.focusDistanceMode = _playableBehaviour.physicalCameraProps.focusDistanceMode;
-                            //    physicalCameraProps.focusDistance +=
-                            //        _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
-                            //    physicalCameraProps.nearBluer.sampleCount +=
-                            //        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.nearBluer.sampleCount * invWeight);
-                            //    physicalCameraProps.nearBluer.maxRadius +=
-                            //        Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.nearBluer.maxRadius * invWeight);
-                            //    
-                            //    physicalCameraProps.farBluer.sampleCount +=
-                            //        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.farBluer.sampleCount * invWeight);
-                            //    physicalCameraProps.farBluer.maxRadius +=
-                            //        Mathf.FloorToInt( _playableBehaviour.physicalCameraProps.farBluer.maxRadius * invWeight);
-                            //
-                            //
-                            //    
-                            //    manualRangeProps.nearRange.start += _playableBehaviour.manualRangeProps.nearRange.start * invWeight;
-                            //    manualRangeProps.nearRange.end += _playableBehaviour.manualRangeProps.nearRange.end * invWeight;
-                            //    
-                            //    manualRangeProps.farRange.start += _playableBehaviour.manualRangeProps.farRange.start * invWeight;
-                            //    manualRangeProps.farRange.end += _playableBehaviour.manualRangeProps.farRange.end * invWeight;
-                            //    manualRangeProps.quality = _playableBehaviour.manualRangeProps.quality;
-                            //    
-                            //    manualRangeProps.nearBluer.sampleCount +=
-                            //        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.nearBluer.sampleCount * invWeight);
-                            //    manualRangeProps.nearBluer.maxRadius +=
-                            //        Mathf.FloorToInt( _playableBehaviour.manualRangeProps.nearBluer.maxRadius * invWeight);
-                            //    
-                            //    manualRangeProps.farBluer.sampleCount +=
-                            //        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.sampleCount * invWeight);
-                            //    manualRangeProps.farBluer.maxRadius +=
-                            //        Mathf.FloorToInt( _playableBehaviour.manualRangeProps.farBluer.maxRadius * invWeight);
 #endif
 
 
@@ -727,6 +708,7 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
     private void SetVolumeValues(CameraSwitcherControlBehaviour behaviour, ManualRangeProps manualRangeProps, PhysicalCameraProps physicalCameraProps)
     {
         
+        // Debug.Log(behaviour.hdAdditionalCameraData.volumeLayerMask.value);
         
         
         if (behaviour.volumeProfile != null)
@@ -738,13 +720,14 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
             if (behaviour.dofOverride)
             {
                 
-
+                
+                
                 if (dof.focusMode.value == DepthOfFieldMode.UsePhysicalCamera)
                 {
                     if (behaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
                     {
                         behaviour.hdAdditionalCameraData.physicalParameters.focusDistance = physicalCameraProps.focusDistance;
-                    
+                        // behaviour.hdAdditionalCameraData.volumeLayerMask.value
                     }
                     else
                     {
@@ -907,6 +890,32 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
     {
         base.OnPlayableDestroy(playable);
         if (m_TrackBinding != null) m_TrackBinding.material.SetFloat("_PlayableDirectorTime", 0f);
+    }
+    
+    public static bool Contains(LayerMask self, int layerId)
+    {
+        return ((1 << layerId) & self) != 0;
+    }
+
+    public static bool Contains(LayerMask self, string layerName)
+    {
+        int layerId = LayerMask.NameToLayer(layerName);
+        return ((1 << layerId) & self) != 0;
+    }
+
+    public static LayerMask Add(LayerMask self, LayerMask layerId)
+    {
+        return self | (1 << layerId);
+    }
+
+    public static LayerMask Toggle(LayerMask self, LayerMask layerId)
+    {
+        return self ^ (1 << layerId);
+    }
+
+    public static LayerMask Remove(LayerMask self, LayerMask layerId)
+    {
+        return self & ~(1 << layerId);
     }
     
 }

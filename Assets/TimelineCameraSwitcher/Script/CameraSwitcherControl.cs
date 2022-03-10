@@ -25,12 +25,19 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
     [SerializeField] public DepthList depth = DepthList.AtLeast24_WidthStencil;
     [HideInInspector] public Material material;
+    
+    // HDAdditionalCameraData.
+    // [SerializeField] public layer
     // [SerializeField] public bool dofControl = false;
  
 #if USE_URP
     [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
     [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
 #elif USE_HDRP
+    // [SerializeField] public LayerMask volumeLayerMaskA = new LayerMask();
+    // [SerializeField] public LayerMask volumeLayerMaskB = new LayerMask();
+    [SerializeField] public LayerMask cameraALayer= new LayerMask();
+    [SerializeField] public LayerMask cameraBLayer= new LayerMask();
     [SerializeField] public DepthOfFieldMode depthOfFieldMode;
     [SerializeField] public PhysicalCameraProps physicalCameraBaseValues= new PhysicalCameraProps();
     [SerializeField] public ManualRangeProps manualRangeBaseValues= new ManualRangeProps();
