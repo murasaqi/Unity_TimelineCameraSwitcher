@@ -126,12 +126,27 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
 
         int i = 0;
+        var isA = true;
+        Camera prevCamera = null;
         foreach (TimelineClip clip in m_Clips)
         {
             var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
             var playableBehaviour = scriptPlayable.GetBehaviour();
             if (playableBehaviour.camera != null)
             {
+
+                if (prevCamera != null && prevCamera != playableBehaviour.camera) isA = !isA;
+                if (playableBehaviour.hdAdditionalCameraData != null)
+                {
+                    playableBehaviour.camera.gameObject.layer = isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = 
+                        Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                        Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
+
+                }
+                prevCamera = playableBehaviour.camera;
+                
                 _cameras.Add(playableBehaviour.camera);
                 playableBehaviour.camera.enabled = false;
                 var c = clip.asset as CameraSwitcherControlClip;
@@ -351,12 +366,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
                     m_TrackBinding.cameraA = playableBehaviour.camera;
                     
-                    playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                        Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                        Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-
+                 
 
                 }
 
@@ -419,16 +429,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                             cameraSwitcherControlNextClip.volume.enabled = _playableBehaviour.dofOverride;
                             cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
 
-                            if (_playableBehaviour.dofOverride)
-                            {
-                                _playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
-                                _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                                    Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                                _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                                    Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-     
-                            }
-                           
                             CheckVolumeProfile(_playableBehaviour, cameraSwitcherControlNextClip);
                             SetVolumeValues(_playableBehaviour, _playableBehaviour.manualRangeProps, _playableBehaviour.physicalCameraProps);
                             CheckVolumeProfile(playableBehaviour, cameraSwitcherControlClip);
