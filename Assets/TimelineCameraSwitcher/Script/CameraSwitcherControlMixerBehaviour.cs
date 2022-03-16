@@ -135,16 +135,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             if (playableBehaviour.camera != null)
             {
 
-                if (prevCamera != null && prevCamera != playableBehaviour.camera) isA = !isA;
-                if (playableBehaviour.hdAdditionalCameraData != null && playableBehaviour.dofOverride)
-                {
-                    playableBehaviour.camera.gameObject.layer = isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = 
-                        Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                        Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
-
-                }
+               
                 prevCamera = playableBehaviour.camera;
                 
                 _cameras.Add(playableBehaviour.camera);
@@ -356,7 +347,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
               
            }
 
-            if (clip.start <= m_Director.time && m_Director.time <= clip.start + clip.duration )
+            if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration )
             {
                 ResetCameraTarget();
                 if (playableBehaviour.camera != null)
@@ -366,20 +357,20 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                     playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
                     m_TrackBinding.cameraA = playableBehaviour.camera;
                     
-                 
-
-                }
-
-
-                if (playableBehaviour.dofOverride)
-                {
                     playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
                     playableBehaviour.hdAdditionalCameraData.volumeLayerMask = 
                         Add(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
                     playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
                         Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
 
+
                 }
+
+
+                // if (playableBehaviour.dofOverride)
+                // {
+                  
+                // }
                 prevCamera = playableBehaviour.camera;
              
                
@@ -387,27 +378,36 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 if (inputPort + 1 < m_Clips.Count() )
                 {
                     
-                    
+                   
                     var nextClip = m_Clips.ToList()[inputPort + 1];
                     var _scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(inputPort+1);
                     var _playableBehaviour = _scriptPlayable.GetBehaviour();
-                    
-                    if (_playableBehaviour.dofOverride && _playableBehaviour.camera != playableBehaviour.camera)
-                    {
-                        _playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
-                        _playableBehaviour.hdAdditionalCameraData.volumeLayerMask = 
-                            Add(_playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                        _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
-                            Remove(_playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
 
-                    }
-                   
+                    
+
                     if (nextClip.start-offsetStartTime <= m_Director.time && m_Director.time < nextClip.start + clip.duration )
                     {
                         currentClips.Add(_playableBehaviour);     
                         m_TrackBinding.cameraB = _playableBehaviour.camera;
                         
-                        
+                        if (playableBehaviour.camera != _playableBehaviour.camera)
+                        {
+                            _playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
+                            _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                Remove(playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                            _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                Add(_playableBehaviour.hdAdditionalCameraData.volumeLayerMask,
+                                    m_TrackBinding.cameraBLayer);
+                        }
+                        else
+                        {
+                            _playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
+                            _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                Add(_playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                            _playableBehaviour.hdAdditionalCameraData.volumeLayerMask =
+                                Remove(_playableBehaviour.hdAdditionalCameraData.volumeLayerMask,
+                                    m_TrackBinding.cameraBLayer);
+                        }
                         
                         
                         
