@@ -151,65 +151,71 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i);
             var playableBehaviour = scriptPlayable.GetBehaviour();
-            if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration)
+            if (i == 0)
             {
-                if (i == 0)
-                {
-                    playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                }
-
-                if (i - 1 > 0)
-                {
-                    var prevScriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i-1);
-                    var prevPlayableBehaviour = prevScriptPlayable.GetBehaviour();
-
-                    
-                    var isA = !prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                    if(prevPlayableBehaviour.camera == playableBehaviour.camera) isA = prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                    playableBehaviour.camera.gameObject.layer =
-                        isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask,isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
-                }
-                if (i+1 < m_Clips.Count)
-                {
-                    var nextScriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i+1);
-                    var nextPlayableBehaviour = nextScriptPlayable.GetBehaviour();
-
-                    var isA = !playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                    if (nextPlayableBehaviour.camera == playableBehaviour.camera)isA = playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                   
-                    if (isA)
-                    {
-                        nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
-                        nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                        nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                    }
-                    else
-                    {
-                        nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
-                        nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                        nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                    }
-
-                    // } 
-                    break;
-                }
-                
-               
-                
+                playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
+                playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
             }
+            else
+            {
+                if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration)
+                {
+                    if (i - 1 > 0)
+                    {
+                        
+                        var prevScriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i-1);
+                        var prevPlayableBehaviour = prevScriptPlayable.GetBehaviour();
 
+                       
+                        var isA = !prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
+                        Debug.Log($"{playableBehaviour.camera.name} isA: {isA}");
+                        if(prevPlayableBehaviour.camera == playableBehaviour.camera) isA = prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
+                        playableBehaviour.camera.gameObject.layer =
+                            isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
+                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask,isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
+                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
+                    }
+                    if (i+1 < m_Clips.Count)
+                    {
+                        var nextScriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(i+1);
+                        var nextPlayableBehaviour = nextScriptPlayable.GetBehaviour();
+
+                        var isA = !playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
+                        if (nextPlayableBehaviour.camera == playableBehaviour.camera)isA = playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
+                        Debug.Log($"{nextPlayableBehaviour.camera.name} isA: {isA}");
+                        if (isA)
+                        {
+                            nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
+                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
+                        }
+                        else
+                        {
+                            nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
+                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
+                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
+                            
+                            
+                        }
+
+                        // } 
+                       
+                    }
+                    break;
+
+                }
+     
+            }
+           
             i++;
         }
 
