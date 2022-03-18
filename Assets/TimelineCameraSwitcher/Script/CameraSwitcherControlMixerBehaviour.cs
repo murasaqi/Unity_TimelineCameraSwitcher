@@ -171,7 +171,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
                        
                         var isA = !prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        Debug.Log($"{playableBehaviour.camera.name} isA: {isA}");
+                        // Debug.Log($"{playableBehaviour.camera.name} isA: {isA}");
                         if(prevPlayableBehaviour.camera == playableBehaviour.camera) isA = prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
                         playableBehaviour.camera.gameObject.layer =
                             isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
@@ -187,7 +187,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
                         var isA = !playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
                         if (nextPlayableBehaviour.camera == playableBehaviour.camera)isA = playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        Debug.Log($"{nextPlayableBehaviour.camera.name} isA: {isA}");
+                        // Debug.Log($"{nextPlayableBehaviour.camera.name} isA: {isA}");
                         if (isA)
                         {
                             nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
