@@ -103,6 +103,25 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             InitRenderTexture(true);
             InitRenderTexture(false);
+
+            var index = 0;
+            foreach (TimelineClip clip in m_Clips)
+            {
+                var scriptPlayable =  (ScriptPlayable<CameraSwitcherControlBehaviour>)playable.GetInput(index);
+                var playableBehaviour = scriptPlayable.GetBehaviour();
+                if (playableBehaviour.camera != null)
+                {
+                    playableBehaviour.camera.enabled = false;
+                    playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask,m_TrackBinding.cameraALayer);
+                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
+                }
+
+                index++;
+
+            }
             
             m_FirstFrameHappened = true;
         }
