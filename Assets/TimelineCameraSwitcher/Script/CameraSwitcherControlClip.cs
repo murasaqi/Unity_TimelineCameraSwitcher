@@ -66,6 +66,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         // clone.physicalCameraProps.focusLength = clone.camera.focalLength;
         // clone.camera.focusDi
         if(clone.camera != null)template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
+#elif USE_URP
+        if(clone.camera != null)template.universalAdditionalCameraData = clone.camera.GetComponent<UniversalAdditionalCameraData>();
 #endif
         return playable;
         

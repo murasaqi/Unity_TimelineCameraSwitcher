@@ -208,6 +208,7 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     [SerializeField] public int volumeLayerMaskIndex = 0;
     [HideInInspector] public List<string> volumeLayerListNames = new List<string>(){"default",{"A"},{"B"}};
 #if USE_URP
+    [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField] public BokehProp bokehProps;
     [SerializeField] public GaussianProp gaussianProps;
 #elif USE_HDRP

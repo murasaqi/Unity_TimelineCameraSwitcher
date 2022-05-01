@@ -29,15 +29,15 @@ public class CameraSwitcherControl : MonoBehaviour
     // HDAdditionalCameraData.
     // [SerializeField] public layer
     // [SerializeField] public bool dofControl = false;
- 
+    [SerializeField] public LayerMask cameraALayer= new LayerMask();
+    [SerializeField] public LayerMask cameraBLayer= new LayerMask();
 #if USE_URP
     [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
     [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
 #elif USE_HDRP
     // [SerializeField] public LayerMask volumeLayerMaskA = new LayerMask();
     // [SerializeField] public LayerMask volumeLayerMaskB = new LayerMask();
-    [SerializeField] public LayerMask cameraALayer= new LayerMask();
-    [SerializeField] public LayerMask cameraBLayer= new LayerMask();
+   
     [SerializeField] public DepthOfFieldMode depthOfFieldMode;
     [SerializeField] public PhysicalCameraProps physicalCameraBaseValues= new PhysicalCameraProps();
     [SerializeField] public ManualRangeProps manualRangeBaseValues= new ManualRangeProps();
