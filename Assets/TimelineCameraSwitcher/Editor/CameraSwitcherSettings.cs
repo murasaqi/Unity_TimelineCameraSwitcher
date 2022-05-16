@@ -18,6 +18,7 @@ public class CameraSwitcherSettings : ScriptableObject
         new Vector2Int(1280,720),
         new Vector2Int(1600,900),
         new Vector2Int(1920,1080),
+        new Vector2Int(2560,1440),
         new Vector2Int(3840,2160),
     };
 
