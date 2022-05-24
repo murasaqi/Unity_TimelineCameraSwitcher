@@ -23,6 +23,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [HideInInspector] public Transform target;
 
     [HideInInspector] public Volume volume;
+
+    [HideInInspector] public Camera targetCamera;
     // public CameraSwitcherControlBehaviour clone;
     public DepthOfFieldMode mode
     {
@@ -42,6 +44,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template); 
         var clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
+        targetCamera = clone.camera;
         target = clone.lookAtProps.target.Resolve(graph.GetResolver());
         if (clone.camera != null)
         {

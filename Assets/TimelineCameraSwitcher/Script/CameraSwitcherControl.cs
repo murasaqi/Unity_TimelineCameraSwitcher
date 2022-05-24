@@ -112,7 +112,7 @@ public class CameraSwitcherControl : MonoBehaviour
         resolution = cameraSwitcherSettings.resolution;
         // volume = cameraSwitcherSettings.volume;
     }
-
+    
     public void SaveProfile()
     {
         if(cameraSwitcherSettings == null) return;
