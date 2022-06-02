@@ -1,6 +1,7 @@
 using System;
 using System;
 using System.Linq;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,22 +14,10 @@ using UnityEngine.UI;
 [TrackBindingType(typeof(CameraSwitcherControl))]
 public class CameraSwitcherControlTrack : TrackAsset
 {
-    [HideInInspector]public bool findMissingCameraInHierarchy = false;
-    [HideInInspector]public bool fixMissingPrefabByCameraName = false;
-    // [SerializeField] private Vector2 m_resolution = new Vector2(1920,1080);
-    // [SerializeField] public int m_prerenderingFrameCount = 3;
-    // [SerializeField] private RenderTextureFormat m_renderTextureFormat;
-    // // [SerializeField] private CameraSwitcherSettings m_cameraSwitcherSettings;
-    // [SerializeField]public DepthList m_depth;
-   
+    
+    public ExposedReference<TextMeshProUGUI> cameraNamePreviewGUI; 
     private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
-    // public int width => (int)m_resolution.x;
-    // public int height => (int)m_resolution.y;
-    // public RenderTextureFormat renderTextureFormat => m_renderTextureFormat;
-
-    // public CameraSwitcherSettings cameraSwitcherSettings => m_cameraSwitcherSettings;
-    // public DepthList depthList => m_depth;
-
+  
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
         
@@ -42,6 +31,7 @@ public class CameraSwitcherControlTrack : TrackAsset
 
         if (playableDirector != null)
         {
+            playableBehaviour.cameraNamePreviewGUI = cameraNamePreviewGUI.Resolve(graph.GetResolver());
             playableBehaviour.director = playableDirector;
             playableBehaviour.fps = timelineAsset.editorSettings.fps;
             playableBehaviour.clips = GetClips().ToList();

@@ -55,7 +55,7 @@ public class CameraSwitcherTimelineRenamer : MonoBehaviour
                     Debug.Log($"{asset.targetCamera.name},{clip.displayName}");
                     if (cameraClipDic.ContainsKey(asset.targetCamera))
                     {
-                        cameraClipDic[asset.targetCamera] = $"{asset.targetCamera.name}_{clip.displayName}";
+                        cameraClipDic[asset.targetCamera] = $"{cameraClipDic[asset.targetCamera]}_{clip.displayName}";
                     }
                     else
                     {
