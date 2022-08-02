@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEditor.VersionControl;
 using UnityEngine;
 #if USE_URP
 
@@ -118,6 +119,7 @@ public class CameraSwitcherControlEditor : Editor
                     if (res == newResolution) return;
                 }
                 cameraSwitcherControl.cameraSwitcherSettings.resolutionList.Add(newResolution);
+                EditorUtility.SetDirty(cameraSwitcherControl.cameraSwitcherSettings);
                 InitResolutionListButton(cameraSwitcherControl);
             }
         };

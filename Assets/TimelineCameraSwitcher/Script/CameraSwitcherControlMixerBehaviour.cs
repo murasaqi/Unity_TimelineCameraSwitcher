@@ -36,6 +36,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private StringBuilder _stringBuilder;
 
 
+    
+    public bool disableWiggler = false;
     internal float fps
     {
         get => m_fps;
@@ -1001,6 +1003,8 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
             m_TrackBinding.material.SetInt("_BlendB", blendNumA);
         }
 
+        
+
         // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
     }
 
@@ -1035,7 +1039,7 @@ SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBeh
             100f * isWiggle
         );
 
-        return wiggler;
+        return disableWiggler ? Vector2.zero : wiggler;
     }
 
     public Vector2 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime,

@@ -22,8 +22,10 @@ public class CameraSwitcherTimelineRenamer : MonoBehaviour
     public void RenameAllTimelineClips()
     {
         if(playableDirector != null)
-        foreach (TrackAsset  trackAsset in (playableDirector.playableAsset as TimelineAsset).GetOutputTracks())
         {
+            var timelineAsset = playableDirector.playableAsset as TimelineAsset;
+            foreach (TrackAsset  trackAsset in timelineAsset.GetOutputTracks())
+        
             if (trackAsset.GetType() == typeof(CameraSwitcherControlTrack))
             {
             
@@ -31,8 +33,10 @@ public class CameraSwitcherTimelineRenamer : MonoBehaviour
                 foreach (var clip in
                          trackAsset.GetClips())
                 {
-                    var number = String.Format("{0:D3}", i);
-                    clip.displayName = $"Cut_{number}";
+                    var number = String.Format("{0:D2}", i);
+                    var startFrame = String.Format("{0:D4}", Mathf.CeilToInt((float)( timelineAsset.editorSettings.frameRate*clip.start)));
+                    var endFrame = String.Format("{0:D4}", Mathf.CeilToInt((float)(timelineAsset.editorSettings.frameRate*clip.end))-1);
+                    clip.displayName = $"C{number}_{startFrame}_{endFrame}";
                     i++;
                 }
              

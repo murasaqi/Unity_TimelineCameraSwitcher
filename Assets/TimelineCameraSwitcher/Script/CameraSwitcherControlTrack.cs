@@ -15,7 +15,9 @@ using UnityEngine.UI;
 public class CameraSwitcherControlTrack : TrackAsset
 {
     
+  
     public ExposedReference<TextMeshProUGUI> cameraNamePreviewGUI; 
+    public bool disableWiggler = false;
     private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
   
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
@@ -35,6 +37,7 @@ public class CameraSwitcherControlTrack : TrackAsset
             playableBehaviour.director = playableDirector;
             playableBehaviour.fps = timelineAsset.editorSettings.fps;
             playableBehaviour.clips = GetClips().ToList();
+            playableBehaviour.disableWiggler = disableWiggler;
             playableBehaviour.track = this;
         }
 
