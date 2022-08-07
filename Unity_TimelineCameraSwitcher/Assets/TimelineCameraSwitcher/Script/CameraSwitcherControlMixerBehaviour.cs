@@ -250,6 +250,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                         
                         var isA = !prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
                         // Debug.Log($"{playableBehaviour.camera.name} isA: {isA}");
+                        
+                        if(playableBehaviour.camera == null) continue;
                         if (prevPlayableBehaviour.camera == playableBehaviour.camera)
                             isA = prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
                         playableBehaviour.camera.gameObject.layer =
