@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -18,1067 +19,640 @@ using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Timeline;
 
 
+internal class ClipInfo
+{
+    public CameraSwitcherControlBehaviour behaviour;
+    public CameraSwitcherControlClip clip;
+    public float inputWeigh;
+    public int clipIndex;
+    public TimelineClip timelineClip;
+    public VolumeProfile tmpVolumeProfile;
+
+    public ClipInfo()
+    {
+        tmpVolumeProfile = new VolumeProfile();
+        var dof = tmpVolumeProfile.Add<DepthOfField>();
+        tmpVolumeProfile.name = Guid.NewGuid().ToString();
+        
+        dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
+        dof.focusDistance.overrideState = true;
+        dof.focalLength.overrideState = true;
+        dof.aperture.overrideState = true;
+        dof.bladeCount.overrideState = true;
+        dof.bladeCurvature.overrideState = true;
+        dof.bladeRotation.overrideState = true;
+        dof.gaussianStart.overrideState = true;
+        dof.gaussianEnd.overrideState = true;
+        dof.gaussianMaxRadius.overrideState = true;
+        dof.highQualitySampling.overrideState = true;
+        
+        
+    }
+}
+
 public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 {
-    private List<TimelineClip> m_Clips;
-    private List<Camera> _cameras = new List<Camera>();
+    public List<TimelineClip> clips;
 
-    private PlayableDirector m_Director;
+    public PlayableDirector director;
+    public CameraSwitcherControlTrack track;
 
-    // private Material m_TrackBinding.cameraSwitcherSettings.material;
-    private CameraSwitcherControlTrack m_track;
-
-    private bool m_FirstFrameHappened;
-    // private CameraSwitcherSettings m_TrackBinding.cameraSwitcherSettings = null;
+    private bool firstFrameHappened;
 
     public TextMeshProUGUI cameraNamePreviewGUI;
-    private float m_fps;
+    public float fps;
     private StringBuilder _stringBuilder;
 
 
+    private double offsetStartTime;
     
-    public bool disableWiggler = false;
-    internal float fps
+
+    private CameraSwitcherControl trackBinding;
+
+    private List<ClipInfo> clipInfos = new List<ClipInfo>();
+
+    private ClipInfo A;
+    private ClipInfo B;
+
+    
+    private ClipInfo preA;
+    private ClipInfo preB;
+    public bool disableWiggler;
+    
+    private void InitBehaviour(CameraSwitcherControlBehaviour cameraSwitcherControlBehaviour)
     {
-        get => m_fps;
-        set { m_fps = value; }
-    }
-
-    internal PlayableDirector director
-    {
-        get { return m_Director; }
-        set { m_Director = value; }
-    }
-
-
-    internal CameraSwitcherControlTrack track
-    {
-        get { return m_track; }
-        set { m_track = value; }
-    }
-
-    internal List<TimelineClip> clips
-    {
-        get { return m_Clips; }
-        set { m_Clips = value; }
-    }
-
-
-    private CameraSwitcherControl m_TrackBinding;
-
-    public void ResetCameraTarget()
-    {
-        foreach (var camera in _cameras)
+        if (cameraSwitcherControlBehaviour.camera != null)
         {
-            camera.targetTexture = null;
+            cameraSwitcherControlBehaviour.camera.enabled = false;
+            cameraSwitcherControlBehaviour.universalAdditionalCameraData = cameraSwitcherControlBehaviour.camera.gameObject.GetComponent<UniversalAdditionalCameraData>();
+            cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
+                cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask,
+                trackBinding.cameraALayer);
+            cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
+                cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask,
+                trackBinding.cameraBLayer);
+            
         }
     }
 
-
-    // private DepthOfField dof;
-
-    private void InitRenderTexture(bool isA)
+    private void InitPlayables(Playable playable)
     {
-        var depth = 0;
-        if (m_TrackBinding.depthList == DepthList.AtLeast16) depth = 16;
-        if (m_TrackBinding.depthList == DepthList.AtLeast24_WidthStencil) depth = 24;
-
-        if (isA)
+        clipInfos.Clear();
+        if(clips == null || clips.Count != playable.GetInputCount())
+            return;
+        for (int i = 0; i < playable.GetInputCount(); i++)
         {
-            if (m_TrackBinding.renderTextureA != null)
+            var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i);
+            var cameraSwitcherControlBehaviour = scriptPlayable.GetBehaviour();
+            InitBehaviour(cameraSwitcherControlBehaviour);
+            clipInfos.Add(new ClipInfo()
             {
-                m_TrackBinding.renderTextureA.Release();
-                m_TrackBinding.renderTextureA.format = m_TrackBinding.renderTextureFormat;
-                m_TrackBinding.renderTextureA.depth = depth;
-                m_TrackBinding.renderTextureA.width = m_TrackBinding.width;
-                m_TrackBinding.renderTextureA.height = m_TrackBinding.height;     
-            }
-           
+                behaviour =     cameraSwitcherControlBehaviour,
+                clip = clips[i].asset as CameraSwitcherControlClip,
+                inputWeigh = playable.GetInputWeight(i),
+                clipIndex = i,
+                timelineClip = clips[i]
+            });
+                
+        }
+    }
+
+    private void Init(Playable playable)
+    {
+        InitPlayables(playable);
+        var timelineAsset = director.playableAsset as TimelineAsset;
+        fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
+        offsetStartTime = (1f / fps) * trackBinding.prerenderingFrameCount;
+        firstFrameHappened = true;
+    }
+    
+
+  
+    private bool CheckClipOnFrame(TimelineClip clip, double offsetTime = 0)
+    {
+        if (clip.start <= director.time+offsetTime && director.time+offsetTime < clip.start + clip.duration)
+        {
+            return true;
         }
         else
         {
-            if (m_TrackBinding.renderTextureB != null)
-            {
-                m_TrackBinding.renderTextureB.Release();
-                m_TrackBinding.renderTextureB.format = m_TrackBinding.renderTextureFormat;
-                m_TrackBinding.renderTextureB.depth = depth;
-                m_TrackBinding.renderTextureB.width = m_TrackBinding.width;
-                m_TrackBinding.renderTextureB.height = m_TrackBinding.height;         
-            }
-          
-            // m_TrackBinding.material.SetTexture("");
+            return false;
         }
     }
+    
+    private void SetLayer(ClipInfo clipInfo,bool isA )
+    {
+        var cameraSwitcherControlBehaviour = clipInfo.behaviour;
+        
+        var camera = cameraSwitcherControlBehaviour.camera;
+        
+        camera.gameObject.layer = isA ? trackBinding.cameraALayer : trackBinding.cameraBLayer;
+        
+        
+        var volumeLayerMask = cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask;
+        cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
+            volumeLayerMask,
+            isA ? trackBinding.cameraALayer : trackBinding.cameraBLayer);
+        volumeLayerMask = cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask;
+        cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
+            volumeLayerMask,
+            isA ? trackBinding.cameraBLayer : trackBinding.cameraALayer);
+        
+    }
 
+
+
+    private void Refresh()
+    {
+        A = null;
+        B = null;
+        _stringBuilder.Clear();
+        
+        foreach (var pair in clipInfos)
+        {
+            pair.behaviour.camera.enabled = false;
+            pair.behaviour.camera.targetTexture = null;
+            pair.clip.lookAtConstraint.enabled = false;
+            pair.clip.volume.enabled = false;
+            // CheckVolumeProfile(pair);
+        }
+
+    }
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
         if (_stringBuilder == null) _stringBuilder = new StringBuilder();
-        m_TrackBinding = playerData as CameraSwitcherControl;
-        if (m_TrackBinding == null)
+        trackBinding = playerData as CameraSwitcherControl;
+        if (trackBinding == null)
             return;
-        if (!m_FirstFrameHappened)
+
+
+        if (!firstFrameHappened)
         {
-            InitRenderTexture(true);
-            InitRenderTexture(false);
-
-            var index = 0;
-            foreach (TimelineClip clip in m_Clips)
-            {
-                var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(index);
-                var playableBehaviour = scriptPlayable.GetBehaviour();
-                if (playableBehaviour.camera != null)
-                {
-                    playableBehaviour.camera.enabled = false;
-                    playableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
-#if USE_URP
-                    if(playableBehaviour.universalAdditionalCameraData == null)
-                    {
-                        playableBehaviour.universalAdditionalCameraData = playableBehaviour.camera.gameObject.GetComponent<UniversalAdditionalCameraData>();
-                    }
-
-                    if (playableBehaviour.universalAdditionalCameraData != null)
-                    {
-                        playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
-                            playableBehaviour.universalAdditionalCameraData.volumeLayerMask,m_TrackBinding.cameraALayer);
-                        playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
-                            playableBehaviour.universalAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);     
-                    }
-                   
-
-#elif USE_HDRP
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask,m_TrackBinding.cameraALayer);
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-#endif
-                }
-
-                index++;
-            }
-
-            m_FirstFrameHappened = true;
+            Init(playable);
         }
 
-        if (m_TrackBinding.renderTextureA.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(true);
-        if (m_TrackBinding.renderTextureB.format != m_TrackBinding.renderTextureFormat) InitRenderTexture(false);
-        if (m_TrackBinding.renderTextureA.width != m_TrackBinding.width ||
-            m_TrackBinding.renderTextureA.height != m_TrackBinding.height) InitRenderTexture(true);
-        if (m_TrackBinding.renderTextureB.width != m_TrackBinding.width ||
-            m_TrackBinding.renderTextureB.height != m_TrackBinding.height) InitRenderTexture(false);
-        if (m_TrackBinding.prerenderingFrameCount != m_TrackBinding.prerenderingFrameCount)
-            m_TrackBinding.prerenderingFrameCount = m_TrackBinding.prerenderingFrameCount;
 
-        var timelineAsset = director.playableAsset as TimelineAsset;
+        
+        Refresh();
 
-        fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
-        var offsetStartTime = (1f / fps) * m_TrackBinding.prerenderingFrameCount;
-
-
-        m_TrackBinding.material.SetFloat("_PlayableDirectorTime", (float) director.time);
-        _cameras.Clear();
-        _stringBuilder.Clear();
 
         if (cameraNamePreviewGUI != null)
         {
-            var dateTime = new TimeSpan(0,0,(int)m_Director.time);
-            // _stringBuilder.Append("TC: ");
+            var dateTime = new TimeSpan(0, 0, (int) director.time);
             _stringBuilder.Append(dateTime.ToString(@"hh\:mm\:ss"));
             _stringBuilder.Append(" ");
-            _stringBuilder.Append((Mathf.CeilToInt(fps * (float)m_Director.time)));
+            _stringBuilder.Append((Mathf.CeilToInt(fps * (float) director.time)));
             _stringBuilder.Append("f ");
-           
+
         }
-
-        int i = 0;
-
-        Camera prevCamera = null;
-        foreach (TimelineClip clip in m_Clips)
+        
+        
+        for (int i = 0; i < clipInfos.Count; i++)
         {
-            var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i);
-            var playableBehaviour = scriptPlayable.GetBehaviour();
-            if (playableBehaviour.camera != null)
+            var clipInfo = clipInfos[i];
+            clipInfo.inputWeigh = playable.GetInputWeight(i);
+
+            if (CheckClipOnFrame(clipInfo.timelineClip))
             {
-                prevCamera = playableBehaviour.camera;
-
-                _cameras.Add(playableBehaviour.camera);
-                playableBehaviour.camera.enabled = false;
-            }
-
-            i++;
-        }
-
-        i = 0;
-
-        foreach (TimelineClip clip in m_Clips)
-        {
-            var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i);
-            var playableBehaviour = scriptPlayable.GetBehaviour();
-            if (i == 0)
-            {
-                if (playableBehaviour.universalAdditionalCameraData == null)
-                    if(playableBehaviour.camera != null)playableBehaviour.universalAdditionalCameraData = playableBehaviour.camera.gameObject
-                        .GetComponent<UniversalAdditionalCameraData>();
-                if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration)
+                A = clipInfo;
+                var nextIndex = i + 1;
+                if (nextIndex < clipInfos.Count)
                 {
-                    _stringBuilder.Append(playableBehaviour.camera.name);
-                }
-                if (playableBehaviour.universalAdditionalCameraData != null)
-                {
-                    playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
-                        playableBehaviour.universalAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                    playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
-                        playableBehaviour.universalAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                }
-#if USE_HDRP
-                playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                    playableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-
-
-#endif
-            }
-            else
-            {
-                if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration)
-                {
-                    if (i > 0)
+                    var nextClipInfo = clipInfos[nextIndex];
+                    nextClipInfo.inputWeigh = playable.GetInputWeight(nextIndex);
+                    if (CheckClipOnFrame(nextClipInfo.timelineClip, trackBinding.prerenderingFrameCount * offsetStartTime))
                     {
-                        var prevScriptPlayable =
-                            (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i - 1);
-                        var prevPlayableBehaviour = prevScriptPlayable.GetBehaviour();
-                        
-                        var isA = !prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        // Debug.Log($"{playableBehaviour.camera.name} isA: {isA}");
-                        if (prevPlayableBehaviour.camera == playableBehaviour.camera)
-                            isA = prevPlayableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        playableBehaviour.camera.gameObject.layer =
-                            isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer;
-
-                        
-                       
-                        
-                        if (playableBehaviour.universalAdditionalCameraData == null)
-                            playableBehaviour.universalAdditionalCameraData = playableBehaviour.camera.gameObject
-                                .GetComponent<UniversalAdditionalCameraData>();
-                        _stringBuilder.Append(playableBehaviour.camera.name);
-                        if (playableBehaviour.universalAdditionalCameraData != null)
-                        {
-                            playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
-                                playableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
-                            playableBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
-                                playableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
-                        }
-
-#if USE_HDRP
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask,isA ? m_TrackBinding.cameraALayer : m_TrackBinding.cameraBLayer);
-                        playableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                            playableBehaviour.hdAdditionalCameraData.volumeLayerMask, isA ? m_TrackBinding.cameraBLayer : m_TrackBinding.cameraALayer);
-#endif
-                    }
-
-                    if (i + 1 < m_Clips.Count)
-                    {
-                        
-                        var nextScriptPlayable =
-                            (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i + 1);
-                        var nextPlayableBehaviour = nextScriptPlayable.GetBehaviour();
-                        
-                        
-                        
-                        var isA = !playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        if (nextPlayableBehaviour.camera == playableBehaviour.camera)
-                        {
-                            isA = playableBehaviour.camera.gameObject.layer.Equals(m_TrackBinding.cameraALayer);
-                        }
-                        else
-                        {
-                            if (clips[i+1].start <= m_Director.time && m_Director.time < clips[i+1].start + clips[i+1].duration)
-                            {
-                                _stringBuilder.Append($" > {nextPlayableBehaviour.camera.name}");
-                            }
-                        }
-                        // Debug.Log($"{nextPlayableBehaviour.camera.name} isA: {isA}");
-                        if (isA)
-                        {
-                            nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraALayer;
-
-                            if (nextPlayableBehaviour.universalAdditionalCameraData == null)
-                                nextPlayableBehaviour.universalAdditionalCameraData = nextPlayableBehaviour.camera
-                                    .gameObject.GetComponent<UniversalAdditionalCameraData>();
-
-                            if (nextPlayableBehaviour.universalAdditionalCameraData != null)
-                            {
-                                nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
-                                    nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                    m_TrackBinding.cameraALayer);
-                                nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
-                                    nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                    m_TrackBinding.cameraBLayer);
-                               
-                            }
-#if USE_HDRP
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-#endif
-                                
-                        }
-                        else
-                        {
-                            nextPlayableBehaviour.camera.gameObject.layer = m_TrackBinding.cameraBLayer;
-                            if (nextPlayableBehaviour.universalAdditionalCameraData == null)
-                                nextPlayableBehaviour.universalAdditionalCameraData = nextPlayableBehaviour.camera
-                                    .gameObject.GetComponent<UniversalAdditionalCameraData>();
-                            if (nextPlayableBehaviour.universalAdditionalCameraData != null)
-                            {
-                                nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
-                                    nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                    m_TrackBinding.cameraBLayer);
-                                nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
-                                    nextPlayableBehaviour.universalAdditionalCameraData.volumeLayerMask,
-                                    m_TrackBinding.cameraALayer);
-
-#if USE_HDRP
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
-                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraBLayer);
-                            nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
-                                nextPlayableBehaviour.hdAdditionalCameraData.volumeLayerMask, m_TrackBinding.cameraALayer);
-#endif
-                               
-                            }
-                        }
-
-                        // } 
-                    }
-
-                    break;
-                }
-            }
-
-            i++;
-        }
-
-        if(cameraNamePreviewGUI != null) cameraNamePreviewGUI.text = _stringBuilder.ToString();
-#if UNITY_EDITOR
-
-
-#endif
-
-        int inputPort = 0;
-        var currentTime = (float) m_Director.time;
-        var wiggler = Vector4.zero;
-        var wigglerRange = Vector2.zero;
-#if USE_URP
-
-        // var focusDistance = 0f;
-        // var focalLength = 0f;
-        // var aperture = 0f;
-        // var bladeCount = 0;
-        // var bladeCurvature = 0f;
-        // var bladeRotation = 0f;
-        var bokehProps = new BokehProp();
-        bokehProps.Reset();
-        var gaussianProps = new GaussianProp();
-        gaussianProps.Reset();
-
-#elif USE_HDRP
-        var physicalCameraProps = new PhysicalCameraProps();
-        physicalCameraProps.Reset();
-        var manualRangeProps = new ManualRangeProps();
-        manualRangeProps.Reset();
-        // var focusDistance = 0f;
-#endif
-
-
-        var currentClips = new List<CameraSwitcherControlBehaviour>();
-        // var currentDirectorTime = m_Director.time - offsetStartTime;
-        foreach (TimelineClip clip in m_Clips)
-        {
-            var inputWeight = playable.GetInputWeight(inputPort);
-
-            var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(inputPort);
-            var playableBehaviour = scriptPlayable.GetBehaviour();
-
-
-            var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
-            if (inputWeight > 0)
-            {
-                if (cameraSwitcherControlClip.volume != null)
-                    cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
-                if (playableBehaviour.dofOverride)
-                {
-                    DepthOfField dof;
-
-#if USE_URP
-
-
-                    // depthOfFieldMode = playableBehaviour.depthOfFieldMode;
-                    bokehProps.focusDistance += playableBehaviour.bokehProps.focusDistance * inputWeight;
-                    bokehProps.focalLength += playableBehaviour.bokehProps.focalLength * inputWeight;
-                    bokehProps.aperture += playableBehaviour.bokehProps.aperture * inputWeight;
-                    bokehProps.bladeCount += Mathf.FloorToInt(playableBehaviour.bokehProps.bladeCount * inputWeight);
-                    bokehProps.bladeCurvature += playableBehaviour.bokehProps.bladeCurvature * inputWeight;
-                    bokehProps.bladeRotation += playableBehaviour.bokehProps.bladeRotation * inputWeight;
-
-                    gaussianProps.start += playableBehaviour.gaussianProps.start * inputWeight;
-                    gaussianProps.end += playableBehaviour.gaussianProps.end * inputWeight;
-                    gaussianProps.maxRadius += playableBehaviour.gaussianProps.maxRadius * inputWeight;
-                    gaussianProps.highQualitySampling = playableBehaviour.gaussianProps.highQualitySampling;
-
-#elif USE_HDRP
-                   // DepthOfField dof;
-                   if (playableBehaviour.volumeProfile != null)
-                   {
-                       playableBehaviour.volumeProfile.TryGet<DepthOfField>(out dof);
-                       if (dof != null)
-                       {
-                           
-                          
-                           if (playableBehaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
-                           {
-                               // var hdAdditionalCameraData = playableBehaviour.camera.GetComponents<HDAdditionalCameraData>();
-                               playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
-                                   playableBehaviour.physicalCameraProps.focusDistance;
-                           }
-                           else
-                           {
-                               dof.focusDistance.value = playableBehaviour.physicalCameraProps.focusDistance;
-                           }
-
-                           physicalCameraProps.focusDistanceMode =
-                               playableBehaviour.physicalCameraProps.focusDistanceMode;
-                           physicalCameraProps.focusDistance +=
-                               playableBehaviour.physicalCameraProps.focusDistance * inputWeight;
-                           
-                           physicalCameraProps.focusLength +=
-                               playableBehaviour.physicalCameraProps.focusLength * inputWeight;
-
-                           physicalCameraProps.nearBluer.sampleCount +=
-                               Mathf.FloorToInt(playableBehaviour.physicalCameraProps.nearBluer.sampleCount *
-                                                inputWeight);
-                           physicalCameraProps.nearBluer.maxRadius +=
-                               Mathf.FloorToInt(playableBehaviour.physicalCameraProps.nearBluer.maxRadius *
-                                                inputWeight);
-
-                           physicalCameraProps.farBluer.sampleCount +=
-                               Mathf.FloorToInt(
-                                   playableBehaviour.physicalCameraProps.farBluer.sampleCount * inputWeight);
-                           physicalCameraProps.farBluer.maxRadius +=
-                               Mathf.FloorToInt(playableBehaviour.physicalCameraProps.farBluer.maxRadius * inputWeight);
-
-                           manualRangeProps.focusLength +=
-                               playableBehaviour.manualRangeProps.focusLength * inputWeight;
-                           manualRangeProps.focusDistance +=
-                               playableBehaviour.manualRangeProps.focusDistance * inputWeight;
-                           manualRangeProps.nearRange.start +=
-                               playableBehaviour.manualRangeProps.nearRange.start * inputWeight;
-                           manualRangeProps.nearRange.end +=
-                               playableBehaviour.manualRangeProps.nearRange.end * inputWeight;
-
-                           manualRangeProps.farRange.start +=
-                               playableBehaviour.manualRangeProps.farRange.start * inputWeight;
-                           manualRangeProps.farRange.end +=
-                               playableBehaviour.manualRangeProps.farRange.end * inputWeight;
-                           manualRangeProps.quality = playableBehaviour.manualRangeProps.quality;
-
-                           manualRangeProps.nearBluer.sampleCount +=
-                               Mathf.FloorToInt(playableBehaviour.manualRangeProps.nearBluer.sampleCount * inputWeight);
-                           manualRangeProps.nearBluer.maxRadius +=
-                               Mathf.FloorToInt(playableBehaviour.manualRangeProps.nearBluer.maxRadius * inputWeight);
-
-                           manualRangeProps.farBluer.sampleCount +=
-                               Mathf.FloorToInt(playableBehaviour.manualRangeProps.farBluer.sampleCount * inputWeight);
-                           manualRangeProps.farBluer.maxRadius +=
-                               Mathf.FloorToInt(playableBehaviour.manualRangeProps.farBluer.maxRadius * inputWeight);
-                       }
-                   }
-
-#endif
-                    currentClips.Add(playableBehaviour);
-                }
-                else
-                {
-                    if (cameraSwitcherControlClip.volume != null)
-                        cameraSwitcherControlClip.volume.enabled = false;
-                }
-
-
-                if (playableBehaviour.lookAt)
-                {
-                    var lookAt = playableBehaviour.camera.GetComponent<LookAtConstraint>();
-
-                    if (lookAt == null) lookAt = playableBehaviour.camera.gameObject.AddComponent<LookAtConstraint>();
-                    var target = playableBehaviour.lookAtProps.target.Resolve(playable.GetGraph().GetResolver());
-                    if (lookAt && target)
-                    {
-                        if (lookAt.sourceCount > 0)
-                        {
-                            while (lookAt.sourceCount > 1)
-                            {
-                                lookAt.RemoveSource(0);
-                            }
-
-                            if (lookAt.GetSource(0).sourceTransform != target)
-                            {
-                                // lookAt.RemoveSource(0);
-                                var source = new ConstraintSource();
-                                source.sourceTransform = target;
-                                source.weight = 1;
-                                lookAt.SetSource(0, source);
-                            }
-                        }
-                        else
-                        {
-                            var source = new ConstraintSource();
-                            source.sourceTransform = target;
-                            source.weight = 1;
-                            lookAt.AddSource(source);
-                        }
-
-                        lookAt.enabled = true;
-                        lookAt.locked = playableBehaviour.lookAtProps.Lock;
-                        lookAt.constraintActive = playableBehaviour.lookAtProps.IsActive;
-                        lookAt.weight = playableBehaviour.lookAtProps.Weight;
-                        lookAt.roll = playableBehaviour.lookAtProps.Roll;
-                        lookAt.useUpObject = playableBehaviour.lookAtProps.UseUpObject;
-                        lookAt.rotationOffset = playableBehaviour.lookAtProps.RotationOffset;
-                        lookAt.rotationAtRest = playableBehaviour.lookAtProps.RotationAtReset;
+                       B = nextClipInfo;
+                  
                     }
                 }
-                else
-                {
-                    // if (lookAt) lookAt.enabled = false;
-                }
-            }
-
-            if (clip.start <= m_Director.time && m_Director.time < clip.start + clip.duration)
-            {
-                ResetCameraTarget();
-                if (playableBehaviour.camera != null)
-                {
-                    playableBehaviour.camera.enabled = true;
-
-                    playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureA;
-                    m_TrackBinding.cameraA = playableBehaviour.camera;
-                }
-
-
-                // if (playableBehaviour.dofOverride)
-                // {
-
-                // }
-                prevCamera = playableBehaviour.camera;
-
-
-                if (inputPort + 1 < m_Clips.Count())
-                {
-                    var nextClip = m_Clips.ToList()[inputPort + 1];
-                    var _scriptPlayable =
-                        (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(inputPort + 1);
-                    var _playableBehaviour = _scriptPlayable.GetBehaviour();
-
-
-                    if (nextClip.start - offsetStartTime <= m_Director.time &&
-                        m_Director.time < nextClip.start + clip.duration)
-                    {
-                        currentClips.Add(_playableBehaviour);
-                        m_TrackBinding.cameraB = _playableBehaviour.camera;
-
-
-                        // blending中で、次のカメラが同じじゃないとき
-                        if (_playableBehaviour.camera != playableBehaviour.camera)
-                        {
-                            _playableBehaviour.camera.enabled = true;
-                            _playableBehaviour.camera.targetTexture = m_TrackBinding.renderTextureB;
-                            m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
-                            m_TrackBinding.material.SetTexture("_TextureB", m_TrackBinding.renderTextureB);
-                            m_TrackBinding.material.SetVector("_WigglerValueA",
-                                CalcNoise(playableBehaviour, currentTime));
-                            m_TrackBinding.material.SetVector("_ClipSizeA",
-                                playableBehaviour.wigglerProps.wiggleRange / 100f);
-                            m_TrackBinding.material.SetColor("_MultiplyColorA",
-                                playableBehaviour.colorBlendProps.color);
-                            m_TrackBinding.material.SetVector("_ClipSizeB",
-                                _playableBehaviour.wigglerProps.wiggleRange / 100f);
-                            m_TrackBinding.material.SetVector("_WigglerValueB",
-                                CalcNoise(_playableBehaviour, currentTime));
-                            m_TrackBinding.material.SetColor("_MultiplyColorB",
-                                playableBehaviour.colorBlendProps.color);
-                            var invWeight = 1f - inputWeight;
-                            m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
-
-
-#if USE_URP
-
-                            // bokehProps.focusDistance += _playableBehaviour.bokehProps.focusDistance*invWeight;
-                            // bokehProps.focalLength += _playableBehaviour.bokehProps.focalLength*invWeight;
-                            // bokehProps.aperture += _playableBehaviour.bokehProps.aperture * invWeight;
-                            // bokehProps.bladeCount += Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount*invWeight);
-                            // bokehProps.bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
-                            // bokehProps.bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
-                            //
-                            // gaussianProps.start += _playableBehaviour.gaussianProps.start * inputWeight;
-                            // gaussianProps.end += _playableBehaviour.gaussianProps.end * inputWeight;
-                            // gaussianProps.maxRadius += _playableBehaviour.gaussianProps.maxRadius * inputWeight;
-                            // gaussianProps.highQualitySampling = _playableBehaviour.gaussianProps.highQualitySampling;
-
-
-#elif USE_HDRP
-                            // var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
-                            var cameraSwitcherControlNextClip = nextClip.asset as CameraSwitcherControlClip;
-                            cameraSwitcherControlNextClip.volume.enabled = _playableBehaviour.dofOverride;
-                            cameraSwitcherControlClip.volume.enabled = playableBehaviour.dofOverride;
-
-                            CheckVolumeProfile(_playableBehaviour, cameraSwitcherControlNextClip);
-                            SetVolumeValues(_playableBehaviour, _playableBehaviour.manualRangeProps, _playableBehaviour.physicalCameraProps);
-                            CheckVolumeProfile(playableBehaviour, cameraSwitcherControlClip);
-                            SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
-
-#endif
-                        }
-                        // blending中で、次のカメラが同じときは値もBlendingしてあげる
-                        else
-                        {
-                            // var nextInputWeight = Mathf.Clamp(1f - inputWeight,0f,1f);
-                            SelectSingleCamera(playableBehaviour, inputWeight, currentTime, _playableBehaviour);
-                            m_TrackBinding.cameraB = _playableBehaviour.camera;
-                            var invWeight = 1f - inputWeight;
-                            var cameraSwitcherControlNextClip = nextClip.asset as CameraSwitcherControlClip;
-                            if (_playableBehaviour.dofOverride)
-                            {
-#if USE_URP
-
-                                // depthOfFieldMode = _playableBehaviour.bokehProps.depthOfFieldMode;
-                                bokehProps.focusDistance += _playableBehaviour.bokehProps.focusDistance * invWeight;
-                                bokehProps.focalLength += _playableBehaviour.bokehProps.focalLength * invWeight;
-                                bokehProps.aperture += _playableBehaviour.bokehProps.aperture * invWeight;
-                                bokehProps.bladeCount +=
-                                    Mathf.FloorToInt(_playableBehaviour.bokehProps.bladeCount * invWeight);
-                                bokehProps.bladeCurvature += _playableBehaviour.bokehProps.bladeCurvature * invWeight;
-                                bokehProps.bladeRotation += _playableBehaviour.bokehProps.bladeRotation * invWeight;
-
-                                gaussianProps.start += _playableBehaviour.gaussianProps.start * inputWeight;
-                                gaussianProps.end += _playableBehaviour.gaussianProps.end * inputWeight;
-                                gaussianProps.maxRadius += _playableBehaviour.gaussianProps.maxRadius * inputWeight;
-                                gaussianProps.highQualitySampling =
-                                    _playableBehaviour.gaussianProps.highQualitySampling;
-                                CheckVolumeProfile(_playableBehaviour, cameraSwitcherControlNextClip);
-                                SetVolumeValues(_playableBehaviour, bokehProps, gaussianProps);
-
-#elif USE_HDRP
-                                DepthOfField dof;
-                                if (_playableBehaviour.volumeProfile != null)
-                                {
-                                    _playableBehaviour.volumeProfile.TryGet<DepthOfField>(out dof);
-
-
-                                    physicalCameraProps.focusDistanceMode =
-                                        _playableBehaviour.physicalCameraProps.focusDistanceMode;
-                                    physicalCameraProps.focusDistance +=
-                                        _playableBehaviour.physicalCameraProps.focusDistance * invWeight;
-                                    physicalCameraProps.focusLength +=
-                                        _playableBehaviour.physicalCameraProps.focusLength * invWeight;
-                                    physicalCameraProps.nearBluer.sampleCount +=
-                                        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.nearBluer.sampleCount *
-                                                         invWeight);
-                                    physicalCameraProps.nearBluer.maxRadius +=
-                                        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.nearBluer.maxRadius *
-                                                         invWeight);
-
-                                    physicalCameraProps.farBluer.sampleCount +=
-                                        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.farBluer.sampleCount *
-                                                         invWeight);
-                                    physicalCameraProps.farBluer.maxRadius +=
-                                        Mathf.FloorToInt(_playableBehaviour.physicalCameraProps.farBluer.maxRadius *
-                                                         invWeight);
-
-                                    manualRangeProps.focusLength +=
-                                        _playableBehaviour.manualRangeProps.focusLength * invWeight;
-                                    manualRangeProps.focusDistance +=
-                                        _playableBehaviour.manualRangeProps.focusDistance * invWeight;
-                                    manualRangeProps.nearRange.start +=
-                                        _playableBehaviour.manualRangeProps.nearRange.start * invWeight;
-                                    manualRangeProps.nearRange.end +=
-                                        _playableBehaviour.manualRangeProps.nearRange.end * invWeight;
-
-                                    manualRangeProps.farRange.start +=
-                                        _playableBehaviour.manualRangeProps.farRange.start * invWeight;
-                                    manualRangeProps.farRange.end +=
-                                        _playableBehaviour.manualRangeProps.farRange.end * invWeight;
-                                    manualRangeProps.quality = _playableBehaviour.manualRangeProps.quality;
-
-                                    manualRangeProps.nearBluer.sampleCount +=
-                                        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.nearBluer.sampleCount *
-                                                         invWeight);
-                                    manualRangeProps.nearBluer.maxRadius +=
-                                        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.nearBluer.maxRadius *
-                                                         invWeight);
-
-                                    manualRangeProps.farBluer.sampleCount +=
-                                        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.sampleCount *
-                                                         invWeight);
-                                    manualRangeProps.farBluer.maxRadius +=
-                                        Mathf.FloorToInt(_playableBehaviour.manualRangeProps.farBluer.maxRadius *
-                                                         invWeight);
-
-                                    if (_playableBehaviour.physicalCameraProps.focusDistanceMode ==
-                                        FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
-                                    {
-                                        _playableBehaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
-                                            Mathf.Lerp(playableBehaviour.physicalCameraProps.focusDistance,
-                                                _playableBehaviour.physicalCameraProps.focusDistance, invWeight);
-                                    }
-                                }
-                               
-                                CheckVolumeProfile(_playableBehaviour,cameraSwitcherControlNextClip);
-                                SetVolumeValues(_playableBehaviour,manualRangeProps,physicalCameraProps);
-
-#endif
-                            }
-                        }
-                    }
-                    else
-                    {
-                        SelectSingleCamera(playableBehaviour, inputWeight, currentTime, _playableBehaviour);
-                        CheckVolumeProfile(playableBehaviour, cameraSwitcherControlClip);
-
-#if USE_URP
-                        SetVolumeValues(playableBehaviour, playableBehaviour.bokehProps,
-                            playableBehaviour.gaussianProps);
-#elif USE_HDRP
-SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
-#endif
-
-                        m_TrackBinding.cameraB = _playableBehaviour.camera;
-                    }
-                }
-                else
-                {
-                    SelectSingleCamera(playableBehaviour, inputWeight, currentTime);
-#if USE_URP
-                    SetVolumeValues(playableBehaviour, playableBehaviour.bokehProps, playableBehaviour.gaussianProps);
-#elif USE_HDRP
-                    SetVolumeValues(playableBehaviour,playableBehaviour.manualRangeProps,playableBehaviour.physicalCameraProps);
-#endif
-                    m_TrackBinding.cameraB = playableBehaviour.camera;
-                }
-
-                // Debug.Log($"{physicalCameraProps.focusLength},{manualRangeProps.focusLength}");
-
+                
                 break;
-            }
 
-            inputPort++;
-        }
-
-//
-//         if (dof)
-//         {
-//            
-//             if (m_TrackBinding.dofControl)
-//             {
-//                     
-// #if USE_URP               
-//                 if (currentClips.Count > 0)
-//                 {
-//                     
-//
-//
-//                     if (dof.mode == DepthOfFieldMode.Bokeh)
-//                     {
-//                         dof.focusDistance.value = focusDistance;
-//                         dof.focalLength.value = focalLength;
-//                         dof.aperture.value = aperture;
-//                         dof.bladeCount.value = bladeCount;
-//                         dof.bladeCurvature.value = bladeCurvature;
-//                         dof.bladeRotation.value = bladeRotation;      
-//                     }
-//
-//                 }
-//                 else
-//                 {
-//                     
-//                     if (dof.mode == DepthOfFieldMode.Bokeh)
-//                     {
-//                         dof.focusDistance.value = m_TrackBinding.bokehBaseValues.focusDistance;
-//                         dof.focalLength.value = m_TrackBinding.bokehBaseValues.focalLength;
-//                         dof.aperture.value = m_TrackBinding.bokehBaseValues.aperture;
-//                         dof.bladeCount.value = m_TrackBinding.bokehBaseValues.bladeCount;
-//                         dof.bladeCurvature.value = m_TrackBinding.bokehBaseValues.bladeCurvature;
-//                         dof.bladeRotation.value = m_TrackBinding.bokehBaseValues.bladeRotation;
-//                     }
-//
-//                 }
-// #elif USE_HDRP
-//                 
-//                
-// #endif   
-//             }
-//         }
-//         
-        // m_TrackBinding.Render();
-        // m_TrackBinding.ReleaseRenderTarget();
-        // if(dof)
-    }
-
-
-    private void CheckVolumeProfile(CameraSwitcherControlBehaviour playableBehaviour, CameraSwitcherControlClip clip)
-    {
-        if (playableBehaviour.dofOverride)
-        {
-            if (playableBehaviour.volumeProfile == null && clip.volume.profile != null)
-            {
-                playableBehaviour.volumeProfile = clip.volume.profile;
-            }
-
-            if (playableBehaviour.volumeProfile != null)
-            {
-                clip.volume.profile = playableBehaviour.volumeProfile;
             }
         }
-    }
-
-#if USE_URP
-    private void SetVolumeValues(CameraSwitcherControlBehaviour behaviour, BokehProp bokehProp,
-        GaussianProp gaussianProp)
-    {
-        if (behaviour.volumeProfile != null)
+        
+        if(A == null && B == null)
         {
-            DepthOfField dof;
-            behaviour.volumeProfile.TryGet<DepthOfField>(out dof);
-            if (dof == null) return;
-            dof.mode.value = behaviour.mode;
-            if (behaviour.dofOverride)
+            if (preA != null)
             {
-                if (dof.mode.value == DepthOfFieldMode.Bokeh)
-                {
-                    dof.focusDistance.value = bokehProp.focusDistance;
-                    dof.focalLength.value = bokehProp.focalLength;
-                    dof.aperture.value = bokehProp.aperture;
-                    dof.bladeCount.value = bokehProp.bladeCount;
-                    dof.bladeCurvature.value = bokehProp.bladeCurvature;
-                    dof.bladeRotation.value = bokehProp.bladeRotation;
-                }
-
-                if (dof.mode.value == DepthOfFieldMode.Gaussian)
-                {
-                }
+                A = preA;
+                B = preB;
             }
+        }
+        
+        SetRenderTexture();
+        SetLayer();
+        SetVolume();
+        SetLookAt();
+        BlendCameraAB(playable);
+        if (cameraNamePreviewGUI != null) cameraNamePreviewGUI.text = _stringBuilder.ToString();
 
+        preA = A;
+        preB = B;
+
+    }
+   
+
+    private void SetLayer()
+    {
+        if (A != null && B != null)
+        {
+            if (A.behaviour.camera == B.behaviour.camera)
+            {
+                SetLayer(A, true);
+            }
             else
             {
-                if (dof.mode.value == DepthOfFieldMode.Bokeh)
-                {
-                    dof.focusDistance.value = m_TrackBinding.bokehBaseValues.focusDistance;
-                    dof.focalLength.value = m_TrackBinding.bokehBaseValues.focalLength;
-                    dof.aperture.value = m_TrackBinding.bokehBaseValues.aperture;
-                    dof.bladeCount.value = m_TrackBinding.bokehBaseValues.bladeCount;
-                    dof.bladeCurvature.value = m_TrackBinding.bokehBaseValues.bladeCurvature;
-                    dof.bladeRotation.value = m_TrackBinding.bokehBaseValues.bladeRotation;
-                }
-
-                if (dof.mode.value == DepthOfFieldMode.Gaussian)
-                {
-                }
+                SetLayer(A, true);
+                SetLayer(B, false);
+            }
+            
+        }else
+        {
+            if (A != null)
+            {
+                SetLayer(A, true);
             }
         }
     }
-#elif USE_HDRP
-    private void SetVolumeValues(CameraSwitcherControlBehaviour behaviour, ManualRangeProps manualRangeProps, PhysicalCameraProps physicalCameraProps)
+
+    private void SetVolume()
     {
-        
-        // Debug.Log(behaviour.hdAdditionalCameraData.volumeLayerMask.value);
-        
-        
-        if (behaviour.volumeProfile != null)
+        if (A != null && B != null)
         {
-            DepthOfField dof;
-            behaviour.volumeProfile.TryGet<DepthOfField>(out dof);
-            if(dof == null) return;
-            dof.focusMode.value = behaviour.mode;
-            if (behaviour.dofOverride)
+            if (A.behaviour.camera == B.behaviour.camera)
             {
+                A.clip.volume.enabled = true;
+                A.clip.volume.profile = trackBinding.volumeProfileA;
+            }
+            else
+            {
+                A.clip.volume.enabled = true;
+                A.clip.volume.profile = trackBinding.volumeProfileA;
+                B.clip.volume.enabled = true;
+                B.clip.volume.profile = trackBinding.volumeProfileB;
+            }
+            
+        }else
+        {
+            if (A != null)
+            {
+                A.clip.volume.profile = trackBinding.volumeProfileA;
+                A.clip.volume.enabled = true;
+            }
+        }
+    }
+
+    
+    
+    private void SetRenderTexture()
+    {
+
+        if (A != null && B != null)
+        {
+            if (A.behaviour.camera == B.behaviour.camera)
+            {
+                A.behaviour.camera.enabled = true;
+                A.behaviour.camera.targetTexture = trackBinding.renderTextureA;
+            }
+            else
+            {
+                A.behaviour.camera.enabled = true;
+                A.behaviour.camera.targetTexture = trackBinding.renderTextureA;
                 
-                
-                
-                if (dof.focusMode.value == DepthOfFieldMode.UsePhysicalCamera)
+                B.behaviour.camera.enabled = true;
+                B.behaviour.camera.targetTexture = trackBinding.renderTextureB;
+            }
+            
+        }else
+        {
+            if (A != null)
+            {
+                A.behaviour.camera.enabled = true;
+                A.behaviour.camera.targetTexture = trackBinding.renderTextureA;
+            }
+          
+        }
+           
+    }
+    
+    private void SetLookAt()
+    {
+
+        if (A != null && B != null)
+        {
+            if (A.behaviour.camera == B.behaviour.camera)
+            {
+                if (A.behaviour.lookAt || B.behaviour.lookAt)
                 {
-                    if (behaviour.physicalCameraProps.focusDistanceMode == FocusDistanceMode.Camera )
-                    {
-                        behaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
- physicalCameraProps.focusDistance;
-                        // behaviour.hdAdditionalCameraData.volumeLayerMask.value
-                    }
-                    else
-                    {
-                        dof.focusDistance.value = behaviour.manualRangeProps.focusDistance;
-                   
-                    }
+                    InitLookAt(A);
                     
-                    dof.focusDistanceMode.value = physicalCameraProps.focusDistanceMode;
-                    dof.focusDistance.value = physicalCameraProps.focusDistance;
-                    dof.quality.value = (int) physicalCameraProps.quality;
-                    dof.nearMaxBlur = physicalCameraProps.nearBluer.maxRadius;
-                    dof.nearSampleCount = physicalCameraProps.nearBluer.sampleCount;
-                    dof.farMaxBlur = physicalCameraProps.farBluer.maxRadius;
-                    dof.farSampleCount = physicalCameraProps.farBluer.sampleCount;
-                    behaviour.camera.focalLength = physicalCameraProps.focusLength;
-
                 }
-
-                if (dof.focusMode.value == DepthOfFieldMode.Manual)
-                {
-                    dof.nearFocusStart.value = manualRangeProps.nearRange.start;
-                    dof.nearFocusEnd.value = manualRangeProps.nearRange.end;
-                    dof.farFocusStart.value = manualRangeProps.farRange.start;
-                    dof.farFocusEnd.value = manualRangeProps.farRange.end;
-                    dof.nearMaxBlur = manualRangeProps.nearBluer.maxRadius;
-                    dof.nearSampleCount = manualRangeProps.nearBluer.sampleCount;
-                    dof.farMaxBlur = manualRangeProps.farBluer.maxRadius;
-                    dof.farSampleCount = manualRangeProps.farBluer.sampleCount;
-                    dof.quality.value = (int) manualRangeProps.quality;
-                    behaviour.camera.focalLength = manualRangeProps.focusLength;
-                    behaviour.hdAdditionalCameraData.physicalParameters.focusDistance = manualRangeProps.focusDistance;
-                    // Debug.Log( behaviour.camera.focalLength);
-                    // behaviour.camera.
-                }
+                
             }
-
             else
             {
-                
-                if(m_TrackBinding.physicalCameraBaseValues.focusDistanceMode == FocusDistanceMode.Camera && dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
-                {
-                    behaviour.hdAdditionalCameraData.physicalParameters.focusDistance =
- m_TrackBinding.physicalCameraBaseValues.focusDistance;
-                }
-                if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
-                {
-                    dof.focusDistanceMode.value = m_TrackBinding.physicalCameraBaseValues.focusDistanceMode;
-                    dof.focusDistance.value = m_TrackBinding.physicalCameraBaseValues.focusDistance;
-                    dof.quality.value = (int) m_TrackBinding.physicalCameraBaseValues.quality;
-                    dof.nearMaxBlur = m_TrackBinding.physicalCameraBaseValues.nearBluer.maxRadius;
-                    dof.nearSampleCount = m_TrackBinding.physicalCameraBaseValues.nearBluer.sampleCount;
-                    dof.farMaxBlur = m_TrackBinding.physicalCameraBaseValues.farBluer.maxRadius;
-                    dof.farSampleCount = m_TrackBinding.physicalCameraBaseValues.farBluer.sampleCount;
-                }
-
-                if (dof.focusMode == DepthOfFieldMode.Manual)
-                {
-                    dof.nearFocusStart.value = m_TrackBinding.manualRangeBaseValues.nearRange.start;
-                    dof.nearFocusEnd.value = m_TrackBinding.manualRangeBaseValues.nearRange.end;
-                    dof.farFocusStart.value = m_TrackBinding.manualRangeBaseValues.farRange.start;
-                    dof.farFocusEnd.value = m_TrackBinding.manualRangeBaseValues.farRange.end;
-                    dof.nearMaxBlur = m_TrackBinding.manualRangeBaseValues.nearBluer.maxRadius;
-                    dof.nearSampleCount = m_TrackBinding.manualRangeBaseValues.nearBluer.sampleCount;
-                    dof.farMaxBlur = m_TrackBinding.manualRangeBaseValues.farBluer.maxRadius;
-                    dof.farSampleCount = m_TrackBinding.manualRangeBaseValues.farBluer.sampleCount;
-                    dof.quality.value = (int) m_TrackBinding.manualRangeBaseValues.quality;
-                }
-
+                InitLookAt(A);
+                InitLookAt(B);
             }
-        }
-    }
-#endif
-    private void SelectSingleCamera(CameraSwitcherControlBehaviour playableBehaviour, float inputWeight,
-        float currentTime, CameraSwitcherControlBehaviour nextPlayableBehaviour = null)
-    {
-        m_TrackBinding.material.SetTexture("_TextureA", m_TrackBinding.renderTextureA);
-        m_TrackBinding.material.SetTexture("_TextureB", m_TrackBinding.renderTextureA);
-        m_TrackBinding.material.SetFloat("_CrossFade", inputWeight);
-
-        var blendNumA = playableBehaviour.colorBlend ? 1 : 0;
-        blendNumA += blendNumA == 0 ? 0 : (int) playableBehaviour.colorBlendProps.blendMode;
-
-        if (nextPlayableBehaviour != null)
+            
+        }else
         {
-            m_TrackBinding.material.SetFloat("_CrossFade", 1f - inputWeight);
-            var nextInputWeight = Mathf.Clamp(1f - inputWeight, 0, 1);
-            var wiggleRange = playableBehaviour.wigglerProps.wiggleRange * inputWeight +
-                              nextPlayableBehaviour.wigglerProps.wiggleRange * nextInputWeight;
-            var noise = CalcNoise(playableBehaviour, nextPlayableBehaviour, currentTime, inputWeight);
-            // var color =playableBehaviour.colorBlendProps.color*inputWeight+nextPlayableBehaviour.colorBlendProps.color* nextInputWeight;
-
-
-            var blendNumB = nextPlayableBehaviour.colorBlend ? 1 : 0;
-            blendNumB += blendNumB == 0 ? 0 : (int) nextPlayableBehaviour.colorBlendProps.blendMode;
-            m_TrackBinding.material.SetVector("_WigglerValueA", noise);
-            m_TrackBinding.material.SetVector("_ClipSizeA", wiggleRange / 100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
-            m_TrackBinding.material.SetInt("_BlendA", blendNumA);
-            m_TrackBinding.material.SetVector("_WigglerValueB", noise);
-            m_TrackBinding.material.SetVector("_ClipSizeB", wiggleRange / 100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorB", nextPlayableBehaviour.colorBlendProps.color);
-            m_TrackBinding.material.SetInt("_BlendB", blendNumB);
+            if (A != null)
+            {
+                InitLookAt(A);
+            }
+          
         }
+           
+    }
+
+    private void BlendCameraAB(Playable playable)
+    {
+        if(A == null && B == null) return;
+        
+        trackBinding.material.SetFloat("_PlayableDirectorTime", (float) director.time);
+
+
+        if (A != null && B != null)
+        {
+            // Clipが2つBlendされた状態で、且つAとBが同じカメラになっている場合、
+            if (A.behaviour.camera == B.behaviour.camera)
+            {
+                var bokehProps = new BokehProp();
+                var gaussianProps = new GaussianProp();
+             
+                var useVolumeOverride = A.behaviour.dofOverride || B.behaviour.dofOverride;
+                bokehProps = A.behaviour.bokehProps * A.inputWeigh+ (B.behaviour.bokehProps * (B.inputWeigh));
+                gaussianProps = A.behaviour.gaussianProps * A.inputWeigh + B.behaviour.gaussianProps * (B.inputWeigh);
+                SetVolumeValues(trackBinding.volumeProfileA,A, bokehProps, gaussianProps);
+                
+                BlendLookAt();
+                trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
+                trackBinding.material.SetTexture("_TextureB", trackBinding.renderTextureA);
+                trackBinding.material.SetVector("_ClipSizeA", BlendClopSize(A,B));
+                trackBinding.material.SetVector("_WigglerValueA",BlendNoise(A,B));
+                trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
+                trackBinding.material.SetInt("_BlendB", GetBlendNum(B));
+                trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
+                trackBinding.material.SetColor("_MultiplyColorB", B.behaviour.colorBlendProps.color);
+                trackBinding.material.SetFloat("_CrossFade", 0);
+                
+                
+            }
+            // AとBで違うカメラをDisolveしたいとき
+            else
+            {
+                SetVolumeValues(trackBinding.volumeProfileA, A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
+                SetVolumeValues(trackBinding.volumeProfileB, B, B.behaviour.bokehProps, B.behaviour.gaussianProps);
+                
+                InitLookAt(A);
+                InitLookAt(B);
+                trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
+                trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
+                trackBinding.material.SetVector("_WigglerValueA",CalcNoise(A));
+                trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
+                trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
+                
+                trackBinding.material.SetTexture("_TextureB", trackBinding.renderTextureB);
+                trackBinding.material.SetVector("_ClipSizeB", GetClopSize(B));
+                trackBinding.material.SetVector("_WigglerValueB",CalcNoise(B));
+                trackBinding.material.SetColor("_MultiplyColorB", B.behaviour.colorBlendProps.color);
+                trackBinding.material.SetInt("_BlendB", GetBlendNum(B));
+                
+                trackBinding.material.SetFloat("_CrossFade", 1f-A.inputWeigh);
+                
+            }     
+        }
+        // 一つしかカメラが無いとき
         else
         {
-            m_TrackBinding.material.SetVector("_WigglerValueA", CalcNoise(playableBehaviour, currentTime));
-            m_TrackBinding.material.SetVector("_ClipSizeA", playableBehaviour.wigglerProps.wiggleRange / 100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorA", playableBehaviour.colorBlendProps.color);
-            m_TrackBinding.material.SetInt("_BlendA", blendNumA);
-            m_TrackBinding.material.SetVector("_WigglerValueB", CalcNoise(playableBehaviour, currentTime));
-            m_TrackBinding.material.SetVector("_ClipSizeB", playableBehaviour.wigglerProps.wiggleRange / 100f);
-            m_TrackBinding.material.SetColor("_MultiplyColorB", playableBehaviour.colorBlendProps.color);
-            m_TrackBinding.material.SetInt("_BlendB", blendNumA);
+            InitLookAt(A);
+            SetVolumeValues(trackBinding.volumeProfileA,A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
+            trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
+            trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
+            trackBinding.material.SetVector("_WigglerValueA", CalcNoise(A));
+            trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
+            trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
+            trackBinding.material.SetFloat("_CrossFade", 0);
+           
         }
-
-        
-
-        // m_TrackBinding.material.SetVector("_OffsetPositionB",offsetPositionA);
+       
     }
 
-
-    // public Vector4 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime)
-    // {
-    //     var isWiggle = new Vector2(
-    //         a.wiggle ? 1 : 0,
-    //         b.wiggle ? 1 : 0
-    //     );
-    //     var wiggler = new Vector4(
-    //         (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x, currentTime*a.roughness + a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.x/100f*isWiggle.x,
-    //         (Mathf.PerlinNoise(a.noiseSeed.x * a.noiseScale.x + currentTime*a.roughness, a.noiseScale.y*a.noiseSeed.y)-0.5f) * a.wiggleRange.y/100f*isWiggle.x,
-    //         (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x, currentTime*b.roughness + b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.x/100f*isWiggle.y,
-    //         (Mathf.PerlinNoise(b.noiseSeed.x * b.noiseScale.x + currentTime*b.roughness, b.noiseScale.y*b.noiseSeed.y)-0.5f) * b.wiggleRange.y/100f*isWiggle.y
-    //     );
-    //
-    //     return wiggler;
-    // }
-
-
-    public Vector2 CalcNoise(CameraSwitcherControlBehaviour a, float currentTime)
+    private int GetBlendNum(ClipInfo clipInfo)
     {
-        var isWiggle = a.wiggle ? 1 : 0f;
+        var blendNumB = clipInfo.behaviour.colorBlend ? 1 : 0;
+        blendNumB += blendNumB == 0 ? 0 : (int) clipInfo.behaviour.colorBlendProps.blendMode;
+        return blendNumB;
+    }
+    
+
+   
+    private Color BlendColor(ClipInfo A, ClipInfo B)
+    {
+        var colorA = A.behaviour.colorBlendProps.color;
+        var colorB = B.behaviour.colorBlendProps.color;
+        return Color.Lerp(colorA, colorB, A.inputWeigh);
+    }
+
+    private Vector2 BlendClopSize(ClipInfo A, ClipInfo B)
+    {
+        return Vector2.Lerp(GetClopSize(A), GetClopSize(B), 1f-A.inputWeigh);
+    }
+
+    private Vector2 GetClopSize(ClipInfo clipInfo)
+    {
+        return  clipInfo.behaviour.wiggle ? clipInfo.behaviour.wigglerProps.wiggleRange / 100f : Vector2.zero;
+    }
+    private Vector2 CalcNoise(ClipInfo clipInfo)
+    {
+        var currentTime = (float) director.time;
+        if (!clipInfo.behaviour.wiggle) return Vector2.zero;
         var wiggler = new Vector2(
-            (Mathf.PerlinNoise(a.wigglerProps.noiseSeed.x * a.wigglerProps.noiseScale.x,
-                 currentTime * a.wigglerProps.roughness + a.wigglerProps.noiseScale.y * a.wigglerProps.noiseSeed.y) -
-             0.5f) * a.wigglerProps.wiggleRange.x / 100f * isWiggle,
+            (Mathf.PerlinNoise(clipInfo.behaviour.wigglerProps.noiseSeed.x * clipInfo.behaviour.wigglerProps.noiseScale.x,
+                 currentTime *clipInfo.behaviour. wigglerProps.roughness + clipInfo.behaviour.wigglerProps.noiseScale.y * clipInfo.behaviour.wigglerProps.noiseSeed.y) -
+             0.5f) * clipInfo.behaviour.wigglerProps.wiggleRange.x / 100f,
             (Mathf.PerlinNoise(
-                a.wigglerProps.noiseSeed.x * a.wigglerProps.noiseScale.x + currentTime * a.wigglerProps.roughness,
-                a.wigglerProps.noiseScale.y * a.wigglerProps.noiseSeed.y) - 0.5f) * a.wigglerProps.wiggleRange.y /
-            100f * isWiggle
+                clipInfo.behaviour.wigglerProps.noiseSeed.x * clipInfo.behaviour.wigglerProps.noiseScale.x + currentTime * clipInfo.behaviour.wigglerProps.roughness,
+                clipInfo.behaviour.wigglerProps.noiseScale.y * clipInfo.behaviour.wigglerProps.noiseSeed.y) - 0.5f) * clipInfo.behaviour.wigglerProps.wiggleRange.y /
+            100f
         );
-
-        return disableWiggler ? Vector2.zero : wiggler;
-    }
-
-    public Vector2 CalcNoise(CameraSwitcherControlBehaviour a, CameraSwitcherControlBehaviour b, float currentTime,
-        float inputWeight)
-    {
-        var wiggler = Vector2.Lerp(CalcNoise(a, currentTime), CalcNoise(b, currentTime), 1f - inputWeight);
 
         return wiggler;
     }
 
+    private Vector2 BlendNoise(ClipInfo a, ClipInfo b)
+    {
+        var wiggler = Vector2.Lerp(CalcNoise(a), CalcNoise(b), 1f - a.inputWeigh);
+
+        return wiggler;
+    }
+
+
+    private void BlendLookAt()
+    {
+        var clipInfo = A.inputWeigh > 0.5f ? A : B; 
+        var target = clipInfo.clip.target;
+        SetLookAtTarget(A.clip.lookAtConstraint, target);
+        clipInfo.clip.lookAtConstraint.enabled = clipInfo.behaviour.lookAt;
+        var lookAt = clipInfo.clip.lookAtConstraint;
+        lookAt.locked = clipInfo.behaviour.lookAtProps.Lock;
+        lookAt.constraintActive = clipInfo.behaviour.lookAtProps.IsActive;
+        lookAt.weight = A.behaviour.lookAtProps.Weight * A.inputWeigh + B.behaviour.lookAtProps.Weight * (1f - A.inputWeigh);
+        lookAt.roll = A.behaviour.lookAtProps.Roll * A.inputWeigh + B.behaviour.lookAtProps.Roll * (1f - A.inputWeigh);
+        lookAt.useUpObject = A.behaviour.lookAtProps.UseUpObject;
+        lookAt.rotationOffset = A.behaviour.lookAtProps.RotationOffset * A.inputWeigh + B.behaviour.lookAtProps.RotationOffset * (1f - A.inputWeigh);
+        lookAt.rotationAtRest = A.behaviour.lookAtProps.RotationAtReset * A.inputWeigh + B.behaviour.lookAtProps.RotationAtReset * (1f - A.inputWeigh);
+    }
+
+
+    private void SetLookAtTarget(LookAtConstraint lookAt, Transform target)
+    {
+        if (target != null)
+        {
+            if (lookAt.sourceCount > 0)
+            {
+                while (lookAt.sourceCount > 1)
+                {
+                    lookAt.RemoveSource(0);
+                }
+
+                if (lookAt.GetSource(0).sourceTransform != target)
+                {
+                    // lookAt.RemoveSource(0);
+                    var source = new ConstraintSource();
+                    source.sourceTransform = target;
+                    source.weight = 1;
+                    lookAt.SetSource(0, source);
+                }
+            }
+            else
+            {
+                var source = new ConstraintSource();
+                source.sourceTransform = target;
+                source.weight = 1;
+                lookAt.AddSource(source);
+            }
+        }
+        else
+        {
+            while (lookAt.sourceCount > 1)
+            {
+                lookAt.RemoveSource(0);
+            }
+        }
+    }
+    private void InitLookAt(ClipInfo clipInfo)
+    {
+        
+        
+       
+        var target = clipInfo.clip.target;
+        clipInfo.clip.lookAtConstraint.enabled = clipInfo.behaviour.lookAt;
+        var lookAt = clipInfo.clip.lookAtConstraint;
+        SetLookAtTarget(lookAt, target);
+        if (target != null)
+        {
+
+            lookAt.locked = clipInfo.behaviour.lookAtProps.Lock;
+            lookAt.constraintActive = clipInfo.behaviour.lookAtProps.IsActive;
+            lookAt.weight = clipInfo.behaviour.lookAtProps.Weight;
+            lookAt.roll = clipInfo.behaviour.lookAtProps.Roll;
+            lookAt.useUpObject = clipInfo.behaviour.lookAtProps.UseUpObject;
+            lookAt.rotationOffset = clipInfo.behaviour.lookAtProps.RotationOffset;
+            lookAt.rotationAtRest = clipInfo.behaviour.lookAtProps.RotationAtReset;
+        }
+       
+            
+        
+    }
+
+
+    private VolumeProfile GetVolumeProfile(ClipInfo clipInfo)
+    {
+        if(clipInfo.behaviour.volumeProfile == null)
+        {
+            return clipInfo.tmpVolumeProfile;
+        }
+        else
+        {
+            return clipInfo.behaviour.volumeProfile;
+        }
+        
+
+
+
+    }
+
+    private void SetVolumeValues(VolumeProfile volumeProfile,ClipInfo clipInfo,BokehProp bokehProp, GaussianProp gaussianProp)
+    {
+
+        // if (clipInfo.behaviour.volumeProfile != null)
+        // {
+        //     CopyVolumeValues(volumeProfile, clipInfo);
+        // }
+        // else
+        // {
+            DepthOfField dof;
+            volumeProfile.TryGet<DepthOfField>(out dof);
+            if (dof == null) return;
+           
+            if (dof.mode.value == DepthOfFieldMode.Bokeh)
+            {
+                dof.focusDistance.value = bokehProp.focusDistance;
+                dof.focalLength.value = bokehProp.focalLength;
+                dof.aperture.value = bokehProp.aperture;
+                dof.bladeCount.value = bokehProp.bladeCount;
+                dof.bladeCurvature.value = bokehProp.bladeCurvature;
+                dof.bladeRotation.value = bokehProp.bladeRotation;
+            }
+
+            if (dof.mode.value == DepthOfFieldMode.Gaussian)
+            {
+                dof.gaussianStart.value = gaussianProp.start;
+                dof.gaussianEnd.value = gaussianProp.end;
+                dof.gaussianMaxRadius.value = gaussianProp.maxRadius;
+                dof.highQualitySampling.value = gaussianProp.highQualitySampling;
+            } 
+        // }
+
+           
+
+    }
+
+    private void CopyVolumeValues(VolumeProfile volumeProfile, ClipInfo clipInfo)
+    {
+        if (clipInfo.behaviour.volumeProfile != null)
+        {
+            DepthOfField dof;
+            volumeProfile.TryGet<DepthOfField>(out dof);
+            
+            DepthOfField referenceDof;
+            clipInfo.behaviour.volumeProfile.TryGet<DepthOfField>(out referenceDof);
+            
+            if(dof != null && referenceDof != null)
+            {
+                dof.focusDistance.value = referenceDof.focusDistance.value;
+                dof.focalLength.value = referenceDof.focalLength.value;
+                dof.aperture.value = referenceDof.aperture.value;
+                dof.bladeCount.value = referenceDof.bladeCount.value;
+                dof.bladeCurvature.value = referenceDof.bladeCurvature.value;
+                dof.bladeRotation.value = referenceDof.bladeRotation.value;
+                dof.gaussianStart.value = referenceDof.gaussianStart.value;
+                dof.gaussianEnd.value = referenceDof.gaussianEnd.value;
+                dof.gaussianMaxRadius.value = referenceDof.gaussianMaxRadius.value;
+                dof.highQualitySampling.value = referenceDof.highQualitySampling.value;
+            }
+        }
+    }
+
+  
     public override void OnPlayableDestroy(Playable playable)
     {
         base.OnPlayableDestroy(playable);
-        if (m_TrackBinding != null && m_TrackBinding.material != null) m_TrackBinding.material.SetFloat("_PlayableDirectorTime", 0f);
+        if (trackBinding != null && trackBinding.material != null) trackBinding.material.SetFloat("_PlayableDirectorTime", 0f);
     }
 
     public static bool Contains(LayerMask self, int layerId)

@@ -29,9 +29,65 @@ public class BokehProp
         focusDistance = 0;
         focalLength = 0; 
         aperture = 0;
-        bladeCount =4;
+        bladeCount =0;
         bladeCurvature = 0;
         bladeRotation = 0;
+    }
+
+
+    public BokehProp(BokehProp bokehProp = null)
+    {
+        if (bokehProp != null)
+        {
+            focusDistance = bokehProp.focusDistance;
+            focalLength = bokehProp.focalLength;
+            aperture = bokehProp.aperture;
+            bladeCount = bokehProp.bladeCount;
+            bladeCurvature = bokehProp.bladeCurvature;
+            bladeRotation = bokehProp.bladeRotation;
+        }
+        else
+        {
+            Reset();
+        }
+    }
+    public static BokehProp operator +(BokehProp A, BokehProp B)
+    {
+        return new BokehProp()
+        {
+            focusDistance = A.focusDistance+ B.focusDistance,
+            focalLength = A.focalLength+ B.focalLength,
+            aperture = A.aperture+ B.aperture,
+            bladeCount = A.bladeCount+ B.bladeCount,
+            bladeCurvature = A.bladeCurvature+ B.bladeCurvature,
+            bladeRotation = A.bladeRotation+ B.bladeRotation,
+        };
+    }
+
+    public static BokehProp operator -(BokehProp A, BokehProp B)
+    {
+        return new BokehProp()
+        {
+            focusDistance = A.focusDistance- B.focusDistance,
+            focalLength = A.focalLength- B.focalLength,
+            aperture = A.aperture- B.aperture,
+            bladeCount = A.bladeCount- B.bladeCount,
+            bladeCurvature = A.bladeCurvature- B.bladeCurvature,
+            bladeRotation = A.bladeRotation- B.bladeRotation,
+        };
+    }
+
+    public static BokehProp operator *(BokehProp A, float weight)
+    {
+        return  new BokehProp()
+        {
+            focusDistance = A.focusDistance* weight,
+            focalLength = A.focalLength* weight,
+            aperture = A.aperture* weight,
+            bladeCount = Mathf.CeilToInt(A.bladeCount* weight),
+            bladeCurvature = A.bladeCurvature* weight,
+            bladeRotation = A.bladeRotation*weight,
+        };
     }
 }
 
@@ -49,6 +105,55 @@ public class GaussianProp
         end =0;
         maxRadius = 0;
         highQualitySampling = false;
+    }
+    
+    public GaussianProp(GaussianProp gaussianProp = null)
+    {
+        if (gaussianProp != null)
+        {
+            start = gaussianProp.start;
+            end = gaussianProp.end;
+            maxRadius = gaussianProp.maxRadius;
+            highQualitySampling = gaussianProp.highQualitySampling;
+        }
+        else
+        {
+            Reset();
+        }
+        
+    }
+    
+    public static GaussianProp operator +(GaussianProp A, GaussianProp B)
+    {
+        return new GaussianProp()
+        {
+            start = A.start+ B.start,
+            end = A.end+ B.end,
+            maxRadius = A.maxRadius+ B.maxRadius,
+            highQualitySampling = A.highQualitySampling|| B.highQualitySampling,
+        };
+    }
+    
+    public static GaussianProp operator -(GaussianProp A, GaussianProp B)
+    {
+        return new GaussianProp()
+        {
+            start = A.start- B.start,
+            end = A.end- B.end,
+            maxRadius = A.maxRadius- B.maxRadius,
+            highQualitySampling = A.highQualitySampling|| B.highQualitySampling,
+        };
+    }
+
+    public static GaussianProp operator *(GaussianProp A, float weight)
+    {
+            return new GaussianProp()
+        {
+            start = A.start* weight,
+            end = A.end* weight,
+            maxRadius = A.maxRadius* weight,
+            highQualitySampling =weight>=0.5? A.highQualitySampling: !A.highQualitySampling,
+        };
     }
 }
 

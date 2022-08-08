@@ -3,6 +3,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using System;
+using UnityEngine.Rendering;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #elif USE_HDRP
@@ -52,16 +53,17 @@ public class CameraSwitcherControl : MonoBehaviour
     private float m_fader;
     public RenderTexture renderTextureA;
     public RenderTexture renderTextureB;
+
+    public VolumeProfile volumeProfileA;
+    public VolumeProfile volumeProfileB;
     
     public int width => (int)resolution.x;
     public int height =>(int) resolution.y;
 
-
-
     public Camera cameraA;
     public Camera cameraB;
     
-    // public Material material => material;
+    private DepthOfField dof;
     
     #if UNITY_EDITOR
     [MenuItem("GameObject/Camera Switcher Control/Camera Switcher Control", false, 10)]
@@ -79,8 +81,24 @@ public class CameraSwitcherControl : MonoBehaviour
     }
 
     #endif
-    
-    
+
+
+    public int depthValue
+    {
+        get
+        {
+            if (depthList == DepthList.AtLeast16)
+            {
+                return 16;
+            }else if (depthList == DepthList.AtLeast24_WidthStencil)
+            {
+                return 24;
+            }else
+            {
+                return 8;
+            }
+        }
+    }    
  
     private void Update()
     {
@@ -94,14 +112,71 @@ public class CameraSwitcherControl : MonoBehaviour
         {
             outputRawImage.material = material;
             outputRawImage.texture = null;
-        } 
+        }
+
+        CheckVolumeProfile();
+        CheckTextureFormat();
         
         Blit();
-        
+    }
+
+    public void CheckVolumeProfile()
+    {
+        if (volumeProfileA == null)
+        {
+            volumeProfileA = CreateVolumeProfile();
+        }
+        if (volumeProfileB == null)
+        {
+            volumeProfileB = CreateVolumeProfile();
+        }
+    }
+    public void CheckTextureFormat()
+    {
+        if(renderTextureA != null)CheckTextureFormat(renderTextureA);
+        if(renderTextureB != null)CheckTextureFormat(renderTextureB);
+    }
+
+    private void CheckTextureFormat(RenderTexture renderTexture)
+    {
+        var depth = renderTexture.depth;
+        if (renderTexture.format != renderTextureFormat ||
+            renderTexture.format != renderTextureFormat ||
+            renderTexture.width != width ||
+            renderTexture.height != height
+           )
+        {
+            InitRenderTexture(renderTexture);
+        }
        
     }
 
-    private DepthOfField dof;
+    public VolumeProfile CloneProfile(VolumeProfile volumeProfile)
+    {
+        return Instantiate(volumeProfile);
+    }
+    private VolumeProfile CreateVolumeProfile()
+    {
+        
+        var volumeProfile = new VolumeProfile();
+        volumeProfile.name = "ProfileA";
+        var dof = volumeProfile.Add<DepthOfField>();
+        dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
+        dof.focusDistance.overrideState = true;
+        dof.focalLength.overrideState = true;
+        dof.aperture.overrideState = true;
+        dof.bladeCount.overrideState = true;
+        dof.bladeCurvature.overrideState = true;
+        dof.bladeRotation.overrideState = true;
+        dof.gaussianStart.overrideState = true;
+        dof.gaussianEnd.overrideState = true;
+        dof.gaussianMaxRadius.overrideState = true;
+        dof.highQualitySampling.overrideState = true;
+
+        return volumeProfile;
+
+    }
+    
 
     public void ApplyProfileSettings()
     {
@@ -110,6 +185,8 @@ public class CameraSwitcherControl : MonoBehaviour
         renderTextureA = cameraSwitcherSettings.renderTextureA;
         renderTextureB = cameraSwitcherSettings.renderTextureB;
         resolution = cameraSwitcherSettings.resolution;
+        EditorUtility.SetDirty(cameraSwitcherSettings);
+        AssetDatabase.SaveAssets();
         // volume = cameraSwitcherSettings.volume;
     }
     
@@ -118,6 +195,8 @@ public class CameraSwitcherControl : MonoBehaviour
         if(cameraSwitcherSettings == null) return;
 
         cameraSwitcherSettings.resolution = resolution;
+        EditorUtility.SetDirty(cameraSwitcherSettings);
+        AssetDatabase.SaveAssets();
         // cameraSwitcherSettings.volume = volume;
         
     }
@@ -226,6 +305,22 @@ public class CameraSwitcherControl : MonoBehaviour
 
 #endif
     }
+
+     private void InitRenderTexture(RenderTexture renderTexture)
+     {
+        
+         renderTexture.Release();
+         renderTexture.format = renderTextureFormat;
+         renderTexture.depth = depthValue;
+         renderTexture.width = width;
+         renderTexture.height = height;    
+     }
+
+     public void InitRenderTextures()
+     {
+         if(renderTextureA != null)InitRenderTexture(renderTextureA);
+         if(renderTextureB != null)InitRenderTexture(renderTextureB);
+     }
 
     public void ReleaseRenderTarget()
     {

@@ -271,6 +271,8 @@ public class CameraSwitcherControlEditor : Editor
                 cameraSwitcherControl.resolution = new Vector2Int(res.x, res.y);
                 widthField.value = res.x;
                 heightField.value = res.y;
+                EditorUtility.SetDirty(cameraSwitcherControl.cameraSwitcherSettings);
+                AssetDatabase.SaveAssets();
             };
 
             toggle.RegisterValueChangedCallback((evt) =>
@@ -352,6 +354,7 @@ public class CameraSwitcherControlEditor : Editor
                 setting.renderTextureB = inputCameraB;
                 
                 EditorUtility.SetDirty(setting);
+                AssetDatabase.SaveAssets();
 
             // }
     }

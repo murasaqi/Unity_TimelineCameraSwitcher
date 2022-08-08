@@ -147,8 +147,8 @@ Material:
     - _OffsetPositionB: {r: 0, g: 0, b: 0, a: 0}
     - _RangeA: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _RangeB: {r: 0.0232, g: 0.024, b: 0, a: 0}
-    - _WigglerValueA: {r: 0.0030374825, g: -0.0017363459, b: 0, a: 0}
-    - _WigglerValueB: {r: 0.0030374825, g: -0.0017363459, b: 0, a: 0}
+    - _WigglerValueA: {r: -0.00403759, g: -0.00403759, b: 0, a: 0}
+    - _WigglerValueB: {r: 0.0074031083, g: 0.0074031083, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []

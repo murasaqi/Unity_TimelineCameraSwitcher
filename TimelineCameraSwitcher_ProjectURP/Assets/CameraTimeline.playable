@@ -21,10 +21,10 @@ MonoBehaviour:
     wigglerProps:
       noiseSeed: {x: 1, y: 1}
       noiseScale: {x: 1, y: 1}
-      roughness: 1
+      roughness: 0.74
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: bf930e4d7b2d82f488e61f31093bb954, type: 2}
+    volumeProfile: {fileID: 0}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
@@ -33,10 +33,10 @@ MonoBehaviour:
     - B
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 0.42
-      focalLength: 113
-      aperture: 10.7
-      bladeCount: 4
+      focusDistance: 1.07
+      focalLength: 157.7
+      aperture: 2.24
+      bladeCount: 3
       bladeCurvature: 0.351
       bladeRotation: 0
     gaussianProps:
@@ -44,16 +44,16 @@ MonoBehaviour:
       end: 0
       maxRadius: 0
       highQualitySampling: 0
-    lookAt: 0
+    lookAt: 1
     lookAtProps:
       target:
-        exposedName: 
+        exposedName: 4471f16f24b268f4c85083ad3fd9c74e
         defaultValue: {fileID: 0}
-      IsActive: 0
-      Weight: 0
+      IsActive: 1
+      Weight: 1
       Roll: 0
       UseUpObject: 0
-      Lock: 0
+      Lock: 1
       RotationAtReset: {x: 0, y: 0, z: 0}
       RotationOffset: {x: 0, y: 0, z: 0}
     colorBlend: 0
@@ -63,6 +63,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!74 &-8548397218939039024
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -691,6 +692,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &-8080638870831320311
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -834,12 +836,12 @@ MonoBehaviour:
     - B
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 0
-      focalLength: 0
-      aperture: 0
-      bladeCount: 0
-      bladeCurvature: 0
-      bladeRotation: 0
+      focusDistance: 0.06
+      focalLength: 267.8
+      aperture: 2.48
+      bladeCount: 3
+      bladeCurvature: 0.309
+      bladeRotation: -15.6
     gaussianProps:
       start: 0
       end: 0
@@ -864,6 +866,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &-6808278027765936826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -898,49 +901,13 @@ MonoBehaviour:
     m_BlendOutDuration: 0.33333333333333304
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -967,25 +934,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1015,7 +964,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0.4499999999999993
+    m_BlendOutDuration: 0.4166666666666661
     m_MixInCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1024,25 +973,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1057,61 +988,25 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: CameraD
   - m_Version: 1
-    m_Start: 9.833333333333334
+    m_Start: 9.866666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -8990017210996848531}
-    m_Duration: 1.75
+    m_Duration: 1.7166666666666668
     m_TimeScale: 1
     m_ParentTrack: {fileID: -6808278027765936826}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.4499999999999993
+    m_BlendInDuration: 0.4166666666666661
     m_BlendOutDuration: 0.6500000000000004
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1138,49 +1033,13 @@ MonoBehaviour:
     m_BlendOutDuration: 1.6499999999999986
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1207,49 +1066,13 @@ MonoBehaviour:
     m_BlendOutDuration: 0.6666666666666661
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1300,25 +1123,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1345,49 +1150,13 @@ MonoBehaviour:
     m_BlendOutDuration: 0.3000000000000007
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1458,6 +1227,7 @@ MonoBehaviour:
     exposedName: c10a4f222037f98428110016c57fe62b
     defaultValue: {fileID: 0}
   disableWiggler: 0
+  cameras: []
 --- !u!114 &-6481175405222720147
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1491,10 +1261,10 @@ MonoBehaviour:
     - B
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 6.15
-      focalLength: 184.2
-      aperture: 12.7
-      bladeCount: 4
+      focusDistance: 6.21
+      focalLength: 142.4
+      aperture: 3.74
+      bladeCount: 2
       bladeCurvature: 0.326
       bladeRotation: 0
     gaussianProps:
@@ -1521,6 +1291,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &-4983351705993982140
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3315,6 +3086,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &3826890652976136473
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3361,7 +3133,7 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: 072ded02cac04014f9f8762660caadba, type: 2}
+    volumeProfile: {fileID: 0}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
@@ -3370,10 +3142,10 @@ MonoBehaviour:
     - B
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 2.39
-      focalLength: 127
-      aperture: 6.8
-      bladeCount: 5
+      focusDistance: 9.45
+      focalLength: 130.3
+      aperture: 6.66
+      bladeCount: 4
       bladeCurvature: 0.464
       bladeRotation: 0
     gaussianProps:
@@ -3381,7 +3153,7 @@ MonoBehaviour:
       end: 0
       maxRadius: 0
       highQualitySampling: 0
-    lookAt: 0
+    lookAt: 1
     lookAtProps:
       target:
         exposedName: 
@@ -3400,6 +3172,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &4062779678493518918
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3595,6 +3368,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &5811129551531683602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3628,9 +3402,9 @@ MonoBehaviour:
     - B
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 1.59
-      focalLength: 51.5
-      aperture: 6.32
+      focusDistance: 4.36
+      focalLength: 58.8
+      aperture: 3.82
       bladeCount: 0
       bladeCurvature: 0
       bladeRotation: 0
@@ -3658,6 +3432,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!74 &6072346511736054788
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -3888,6 +3663,7 @@ MonoBehaviour:
   target: {fileID: 0}
   volume: {fileID: 0}
   targetCamera: {fileID: 0}
+  lookAtConstraint: {fileID: 0}
 --- !u!114 &7861742808868575473
 MonoBehaviour:
   m_ObjectHideFlags: 1

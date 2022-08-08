@@ -58,6 +58,7 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         position.y += EditorGUIUtility.singleLineHeight;
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
         EditorGUI.PropertyField (singleFieldRect, volumeProfileProp);
+        
         position.y += EditorGUIUtility.singleLineHeight;
         
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
@@ -75,7 +76,7 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 1);
             PropertyDrawerUtility.DrawDefaultGUI(position, gaussianProp, new GUIContent("Gaussian"));   
             position.y += gaussianProp.isExpanded ? EditorGUIUtility.singleLineHeight * 6 : EditorGUIUtility.singleLineHeight;
-            position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 8 : EditorGUIUtility.singleLineHeight;
+            // position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 6 : EditorGUIUtility.singleLineHeight;
         
 
 

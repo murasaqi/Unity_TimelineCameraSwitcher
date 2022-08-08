@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEditor;
@@ -18,7 +19,7 @@ public class CameraSwitcherControlTrack : TrackAsset
     public ExposedReference<TextMeshProUGUI> cameraNamePreviewGUI; 
     public bool disableWiggler = false;
     private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
-  
+    public List<Camera> cameras = new List<Camera>();
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
         

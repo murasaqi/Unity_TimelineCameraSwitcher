@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
@@ -25,6 +26,8 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [HideInInspector] public Volume volume;
 
     [HideInInspector] public Camera targetCamera;
+
+    [HideInInspector] public LookAtConstraint lookAtConstraint;
     // public CameraSwitcherControlBehaviour clone;
     public DepthOfFieldMode mode
     {
@@ -50,18 +53,12 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         {
             volume = clone.camera.GetComponent<Volume>();
             if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
+
+            lookAtConstraint = clone.camera.GetComponent<LookAtConstraint>();
+            if(lookAtConstraint == null) lookAtConstraint = clone.camera.gameObject.AddComponent<LookAtConstraint>();
+            lookAtConstraint.enabled = false;
         }
         
-
-        // if (volume.profile != null && template.volumeProfile == null)
-        // {
-        //     template.volumeProfile = volume.profile;
-        // }
-        //
-        // if (volume.profile == null && template.volumeProfile != null)
-        // {
-        //     volume.profile = template.volumeProfile;
-        // }
 
         
         
