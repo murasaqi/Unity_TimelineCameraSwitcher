@@ -3,6 +3,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using UnityEngine.Rendering;
 #if USE_URP
 using UnityEngine.Rendering.Universal;
@@ -11,6 +12,13 @@ using UnityEngine.Rendering.HighDefinition;
 #endif
 using UnityEngine.UI;
 
+
+[Serializable]
+public class CameraVolumeProfileSetting
+{
+    public Camera camera;
+    public VolumeProfile volumeProfile;
+}
 
 [ExecuteAlways]
 public class CameraSwitcherControl : MonoBehaviour
@@ -26,7 +34,10 @@ public class CameraSwitcherControl : MonoBehaviour
     [SerializeField] public RenderTextureFormat renderTextureFormat = RenderTextureFormat.DefaultHDR;
     [SerializeField] public DepthList depth = DepthList.AtLeast24_WidthStencil;
     [HideInInspector] public Material material;
-    
+
+
+    [SerializeField] public Volume volumeA;
+    [SerializeField] public Volume volumeB;
     // HDAdditionalCameraData.
     // [SerializeField] public layer
     // [SerializeField] public bool dofControl = false;
@@ -63,6 +74,8 @@ public class CameraSwitcherControl : MonoBehaviour
     public Camera cameraA;
     public Camera cameraB;
     
+    public List<CameraVolumeProfileSetting> cameraVolumeProfileSettings = new List<CameraVolumeProfileSetting>();
+
     private DepthOfField dof;
     
     #if UNITY_EDITOR
@@ -75,9 +88,23 @@ public class CameraSwitcherControl : MonoBehaviour
         //　Undo操作を加える(Ctrl+Zキーの操作に加える）
         Undo.RegisterCreatedObjectUndo (obj, "Create " + obj.name);
         //　初期位置を設定
-        obj.AddComponent<CameraSwitcherControl>();
+        var cameraSwitcherControl =  obj.AddComponent<CameraSwitcherControl>();
         //　作成したゲームオブジェクトを選択状態にする
         Selection.activeObject = obj;
+
+
+
+        var volumeA = new GameObject().AddComponent<Volume>();
+        volumeA.transform.SetParent(obj.transform);
+        var volumeB = new GameObject().AddComponent<Volume>();
+        volumeB.transform.SetParent(obj.transform);
+        cameraSwitcherControl.volumeA = volumeA;
+        cameraSwitcherControl.volumeB = volumeB;
+
+        volumeA.gameObject.layer = cameraSwitcherControl.cameraALayer;
+        volumeB.gameObject.layer = cameraSwitcherControl.cameraBLayer;
+
+
     }
 
     #endif
@@ -102,6 +129,14 @@ public class CameraSwitcherControl : MonoBehaviour
  
     private void Update()
     {
+
+        volumeA.gameObject.layer = cameraALayer;
+        volumeB.gameObject.layer = cameraBLayer;
+
+        volumeA.profile = volumeProfileA;
+        volumeB.profile = volumeProfileB;
+
+
         if(cameraSwitcherSettings == null) return;
         if (renderTextureA == null && cameraSwitcherSettings.renderTextureA != null)
             renderTextureA = cameraSwitcherSettings.renderTextureA;
@@ -161,6 +196,13 @@ public class CameraSwitcherControl : MonoBehaviour
         var volumeProfile = new VolumeProfile();
         volumeProfile.name = "ProfileA";
         var dof = volumeProfile.Add<DepthOfField>();
+        InitDofValues(dof);
+        return volumeProfile;
+
+    }
+
+    private void InitDofValues(DepthOfField dof)
+    {
         dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
         dof.focusDistance.overrideState = true;
         dof.focalLength.overrideState = true;
@@ -172,9 +214,6 @@ public class CameraSwitcherControl : MonoBehaviour
         dof.gaussianEnd.overrideState = true;
         dof.gaussianMaxRadius.overrideState = true;
         dof.highQualitySampling.overrideState = true;
-
-        return volumeProfile;
-
     }
     
 

@@ -4,6 +4,9 @@
     <ui:Template name="DofParameters" src="project://database/Packages/com.murasaqi.camera_switcher_control/Resources/CameraSwitcherControlResources/DofParameters_Gaussian.uxml?fileID=9197481963319205126&amp;guid=2e73b3d1250e75c44bc915dd26cd39a3&amp;type=3#DofParameters_Gaussian" />
     <ui:Button text="Create Settings" display-tooltip-when-elided="true" name="CreateSettingsButton" />
     <uie:ObjectField label="Profile" name="ProfileField" binding-path="cameraSwitcherSettings" style="justify-content: center;" />
+    <ui:VisualElement style="flex-direction: row; align-items: flex-end; justify-content: flex-end; border-top-width: 4px; border-bottom-width: 4px;">
+        <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" />
+    </ui:VisualElement>
     <ui:VisualElement binding-path="volume" name="CameraSwitcherPropsElement" style="background-color: rgb(56, 56, 56); margin-top: 4px; margin-bottom: 4px; padding-left: 0; height: 820px;">
         <ui:Foldout text="Settings" name="Settings" focusable="false" value="true" usage-hints="None" tabindex="0" style="height: auto;">
             <uie:PropertyField name="RenderTextureAField" binding-path="renderTextureA" />
@@ -16,19 +19,35 @@
         <uie:ObjectField label="Output Render Texture" name="RenderTextureField" binding-path="outPutRenderTarget" />
         <ui:Slider picking-mode="Ignore" label="Prerendering Frame Count" value="3" high-value="5" name="PrerenderingFrameCountField" binding-path="prerenderingFrameCount" show-input-field="true" />
         <uie:EnumField label="RenderTexture Format" value="Center" binding-path="renderTextureFormat" name="RenderTextureFormatField" />
-        <ui:Label text="Camera Layer Settings" display-tooltip-when-elided="true" />
-        <ui:VisualElement name="CameraLayerSettings" style="padding-left: 8px;">
-            <uie:LayerField label="CameraA" binding-path="cameraALayer" />
-            <uie:LayerField label="CameraB" binding-path="cameraBLayer" />
+        <ui:VisualElement style="margin-top: 4px;">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="VolumeObject" />
+            <ui:VisualElement style="padding-left: 8px;">
+                <uie:ObjectField label="VolumeA" name="VolumeAObjectField" />
+                <uie:ObjectField label="VolumeB" name="VolumeBObjectField" />
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Label text="Base DoF Values" display-tooltip-when-elided="true" />
-        <ui:VisualElement name="DoFParameterElement" style="padding-left: 8px;">
-            <ui:Instance template="DofParameters_Bokeh" name="DofParameters_Bokeh" />
-            <ui:Instance template="DofParameters" name="DofParameters_Gaussian" binding-path="baseDofValues" style="justify-content: center;" />
-            <uie:PropertyField name="PhysicalCameraProps" binding-path="physicalCameraBaseValues" />
-            <uie:PropertyField name="ManualRangeProps" binding-path="manualRangeBaseValues" />
-            <ui:VisualElement style="flex-direction: row; align-items: flex-end; justify-content: flex-end; border-top-width: 4px; border-bottom-width: 4px;">
-                <ui:Button text="Apply Profile" display-tooltip-when-elided="true" name="ApplyProfileButton" />
+        <ui:VisualElement name="CameraLayerSettings" style="margin-top: 4px;">
+            <ui:Label text="Camera Layer Settings" display-tooltip-when-elided="true" />
+            <ui:VisualElement name="CameraLayerSettings_Container" style="padding-left: 8px; margin-top: 4px;">
+                <uie:LayerField label="CameraA" binding-path="cameraALayer" />
+                <uie:LayerField label="CameraB" binding-path="cameraBLayer" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VolumeProfileSettingElement" style="margin-top: 4px;">
+            <ui:Label text="Base DoF Values" display-tooltip-when-elided="true" />
+            <ui:VisualElement name="DoFParameterElement" style="padding-left: 8px;">
+                <ui:Instance template="DofParameters_Bokeh" name="DofParameters_Bokeh" />
+                <ui:Instance template="DofParameters" name="DofParameters_Gaussian" binding-path="baseDofValues" style="justify-content: center;" />
+                <uie:PropertyField name="PhysicalCameraProps" binding-path="physicalCameraBaseValues" />
+                <uie:PropertyField name="ManualRangeProps" binding-path="manualRangeBaseValues" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="CameraVolumeProfileList" style="margin-top: 4px;">
+            <ui:Label text="Camera volume override" display-tooltip-when-elided="true" />
+            <ui:ScrollView name="CameraVolumeProfileContainer" horizontal-scroller-visibility="Auto" mode="Vertical" vertical-scroller-visibility="AlwaysVisible" style="height: 111px; background-color: rgb(56, 56, 56); -unity-background-image-tint-color: rgb(40, 40, 40); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(29, 29, 29); border-right-color: rgb(29, 29, 29); border-top-color: rgb(29, 29, 29); border-bottom-color: rgb(29, 29, 29); justify-content: space-around; align-items: center;" />
+            <ui:VisualElement name="CameraVolumeSettingButons" style="flex-direction: row; justify-content: flex-end; height: auto;">
+                <ui:Button text="Add" display-tooltip-when-elided="true" name="AddVolumeSettingButton" style="width: 80px;" />
+                <ui:Button text="Delete" display-tooltip-when-elided="true" name="RemoveCameraVolumeSettingButton" style="width: 80px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -51,6 +51,18 @@ public class BokehProp
             Reset();
         }
     }
+
+    public BokehProp(DepthOfField depthOfField)
+    {
+        
+        aperture = depthOfField.aperture.value;
+        focalLength = depthOfField.focalLength.value;
+        focusDistance = depthOfField.focusDistance.value;
+        bladeCount = depthOfField.bladeCount.value;
+        bladeCurvature = depthOfField.bladeCurvature.value;
+        bladeRotation = depthOfField.bladeRotation.value;
+        
+    }
     public static BokehProp operator +(BokehProp A, BokehProp B)
     {
         return new BokehProp()
@@ -121,6 +133,14 @@ public class GaussianProp
             Reset();
         }
         
+    }
+
+    public GaussianProp(DepthOfField depthOfField)
+    {
+        start = depthOfField.gaussianStart.value;
+        end = depthOfField.gaussianEnd.value;
+        maxRadius    = depthOfField.gaussianMaxRadius.value;
+        highQualitySampling = depthOfField.highQualitySampling.value;
     }
     
     public static GaussianProp operator +(GaussianProp A, GaussianProp B)
@@ -301,15 +321,18 @@ public class ColorBlendProps
 [Serializable]
 public class CameraSwitcherControlBehaviour : PlayableBehaviour
 {
+    // public Volume volume;
     [HideInInspector][SerializeField] public Camera camera;
     
     [SerializeField] public bool wiggle;
     [SerializeField] public WigglerProps wigglerProps;
     [SerializeField] public bool dofOverride = false;
-    [SerializeField] public VolumeProfile volumeProfile;
+    // [SerializeField] public VolumeProfile volumeProfile;
     [HideInInspector] public DepthOfFieldMode mode;
     [SerializeField] public int volumeLayerMaskIndex = 0;
     [HideInInspector] public List<string> volumeLayerListNames = new List<string>(){"default",{"A"},{"B"}};
+    [SerializeField] [Range(0,1)]public float volumeWeight = 1;
+    [SerializeField] public float volumePriority = 0;
 #if USE_URP
     [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField] public BokehProp bokehProps;

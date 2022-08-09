@@ -26,25 +26,27 @@ internal class ClipInfo
     public float inputWeigh;
     public int clipIndex;
     public TimelineClip timelineClip;
-    public VolumeProfile tmpVolumeProfile;
+    // public VolumeProfile tmpVolumeProfile;
 
     public ClipInfo()
     {
-        tmpVolumeProfile = new VolumeProfile();
-        var dof = tmpVolumeProfile.Add<DepthOfField>();
-        tmpVolumeProfile.name = Guid.NewGuid().ToString();
+        // tmpVolumeProfile = new VolumeProfile();
+        // var dof = tmpVolumeProfile.Add<DepthOfField>();
+        // tmpVolumeProfile.name = Guid.NewGuid().ToString();
+        //
+        // dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
+        // dof.focusDistance.overrideState = true;
+        // dof.focalLength.overrideState = true;
+        // dof.aperture.overrideState = true;
+        // dof.bladeCount.overrideState = true;
+        // dof.bladeCurvature.overrideState = true;
+        // dof.bladeRotation.overrideState = true;
+        // dof.gaussianStart.overrideState = true;
+        // dof.gaussianEnd.overrideState = true;
+        // dof.gaussianMaxRadius.overrideState = true;
+        // dof.highQualitySampling.overrideState = true;
         
-        dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
-        dof.focusDistance.overrideState = true;
-        dof.focalLength.overrideState = true;
-        dof.aperture.overrideState = true;
-        dof.bladeCount.overrideState = true;
-        dof.bladeCurvature.overrideState = true;
-        dof.bladeRotation.overrideState = true;
-        dof.gaussianStart.overrideState = true;
-        dof.gaussianEnd.overrideState = true;
-        dof.gaussianMaxRadius.overrideState = true;
-        dof.highQualitySampling.overrideState = true;
+
         
         
     }
@@ -53,20 +55,13 @@ internal class ClipInfo
 public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 {
     public List<TimelineClip> clips;
-
     public PlayableDirector director;
     public CameraSwitcherControlTrack track;
-
     private bool firstFrameHappened;
-
     public TextMeshProUGUI cameraNamePreviewGUI;
     public float fps;
     private StringBuilder _stringBuilder;
-
-
     private double offsetStartTime;
-    
-
     private CameraSwitcherControl trackBinding;
 
     private List<ClipInfo> clipInfos = new List<ClipInfo>();
@@ -77,8 +72,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     
     private ClipInfo preA;
     private ClipInfo preB;
+
     public bool disableWiggler;
     
+    private Dictionary<Camera, VolumeProfile> cameraVolumeProfiles = new Dictionary<Camera, VolumeProfile>();
+
     private void InitBehaviour(CameraSwitcherControlBehaviour cameraSwitcherControlBehaviour)
     {
         if (cameraSwitcherControlBehaviour.camera != null)
@@ -124,6 +122,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
         offsetStartTime = (1f / fps) * trackBinding.prerenderingFrameCount;
         firstFrameHappened = true;
+        
+        cameraVolumeProfiles.Clear();
+
+        foreach (var cameraVolumeProfileSetting in trackBinding.cameraVolumeProfileSettings)
+        {
+            cameraVolumeProfiles.Add(cameraVolumeProfileSetting.camera, cameraVolumeProfileSetting.volumeProfile);
+        }
     }
     
 
@@ -158,6 +163,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             volumeLayerMask,
             isA ? trackBinding.cameraBLayer : trackBinding.cameraALayer);
         
+        
     }
 
 
@@ -173,7 +179,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             pair.behaviour.camera.enabled = false;
             pair.behaviour.camera.targetTexture = null;
             pair.clip.lookAtConstraint.enabled = false;
-            pair.clip.volume.enabled = false;
             // CheckVolumeProfile(pair);
         }
 
@@ -283,23 +288,24 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             if (A.behaviour.camera == B.behaviour.camera)
             {
-                A.clip.volume.enabled = true;
-                A.clip.volume.profile = trackBinding.volumeProfileA;
+                trackBinding.volumeA.enabled = A.behaviour.dofOverride || B.behaviour.dofOverride;
+                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
             }
             else
             {
-                A.clip.volume.enabled = true;
-                A.clip.volume.profile = trackBinding.volumeProfileA;
-                B.clip.volume.enabled = true;
-                B.clip.volume.profile = trackBinding.volumeProfileB;
+                trackBinding.volumeA.enabled = A.behaviour.dofOverride;
+                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
+                
+                trackBinding.volumeB.enabled = B.behaviour.dofOverride;
+                B.clip.volume.profile = cameraVolumeProfiles.ContainsKey(B.behaviour.camera) ? cameraVolumeProfiles[B.behaviour.camera] : null;
             }
             
         }else
         {
             if (A != null)
             {
-                A.clip.volume.profile = trackBinding.volumeProfileA;
-                A.clip.volume.enabled = true;
+                trackBinding.volumeA.enabled = A.behaviour.dofOverride;
+                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
             }
         }
     }
@@ -368,6 +374,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
            
     }
 
+    
+
     private void BlendCameraAB(Playable playable)
     {
         if(A == null && B == null) return;
@@ -380,13 +388,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             // Clipが2つBlendされた状態で、且つAとBが同じカメラになっている場合、
             if (A.behaviour.camera == B.behaviour.camera)
             {
-                var bokehProps = new BokehProp();
-                var gaussianProps = new GaussianProp();
-             
+
                 var useVolumeOverride = A.behaviour.dofOverride || B.behaviour.dofOverride;
-                bokehProps = A.behaviour.bokehProps * A.inputWeigh+ (B.behaviour.bokehProps * (B.inputWeigh));
-                gaussianProps = A.behaviour.gaussianProps * A.inputWeigh + B.behaviour.gaussianProps * (B.inputWeigh);
-                SetVolumeValues(trackBinding.volumeProfileA,A, bokehProps, gaussianProps);
+                if (useVolumeOverride)
+                {
+                    var bokehProps = A.behaviour.bokehProps * A.inputWeigh+ (B.behaviour.bokehProps * (B.inputWeigh));
+                    var gaussianProps = A.behaviour.gaussianProps * A.inputWeigh + B.behaviour.gaussianProps * (B.inputWeigh);
+                    var weight= A.behaviour.volumeWeight * A.inputWeigh + B.behaviour.volumeWeight * (B.inputWeigh);
+                    var priority = A.behaviour.volumePriority * A.inputWeigh + B.behaviour.volumePriority * (B.inputWeigh);
+                    trackBinding.volumeA.priority = priority;
+                    trackBinding.volumeA.weight = weight;
+                    SetVolumeValues(trackBinding.volumeProfileA, A, bokehProps, gaussianProps);     
+                }
+               
                 
                 BlendLookAt();
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
@@ -404,6 +418,10 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             // AとBで違うカメラをDisolveしたいとき
             else
             {
+                trackBinding.volumeA.weight = A.behaviour.volumeWeight;
+                trackBinding.volumeA.priority = A.behaviour.volumePriority;
+                trackBinding.volumeB.weight = B.behaviour.volumeWeight;
+                trackBinding.volumeB.priority = B.behaviour.volumePriority;
                 SetVolumeValues(trackBinding.volumeProfileA, A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
                 SetVolumeValues(trackBinding.volumeProfileB, B, B.behaviour.bokehProps, B.behaviour.gaussianProps);
                 
@@ -429,6 +447,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         else
         {
             InitLookAt(A);
+            trackBinding.volumeA.weight = A.behaviour.volumeWeight;
+            trackBinding.volumeA.priority = A.behaviour.volumePriority;
             SetVolumeValues(trackBinding.volumeProfileA,A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
             trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
             trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
@@ -555,7 +575,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         SetLookAtTarget(lookAt, target);
         if (target != null)
         {
-
             lookAt.locked = clipInfo.behaviour.lookAtProps.Lock;
             lookAt.constraintActive = clipInfo.behaviour.lookAtProps.IsActive;
             lookAt.weight = clipInfo.behaviour.lookAtProps.Weight;
@@ -570,83 +589,50 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     }
 
 
-    private VolumeProfile GetVolumeProfile(ClipInfo clipInfo)
+   
+
+    private void SetVolumeValues(VolumeProfile applyTo,ClipInfo clipInfo,BokehProp bokehProp, GaussianProp gaussianProp)
     {
-        if(clipInfo.behaviour.volumeProfile == null)
+        DepthOfField dof;
+        applyTo.TryGet<DepthOfField>(out dof);
+        if (dof == null)
         {
-            return clipInfo.tmpVolumeProfile;
+            dof = applyTo.Add<DepthOfField>();
+            dof.focusDistance.overrideState = true;
+            dof.focalLength.overrideState = true;
+            dof.aperture.overrideState = true;
+            dof.bladeCount.overrideState = true;
+            dof.bladeCurvature.overrideState = true;
+            dof.bladeRotation.overrideState = true;
+            dof.gaussianStart.overrideState = true;
+            dof.gaussianEnd.overrideState = true;
+            dof.gaussianMaxRadius.overrideState = true;
+            dof.highQualitySampling.overrideState = true;
         }
-        else
-        {
-            return clipInfo.behaviour.volumeProfile;
-        }
+
+        dof.mode.value = clipInfo.behaviour.mode;
         
 
-
-
-    }
-
-    private void SetVolumeValues(VolumeProfile volumeProfile,ClipInfo clipInfo,BokehProp bokehProp, GaussianProp gaussianProp)
-    {
-
-        // if (clipInfo.behaviour.volumeProfile != null)
-        // {
-        //     CopyVolumeValues(volumeProfile, clipInfo);
-        // }
-        // else
-        // {
-            DepthOfField dof;
-            volumeProfile.TryGet<DepthOfField>(out dof);
-            if (dof == null) return;
-           
-            if (dof.mode.value == DepthOfFieldMode.Bokeh)
-            {
-                dof.focusDistance.value = bokehProp.focusDistance;
-                dof.focalLength.value = bokehProp.focalLength;
-                dof.aperture.value = bokehProp.aperture;
-                dof.bladeCount.value = bokehProp.bladeCount;
-                dof.bladeCurvature.value = bokehProp.bladeCurvature;
-                dof.bladeRotation.value = bokehProp.bladeRotation;
-            }
-
-            if (dof.mode.value == DepthOfFieldMode.Gaussian)
-            {
-                dof.gaussianStart.value = gaussianProp.start;
-                dof.gaussianEnd.value = gaussianProp.end;
-                dof.gaussianMaxRadius.value = gaussianProp.maxRadius;
-                dof.highQualitySampling.value = gaussianProp.highQualitySampling;
-            } 
-        // }
-
-           
-
-    }
-
-    private void CopyVolumeValues(VolumeProfile volumeProfile, ClipInfo clipInfo)
-    {
-        if (clipInfo.behaviour.volumeProfile != null)
+        if (dof.mode.value == DepthOfFieldMode.Bokeh)
         {
-            DepthOfField dof;
-            volumeProfile.TryGet<DepthOfField>(out dof);
-            
-            DepthOfField referenceDof;
-            clipInfo.behaviour.volumeProfile.TryGet<DepthOfField>(out referenceDof);
-            
-            if(dof != null && referenceDof != null)
-            {
-                dof.focusDistance.value = referenceDof.focusDistance.value;
-                dof.focalLength.value = referenceDof.focalLength.value;
-                dof.aperture.value = referenceDof.aperture.value;
-                dof.bladeCount.value = referenceDof.bladeCount.value;
-                dof.bladeCurvature.value = referenceDof.bladeCurvature.value;
-                dof.bladeRotation.value = referenceDof.bladeRotation.value;
-                dof.gaussianStart.value = referenceDof.gaussianStart.value;
-                dof.gaussianEnd.value = referenceDof.gaussianEnd.value;
-                dof.gaussianMaxRadius.value = referenceDof.gaussianMaxRadius.value;
-                dof.highQualitySampling.value = referenceDof.highQualitySampling.value;
-            }
+            dof.focusDistance.value = bokehProp.focusDistance;
+            dof.focalLength.value = bokehProp.focalLength;
+            dof.aperture.value = bokehProp.aperture;
+            dof.bladeCount.value = bokehProp.bladeCount;
+            dof.bladeCurvature.value = bokehProp.bladeCurvature;
+            dof.bladeRotation.value = bokehProp.bladeRotation;
         }
+
+        if (dof.mode.value == DepthOfFieldMode.Gaussian)
+        {
+            dof.gaussianStart.value = gaussianProp.start;
+            dof.gaussianEnd.value = gaussianProp.end;
+            dof.gaussianMaxRadius.value = gaussianProp.maxRadius;
+            dof.highQualitySampling.value = gaussianProp.highQualitySampling;
+        }
+        
     }
+
 
   
     public override void OnPlayableDestroy(Playable playable)

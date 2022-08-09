@@ -1,11 +1,13 @@
 #if  UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.Rendering;
 #if USE_URP
 
 using UnityEngine.Rendering.Universal;
@@ -28,10 +30,14 @@ public class CameraSwitcherControlEditor : Editor
 
     private List<Toggle> toggles = new List<Toggle>();
     private TemplateContainer container;
+    private VisualTreeAsset cameraVolumeProfileSettingElement;
+    private VisualElement cameraVolumeProfileSettingContainer;
+    private CameraSwitcherControl cameraSwitcherControl;
+    private Button removeCameraVolumeProfileButton;
     public override VisualElement CreateInspectorGUI(){
         
         
-        CameraSwitcherControl cameraSwitcherControl = target as CameraSwitcherControl;
+        cameraSwitcherControl = target as CameraSwitcherControl;
         var treeAsset = Resources.Load<VisualTreeAsset>("CameraSwitcherControlResources/TimelineCameraSwitcherUI");
         container = treeAsset.Instantiate();
         var createButton = container.Q<Button>("CreateSettingsButton");
@@ -53,8 +59,6 @@ public class CameraSwitcherControlEditor : Editor
             }
             cameraSwitcherPropsElement.SetEnabled(profileField.value != null);
             createButton.SetEnabled(profileField.value == null);
-
-
 
         });
         createButton.SetEnabled(cameraSwitcherControl.cameraSwitcherSettings == null);
@@ -98,8 +102,7 @@ public class CameraSwitcherControlEditor : Editor
             );
             cameraSwitcherControl.SaveProfile();
         });
-        
-        
+
         var resolutionListField=  container.Q<ScrollView>("ResolutionListField");
         var removeButton = container.Q<Button>("RemoveButton");
         if (cameraSwitcherControl.cameraSwitcherSettings != null)
@@ -146,71 +149,172 @@ public class CameraSwitcherControlEditor : Editor
         var outPutRenderTargetField = container.Q<ObjectField>("RenderTextureField");
         outPutRenderTargetField.objectType = typeof(RenderTexture);
 
-
-        // var dofControlField = container.Q<Toggle>("DofControlField");
-        // var volumeFiled = container.Q<ObjectField>("VolumeField");
-        // volumeFiled.objectType = typeof(VolumeProfile);
-        // var volume = volumeFiled.binding as VolumeProfile;
-        var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
-        // dofControlField.RegisterValueChangedCallback((evt => dofParameterElement.SetEnabled(evt.newValue)));
+        container.Q<VisualElement>("VolumeProfileSettingElement").Clear();
+        cameraVolumeProfileSettingElement = Resources.Load<VisualTreeAsset>("CameraSwitcherControlResources/CameraVolumeProfile");
+        cameraVolumeProfileSettingContainer = container.Q<ScrollView>("CameraVolumeProfileContainer");
         
-        var dofParameters = container.Q<VisualElement>("DoFParameterElement");
-        var dofMode = container.Q<EnumField>("DepthOfFieldMode");
-
-
-        // if (cameraSwitcherControl.volume != null)
-        // { 
-        //     volumeFiled.value = cameraSwitcherControl.volume;
-        //     cameraSwitcherControl.ChangeDofMode();
-        // }
-
-        CheckDofMode(cameraSwitcherControl);
-        
-        dofMode.RegisterValueChangedCallback((evt) =>
+        var volumeAObjectField =  container.Q<ObjectField>("VolumeAObjectField");
+        volumeAObjectField.objectType = typeof(Volume);
+        volumeAObjectField.RegisterValueChangedCallback((v) =>
         {
-            CheckDofMode(cameraSwitcherControl);
-            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.ChangeDofMode();
-            // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
-            
+            cameraSwitcherControl.volumeA = v.newValue as Volume;
         });
-        // volumeFiled.RegisterValueChangedCallback((evt) =>
-        // {
-        //     // cameraSwitcherControl.volume = evt.newValue as VolumeProfile;
-        //     CheckDofMode(cameraSwitcherControl);
-        //     // if(cameraSwitcherControl.volume != null) cameraSwitcherControl.SetBaseDofValues();
-        //     // dofParameters.SetEnabled(cameraSwitcherControl.volume != null);
-        //     
-        // });
-        
-        
-        
-        var bokeh = dofParameterElement.Q<Foldout>("Bokeh");
-        var gaussian = dofParameterElement.Q<Foldout>("Gaussian");
-        var physical = dofParameterElement.Q<PropertyField>("PhysicalCameraProps");
-        var manual = dofParameterElement.Q<PropertyField>("ManualRangeProps");
-
-        var applyProfileButton = dofParameterElement.Q<Button>("ApplyProfileButton");
-        applyProfileButton.clicked += () =>
+        var volumeBObjectField = container.Q<ObjectField>("VolumeBObjectField");
+        volumeBObjectField.objectType = typeof(Volume);
+        volumeBObjectField.RegisterValueChangedCallback((v) =>
         {
-            cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+            cameraSwitcherControl.volumeB = v.newValue as Volume;
+        });
+
+        if (cameraSwitcherControl.cameraVolumeProfileSettings.Count == 0)
+        {
+            var line = AddCameraVolumeProfileField(cameraVolumeProfileSettingElement.Instantiate(), null, null);
+            cameraVolumeProfileSettingContainer.Add(line);
+        }
+        else
+        {
+            foreach (var pair in cameraSwitcherControl.cameraVolumeProfileSettings)
+            {
+                var line = AddCameraVolumeProfileField(cameraVolumeProfileSettingElement.Instantiate(), pair.camera, pair.volumeProfile);
+                cameraVolumeProfileSettingContainer.Add(line);
+            }    
+        }
+        
+        
+        
+        var addVolumeSettingButton = container.Q<Button>("AddVolumeSettingButton");
+        addVolumeSettingButton.clicked += () =>
+        {
+            var line = AddCameraVolumeProfileField(cameraVolumeProfileSettingElement.Instantiate(), null, null);
+            cameraVolumeProfileSettingContainer.Add(line);
+            CheckCameraVolumeSettingRemovable();
         };
         
-        physical.RegisterValueChangeCallback((evt) =>
+        removeCameraVolumeProfileButton = container.Q<Button>("RemoveCameraVolumeSettingButton");
+        removeCameraVolumeProfileButton.clicked += () =>
         {
-            cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+            var removeTarget = new List<VisualElement>();
+            foreach (var child in cameraVolumeProfileSettingContainer.Children())
+            {
+                var toggle = child.Q<Toggle>();
+                if (toggle != null && toggle.value)
+                {
+                    removeTarget.Add(child);
+                }
+            }
+
+            foreach (var target in removeTarget)
+            {
+                cameraVolumeProfileSettingContainer.Remove(target);
+            }
+            CheckCameraVolumeSettingRemovable();
+        };
+        
+        
+        
+        CheckCameraVolumeSettingRemovable();
+        // container.Remove();
+        //
+        // container.Q<VisualElement>("VolumeProfileSettingElement").visible = false;
+        // var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
+        // var dofParameters = container.Q<VisualElement>("DoFParameterElement");
+        // var dofMode = container.Q<EnumField>("DepthOfFieldMode");
+        // CheckDofMode(cameraSwitcherControl);
+        // dofMode.RegisterValueChangedCallback((evt) =>
+        // {
+        //     CheckDofMode(cameraSwitcherControl);
+        //     
+        // });
+        //
+        // var bokeh = dofParameterElement.Q<Foldout>("Bokeh");
+        // var gaussian = dofParameterElement.Q<Foldout>("Gaussian");
+        // var physical = dofParameterElement.Q<PropertyField>("PhysicalCameraProps");
+        // var manual = dofParameterElement.Q<PropertyField>("ManualRangeProps");
+        //
+        // var applyProfileButton = container.Q<Button>("ApplyProfileButton");
+        // applyProfileButton.clicked += () =>
+        // {
+        //     cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+        // };
+        //
+        // physical.RegisterValueChangeCallback((evt) =>
+        // {
+        //     cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+        // });
+        //
+        // manual.RegisterValueChangeCallback((evt) =>
+        // {
+        //     cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+        // });
+        return container;
+    
+
+    }
+
+    public void UpdateCameraVolumeProfileData()
+    {
+        cameraSwitcherControl.cameraVolumeProfileSettings.Clear();
+        foreach (var child in cameraVolumeProfileSettingContainer.Children())
+        {
+            var camera = child.Q<ObjectField>("CameraField").value as Camera;
+            var profile  = child.Q<ObjectField>("VolumeProfileField").value as VolumeProfile;
+
+            
+            if(camera != null && profile != null)cameraSwitcherControl.cameraVolumeProfileSettings.Add(new CameraVolumeProfileSetting()
+            {
+                camera =  camera,
+                volumeProfile = profile
+            });
+            
+            
+        }
+        foreach (var pair in cameraSwitcherControl.cameraVolumeProfileSettings)
+        {
+            Debug.Log($"{pair.camera}, {pair.volumeProfile}");
+        }
+    }
+
+    private void CheckCameraVolumeSettingRemovable()
+    {
+        var isRemove = false;
+        foreach (var child in cameraVolumeProfileSettingContainer.Children())
+        {
+            var toggle = child.Q<Toggle>();
+            if(toggle!= null && toggle.value) isRemove = true;
+        }
+        
+        removeCameraVolumeProfileButton.SetEnabled(isRemove);
+    }
+
+    private VisualElement AddCameraVolumeProfileField(VisualElement cameraVolumeProfileSettingElement, Camera camera, VolumeProfile volumeProfile)
+    {
+        // var cameraVolumeProfileSetting = cameraVolumeProfileSettingElement.Instantiate();
+        var cameraField = cameraVolumeProfileSettingElement.Q<ObjectField>("CameraField");
+        var volumeProfileField = cameraVolumeProfileSettingElement.Q<ObjectField>("VolumeProfileField");
+        cameraField.objectType = typeof(Camera);
+        cameraField.value = camera;
+        volumeProfileField.objectType = typeof(VolumeProfile);
+        volumeProfileField.value = volumeProfile;
+        var toggle = cameraVolumeProfileSettingElement.Q<Toggle>();
+
+        toggle.RegisterValueChangedCallback(evt =>
+        {
+            CheckCameraVolumeSettingRemovable();
+        });
+
+        
+        cameraField.RegisterValueChangedCallback((evt) =>
+        {
+            UpdateCameraVolumeProfileData();
         });
         
-        manual.RegisterValueChangeCallback((evt) =>
+        volumeProfileField.RegisterValueChangedCallback((evt) =>
         {
-            cameraSwitcherControl.ApplyBaseDofValuesToVolumeProfile();
+            UpdateCameraVolumeProfileData();
         });
-        return container;
-        //targetを変換して対象を取得
-
-
-        //PrivateMethodを実行する用のボタン
-
-
+        
+        
+        return cameraVolumeProfileSettingElement;
     }
 
 

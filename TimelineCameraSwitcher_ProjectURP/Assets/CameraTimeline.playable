@@ -24,13 +24,14 @@ MonoBehaviour:
       roughness: 0.74
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 0}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 1.07
@@ -653,13 +654,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: 072ded02cac04014f9f8762660caadba, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 3.22
@@ -827,13 +829,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: bf930e4d7b2d82f488e61f31093bb954, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 0.06
@@ -1123,7 +1126,25 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1252,13 +1273,14 @@ MonoBehaviour:
       roughness: 1.19
       wiggleRange: {x: 4.83, y: 6.48}
     dofOverride: 1
-    volumeProfile: {fileID: 0}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 6.21
@@ -3047,13 +3069,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: bf930e4d7b2d82f488e61f31093bb954, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 1.3
@@ -3132,22 +3155,23 @@ MonoBehaviour:
       noiseScale: {x: 1, y: 1}
       roughness: 1
       wiggleRange: {x: 5, y: 5}
-    dofOverride: 1
-    volumeProfile: {fileID: 0}
+    dofOverride: 0
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 20.52
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
-      focusDistance: 9.45
-      focalLength: 130.3
-      aperture: 6.66
-      bladeCount: 4
-      bladeCurvature: 0.464
-      bladeRotation: 0
+      focusDistance: 8.6
+      focalLength: 1.8
+      aperture: 8.6
+      bladeCount: 7
+      bladeCurvature: 0.31
+      bladeRotation: 45
     gaussianProps:
       start: 0
       end: 0
@@ -3329,13 +3353,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: 072ded02cac04014f9f8762660caadba, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 5.65
@@ -3393,13 +3418,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: bf930e4d7b2d82f488e61f31093bb954, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 4.36
@@ -3624,13 +3650,14 @@ MonoBehaviour:
       roughness: 1
       wiggleRange: {x: 5, y: 5}
     dofOverride: 1
-    volumeProfile: {fileID: 11400000, guid: bf930e4d7b2d82f488e61f31093bb954, type: 2}
     mode: 2
     volumeLayerMaskIndex: 0
     volumeLayerListNames:
     - default
     - A
     - B
+    volumeWeight: 1
+    volumePriority: 0
     universalAdditionalCameraData: {fileID: 0}
     bokehProps:
       focusDistance: 0.66

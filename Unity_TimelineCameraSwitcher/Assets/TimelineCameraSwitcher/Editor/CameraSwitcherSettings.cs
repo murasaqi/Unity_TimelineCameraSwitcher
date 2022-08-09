@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 // using UnityEngine.Rendering.Universal;
 
 // [CreateAssetMenu(fileName = "CameraSwitcherSetting", menuName = "ScriptableObjects/CameraSwitcherControlSettings", order = 1)]
+
 public class CameraSwitcherSettings : ScriptableObject
 {
     // Start is called before the first frame update

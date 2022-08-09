@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: row; justify-content: space-between; width: 100%; align-items: stretch; padding-left: 4px; padding-right: 4px;">
+        <ui:Toggle name="ToggleField" style="min-width: auto; min-height: auto; width: 5%; justify-content: space-around; margin-left: 5px; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-direction: row;" />
+        <ui:VisualElement style="width: 90%; flex-direction: row; justify-content: space-between; min-width: auto; min-height: auto;">
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; width: 50%; padding-right: 10px;">
+                <ui:Label text="Camera" display-tooltip-when-elided="true" style="-unity-text-align: middle-left; width: auto;" />
+                <uie:ObjectField name="CameraField" style="width: 70%;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; justify-content: flex-start; width: 50%;">
+                <ui:Label text="Volume" display-tooltip-when-elided="true" style="justify-content: center; -unity-text-align: middle-left; max-width: none; min-width: auto;" />
+                <uie:ObjectField name="VolumeProfileField" style="width: 70%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

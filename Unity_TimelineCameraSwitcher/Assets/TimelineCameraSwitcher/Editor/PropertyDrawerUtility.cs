@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 public static class PropertyDrawerUtility
 {
-    public static void DrawDefaultGUI(Rect position, SerializedProperty property, GUIContent label)
+    public static Rect DrawDefaultGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         property = property.serializedObject.FindProperty(property.propertyPath);
         var fieldRect = position;
@@ -18,7 +18,7 @@ public static class PropertyDrawerUtility
             else {
                 // 子要素が無ければラベルだけ表示
                 EditorGUI.LabelField(fieldRect, label);
-                return;
+                return fieldRect;
             }
             fieldRect.y += EditorGUIUtility.singleLineHeight;
             fieldRect.y += EditorGUIUtility.standardVerticalSpacing;
@@ -50,6 +50,8 @@ public static class PropertyDrawerUtility
                 }
             }
         }
+
+        return fieldRect;
     }
 
     public static float GetDefaultPropertyHeight(SerializedProperty property, GUIContent label)

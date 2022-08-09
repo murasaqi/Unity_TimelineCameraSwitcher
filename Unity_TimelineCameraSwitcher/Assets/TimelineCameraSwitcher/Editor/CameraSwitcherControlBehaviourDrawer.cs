@@ -21,7 +21,9 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         SerializedProperty wiggleProp = property.FindPropertyRelative ("wiggle");
         SerializedProperty wigglePropsProp = property.FindPropertyRelative("wigglerProps");
         var dofModeProp = property.FindPropertyRelative ("mode");
-        var volumeProfileProp = property.FindPropertyRelative ("volumeProfile");
+        var volumeWeight = property.FindPropertyRelative ("volumeWeight");
+        var volumePriority = property.FindPropertyRelative ("volumePriority");
+        // var volume = property.FindPropertyRelative ("volume");
         SerializedProperty dofProp = property.FindPropertyRelative ("dofOverride");
         
         SerializedProperty volumeLayerMaskProps = property.FindPropertyRelative ("volumeLayerMask");
@@ -57,16 +59,22 @@ public class CameraSwitcherControlBehaviourDrawer :  PropertyDrawer
         EditorGUI.PropertyField (singleFieldRect, dofProp);
         position.y += EditorGUIUtility.singleLineHeight;
         singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
-        EditorGUI.PropertyField (singleFieldRect, volumeProfileProp);
-        
-        position.y += EditorGUIUtility.singleLineHeight;
-        
-        singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
-        EditorGUI.PropertyField (singleFieldRect, dofModeProp);
+        EditorGUI.PropertyField (singleFieldRect, volumeWeight);
         position.y += EditorGUIUtility.singleLineHeight;
 #if USE_URP        
         EditorGUI.BeginDisabledGroup(!dofProp.boolValue);
             EditorGUI.BeginDisabledGroup(dofModeProp.enumValueIndex != 2);
+            // singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*8);
+            // EditorGUI.PropertyField(singleFieldRect, volume, new GUIContent("Volume"));
+            // position.y += EditorGUIUtility.singleLineHeight * 100;
+            
+            singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
+            EditorGUI.PropertyField (singleFieldRect, volumePriority);
+            position.y += EditorGUIUtility.singleLineHeight;
+        
+            singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight*1);
+            EditorGUI.PropertyField (singleFieldRect, dofModeProp);
+            position.y += EditorGUIUtility.singleLineHeight;
 
             PropertyDrawerUtility.DrawDefaultGUI(position, bokehProp, new GUIContent("Bokeh"));
             position.y += bokehProp.isExpanded ? EditorGUIUtility.singleLineHeight * 8 : EditorGUIUtility.singleLineHeight;
