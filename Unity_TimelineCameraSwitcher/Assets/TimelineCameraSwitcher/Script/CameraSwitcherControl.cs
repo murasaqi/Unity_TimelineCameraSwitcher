@@ -192,8 +192,8 @@ public class CameraSwitcherControl : MonoBehaviour
     }
     private VolumeProfile CreateVolumeProfile()
     {
-        
-        var volumeProfile = new VolumeProfile();
+
+        var volumeProfile = ScriptableObject.CreateInstance<VolumeProfile>();
         volumeProfile.name = "ProfileA";
         var dof = volumeProfile.Add<DepthOfField>();
         InitDofValues(dof);
