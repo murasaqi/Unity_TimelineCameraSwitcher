@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
@@ -277,7 +278,7 @@ public class ManualRangeProps
 [Serializable]
 public class LookAtProps
 {
-    [SerializeField] public ExposedReference<Transform> target;
+    // [SerializeField] public Transform target;
     [SerializeField] public bool IsActive = false;
     [SerializeField, Range(0f,1f)] public float Weight;
     [SerializeField] public float Roll;
@@ -324,31 +325,33 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     // public Volume volume;
     [HideInInspector][SerializeField] public Camera camera;
     
-    [SerializeField] public bool wiggle;
-    [SerializeField] public WigglerProps wigglerProps;
-    [SerializeField] public bool dofOverride = false;
-    // [SerializeField] public VolumeProfile volumeProfile;
-    [HideInInspector] public DepthOfFieldMode mode;
-    [SerializeField] public int volumeLayerMaskIndex = 0;
-    [HideInInspector] public List<string> volumeLayerListNames = new List<string>(){"default",{"A"},{"B"}};
-    [SerializeField] [Range(0,1)]public float volumeWeight = 1;
-    [SerializeField] public float volumePriority = 0;
+//     [SerializeField] public bool wiggle;
+//     [SerializeField] public WigglerProps wigglerProps;
+//     [SerializeField] public bool dofOverride = false;
+//     // [SerializeField] public VolumeProfile volumeProfile;
+//     [HideInInspector] public DepthOfFieldMode mode;
+//     [SerializeField] public int volumeLayerMaskIndex = 0;
+//     [HideInInspector] public List<string> volumeLayerListNames = new List<string>(){"default",{"A"},{"B"}};
+//     [SerializeField] [Range(0,1)]public float volumeWeight = 1;
+//     [SerializeField] public float volumePriority = 0;
 #if USE_URP
-    [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
-    [SerializeField] public BokehProp bokehProps;
-    [SerializeField] public GaussianProp gaussianProps;
+     [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
+//     [SerializeField] public BokehProp bokehProps;
+//     [SerializeField] public GaussianProp gaussianProps;
 #elif USE_HDRP
-    [HideInInspector] public HDAdditionalCameraData hdAdditionalCameraData;
-
-    [SerializeField] public PhysicalCameraProps physicalCameraProps;
-    [SerializeField] public ManualRangeProps manualRangeProps;
+//     [HideInInspector] public HDAdditionalCameraData hdAdditionalCameraData;
+//
+//     [SerializeField] public PhysicalCameraProps physicalCameraProps;
+//     [SerializeField] public ManualRangeProps manualRangeProps;
 #endif
-    // [SerializeField] public bool fadeCurveOverride = false;
-    [SerializeField] public bool lookAt;
-    [SerializeField] public LookAtProps lookAtProps;
+//     // [SerializeField] public bool fadeCurveOverride = false;
+//     [SerializeField] public bool lookAt;
+//     [SerializeField] public LookAtProps lookAtProps;
+    [SerializeField] public Transform lookAtTarget;
+    [SerializeField] public LookAtConstraint lookAtConstraint;
 
-    [SerializeField] public bool colorBlend;
-    [SerializeField] public ColorBlendProps colorBlendProps;
+    // [SerializeField] public bool colorBlend;
+    // [SerializeField] public ColorBlendProps colorBlendProps;
     // public AnimationCurve fadeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
     public override void OnPlayableCreate (Playable playable)
     {

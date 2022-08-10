@@ -56,14 +56,14 @@ public class CameraSwitcherTimelineRenamer : MonoBehaviour
                 foreach (var clip in trackAsset.GetClips())
                 {
                     CameraSwitcherControlClip asset = clip.asset as CameraSwitcherControlClip;
-                    Debug.Log($"{asset.targetCamera.name},{clip.displayName}");
-                    if (cameraClipDic.ContainsKey(asset.targetCamera))
+                    Debug.Log($"{asset.template.camera.name},{clip.displayName}");
+                    if (cameraClipDic.ContainsKey(asset.template.camera))
                     {
-                        cameraClipDic[asset.targetCamera] = $"{cameraClipDic[asset.targetCamera]}_{clip.displayName}";
+                        cameraClipDic[asset.template.camera] = $"{cameraClipDic[asset.template.camera]}_{clip.displayName}";
                     }
                     else
                     {
-                        cameraClipDic.Add(asset.targetCamera, clip.displayName);
+                        cameraClipDic.Add(asset.template.camera, clip.displayName);
                     }
                 }
                    

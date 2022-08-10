@@ -18,45 +18,64 @@ using UnityEngine.Timeline;
 public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 {
     
-    [SerializeField] ExposedReference<Camera> camera;
-    [SerializeField] CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
-    // [SerializeField] public bool lookAt = false;
-    [HideInInspector] public Transform target;
+    [SerializeField] public ExposedReference<Camera> camera;
+    [HideInInspector] public CameraSwitcherControlBehaviour template = new CameraSwitcherControlBehaviour ();
 
-    [HideInInspector] public Volume volume;
+    [HideInInspector] public Volume defaultVolume;
+    // [HideInInspector] public Volume targetCameraVolumeB;
+    
+    [SerializeField] public bool wiggle = false;
+    [SerializeField] public WigglerProps wigglerProps = new WigglerProps();
+    
+   
+    [SerializeField] public bool lookAt = false;
+    [SerializeField] public ExposedReference<Transform> lookAtTarget;
+    [SerializeField] public LookAtProps lookAtProps = new LookAtProps();
+ 
+    
+    [SerializeField] public bool colorBlend;
+    [SerializeField] public ColorBlendProps colorBlendProps;
+    
+    [SerializeField] public bool volumeOverride = false;
+    [HideInInspector]public VolumeProfile volumeProfile;
 
-    [HideInInspector] public Camera targetCamera;
-
-    [HideInInspector] public LookAtConstraint lookAtConstraint;
+    private CameraSwitcherControlBehaviour clone;
+    private PlayableGraph playableGraph;
+    // [HideInInspector] public Camera resolvedCamera;
     // public CameraSwitcherControlBehaviour clone;
-    public DepthOfFieldMode mode
-    {
-        set
-        {
-            template.mode = value;
-        }
-    }
-
+    
+    
     public ClipCaps clipCaps
     {
         get { return ClipCaps.Blending; }
     }
 
+    public void Init()
+    {
+        clone.camera= camera.Resolve (playableGraph.GetResolver ());
+    }
+    
+    
+
     public override Playable CreatePlayable (PlayableGraph graph, GameObject owner)
     {
+        playableGraph = graph;
         var playable = ScriptPlayable<CameraSwitcherControlBehaviour>.Create (graph, template); 
-        var clone = playable.GetBehaviour ();
+        clone = playable.GetBehaviour ();
         clone.camera= camera.Resolve (graph.GetResolver ());
-        targetCamera = clone.camera;
-        target = clone.lookAtProps.target.Resolve(graph.GetResolver());
+        clone.lookAtTarget = lookAtTarget.Resolve(graph.GetResolver());
         if (clone.camera != null)
         {
-            volume = clone.camera.GetComponent<Volume>();
-            if (volume == null) volume = clone.camera.gameObject.AddComponent<Volume>();
+            
+            defaultVolume = clone.camera.GetComponent<Volume>();
+            if (defaultVolume == null)
+            {
+                defaultVolume = clone.camera.gameObject.AddComponent<Volume>();
+            }
 
-            lookAtConstraint = clone.camera.GetComponent<LookAtConstraint>();
-            if(lookAtConstraint == null) lookAtConstraint = clone.camera.gameObject.AddComponent<LookAtConstraint>();
-            lookAtConstraint.enabled = false;
+            clone.lookAtConstraint = clone.camera.GetComponent<LookAtConstraint>();
+            if(clone.lookAtConstraint == null) clone.lookAtConstraint = clone.camera.gameObject.AddComponent<LookAtConstraint>();
+            clone.lookAtConstraint.enabled = false;
         }
         
 
@@ -72,6 +91,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         return playable;
         
     }
+    
 
 
     private void OnDestroy()

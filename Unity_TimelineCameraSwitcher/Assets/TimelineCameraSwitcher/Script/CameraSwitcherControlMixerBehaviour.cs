@@ -26,28 +26,17 @@ internal class ClipInfo
     public float inputWeigh;
     public int clipIndex;
     public TimelineClip timelineClip;
-    // public VolumeProfile tmpVolumeProfile;
-
+    public VolumeProfile defaultProfile;
     public ClipInfo()
     {
-        // tmpVolumeProfile = new VolumeProfile();
-        // var dof = tmpVolumeProfile.Add<DepthOfField>();
-        // tmpVolumeProfile.name = Guid.NewGuid().ToString();
-        //
-        // dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
-        // dof.focusDistance.overrideState = true;
-        // dof.focalLength.overrideState = true;
-        // dof.aperture.overrideState = true;
-        // dof.bladeCount.overrideState = true;
-        // dof.bladeCurvature.overrideState = true;
-        // dof.bladeRotation.overrideState = true;
-        // dof.gaussianStart.overrideState = true;
-        // dof.gaussianEnd.overrideState = true;
-        // dof.gaussianMaxRadius.overrideState = true;
-        // dof.highQualitySampling.overrideState = true;
-        
 
         
+
+    }
+
+    public void Init()
+    {
+        clip.defaultVolume.profile = defaultProfile;
         
     }
 }
@@ -103,21 +92,26 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             var scriptPlayable = (ScriptPlayable<CameraSwitcherControlBehaviour>) playable.GetInput(i);
             var cameraSwitcherControlBehaviour = scriptPlayable.GetBehaviour();
             InitBehaviour(cameraSwitcherControlBehaviour);
+
+            var cameraSwitcherControlClip = clips[i].asset as CameraSwitcherControlClip;
+            // cameraSwitcherControlBehaviour.camera = cameraSwitcherControlClip.camera.Resolve(playable.GetGraph().GetResolver());
             clipInfos.Add(new ClipInfo()
             {
-                behaviour =     cameraSwitcherControlBehaviour,
-                clip = clips[i].asset as CameraSwitcherControlClip,
+                behaviour =     cameraSwitcherControlBehaviour, 
+                clip =cameraSwitcherControlClip,
                 inputWeigh = playable.GetInputWeight(i),
                 clipIndex = i,
-                timelineClip = clips[i]
+                timelineClip = clips[i],
+                defaultProfile = cameraVolumeProfiles.ContainsKey(cameraSwitcherControlBehaviour.camera) ? cameraVolumeProfiles[cameraSwitcherControlBehaviour.camera] : null
             });
-                
+            
+            clipInfos.Last().Init();
+
         }
     }
 
     private void Init(Playable playable)
     {
-        InitPlayables(playable);
         var timelineAsset = director.playableAsset as TimelineAsset;
         fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
         offsetStartTime = (1f / fps) * trackBinding.prerenderingFrameCount;
@@ -129,6 +123,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             cameraVolumeProfiles.Add(cameraVolumeProfileSetting.camera, cameraVolumeProfileSetting.volumeProfile);
         }
+        
+        InitPlayables(playable);
     }
     
 
@@ -176,9 +172,17 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
         foreach (var pair in clipInfos)
         {
+            if (pair.behaviour.camera == null)
+            {
+                Debug.LogWarning($"{pair.timelineClip.displayName} Camera is null");
+                continue;
+            }
+            pair.timelineClip.displayName = pair.behaviour.camera != null ? pair.behaviour.camera.name : "!CAMERA NULL";
             pair.behaviour.camera.enabled = false;
             pair.behaviour.camera.targetTexture = null;
-            pair.clip.lookAtConstraint.enabled = false;
+            pair.behaviour.lookAtConstraint.enabled = false;
+            pair.clip.defaultVolume.profile = cameraVolumeProfiles.ContainsKey(pair.behaviour.camera) ? cameraVolumeProfiles[pair.behaviour.camera] : null;
+            pair.clip.defaultVolume.enabled = false;
             // CheckVolumeProfile(pair);
         }
 
@@ -225,6 +229,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 {
                     var nextClipInfo = clipInfos[nextIndex];
                     nextClipInfo.inputWeigh = playable.GetInputWeight(nextIndex);
+                    
+                    
                     if (CheckClipOnFrame(nextClipInfo.timelineClip, trackBinding.prerenderingFrameCount * offsetStartTime))
                     {
                        B = nextClipInfo;
@@ -284,28 +290,49 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
     private void SetVolume()
     {
+        
         if (A != null && B != null)
         {
+            trackBinding.volumeA.profile = A.clip.volumeProfile;
+            trackBinding.volumeB.profile = B.clip.volumeProfile;
+            A.clip.defaultVolume.enabled = true;
+            B.clip.defaultVolume.enabled = true;
             if (A.behaviour.camera == B.behaviour.camera)
             {
-                trackBinding.volumeA.enabled = A.behaviour.dofOverride || B.behaviour.dofOverride;
-                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
+                
+                var isOverride = A.clip.volumeOverride || B.clip.volumeOverride;
+                if (isOverride)
+                {
+                    trackBinding.volumeA.gameObject.layer = trackBinding.cameraALayer;
+                    trackBinding.volumeB.gameObject.layer = trackBinding.cameraALayer;
+                    trackBinding.volumeA.enabled = true;
+                    trackBinding.volumeB.enabled = true;
+                    trackBinding.volumeA.weight = A.inputWeigh;
+                    trackBinding.volumeB.weight = B.inputWeigh;
+                }
             }
+            // AとBで違うカメラがBlendingされているとき
             else
             {
-                trackBinding.volumeA.enabled = A.behaviour.dofOverride;
-                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
-                
-                trackBinding.volumeB.enabled = B.behaviour.dofOverride;
-                B.clip.volume.profile = cameraVolumeProfiles.ContainsKey(B.behaviour.camera) ? cameraVolumeProfiles[B.behaviour.camera] : null;
+                trackBinding.volumeA.weight = 1f;
+                trackBinding.volumeB.weight = 1f;
+                trackBinding.volumeA.enabled = A.clip.volumeOverride;
+                trackBinding.volumeB.enabled = B.clip.volumeOverride;
+                trackBinding.volumeA.gameObject.layer = trackBinding.cameraALayer;
+                trackBinding.volumeB.gameObject.layer = trackBinding.cameraBLayer;
+
             }
             
         }else
         {
             if (A != null)
             {
-                trackBinding.volumeA.enabled = A.behaviour.dofOverride;
-                A.clip.volume.profile = cameraVolumeProfiles.ContainsKey(A.behaviour.camera) ? cameraVolumeProfiles[A.behaviour.camera] : null;
+                trackBinding.volumeA.enabled = A.clip.volumeOverride;
+                trackBinding.volumeA.profile = A.clip.volumeProfile;
+                trackBinding.volumeB.enabled = false;
+                trackBinding.volumeA.weight = 1f;   
+                
+                A.clip.defaultVolume.enabled = true;
             }
         }
     }
@@ -350,7 +377,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             if (A.behaviour.camera == B.behaviour.camera)
             {
-                if (A.behaviour.lookAt || B.behaviour.lookAt)
+                if (A.clip.lookAt|| B.clip.lookAt)
                 {
                     InitLookAt(A);
                     
@@ -389,16 +416,16 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             if (A.behaviour.camera == B.behaviour.camera)
             {
 
-                var useVolumeOverride = A.behaviour.dofOverride || B.behaviour.dofOverride;
+                var useVolumeOverride = A.clip.volumeOverride || B.clip.volumeOverride;
                 if (useVolumeOverride)
                 {
-                    var bokehProps = A.behaviour.bokehProps * A.inputWeigh+ (B.behaviour.bokehProps * (B.inputWeigh));
-                    var gaussianProps = A.behaviour.gaussianProps * A.inputWeigh + B.behaviour.gaussianProps * (B.inputWeigh);
-                    var weight= A.behaviour.volumeWeight * A.inputWeigh + B.behaviour.volumeWeight * (B.inputWeigh);
-                    var priority = A.behaviour.volumePriority * A.inputWeigh + B.behaviour.volumePriority * (B.inputWeigh);
-                    trackBinding.volumeA.priority = priority;
-                    trackBinding.volumeA.weight = weight;
-                    SetVolumeValues(trackBinding.volumeProfileA, A, bokehProps, gaussianProps);     
+                    // var bokehProps = A.clip.bokehProps * A.inputWeigh+ (B.clip.bokehProps * (B.inputWeigh));
+                    // var gaussianProps = A.clip.gaussianProps * A.inputWeigh + B.clip.gaussianProps * (B.inputWeigh);
+                    // var weight= A.clip.volumeWeight * A.inputWeigh + B.clip.volumeWeight * (B.inputWeigh);
+                    // var priority = A.clip.volumePriority * A.inputWeigh + B.clip.volumePriority * (B.inputWeigh);
+                    // trackBinding.volumeA.priority = priority;
+                    // trackBinding.volumeA.weight = weight;
+                    // SetVolumeValues(trackBinding.volumeProfileA, A, bokehProps, gaussianProps);     
                 }
                
                 
@@ -409,8 +436,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 trackBinding.material.SetVector("_WigglerValueA",BlendNoise(A,B));
                 trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
                 trackBinding.material.SetInt("_BlendB", GetBlendNum(B));
-                trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
-                trackBinding.material.SetColor("_MultiplyColorB", B.behaviour.colorBlendProps.color);
+                trackBinding.material.SetColor("_MultiplyColorA", A.clip.colorBlendProps.color);
+                trackBinding.material.SetColor("_MultiplyColorB", B.clip.colorBlendProps.color);
                 trackBinding.material.SetFloat("_CrossFade", 0);
                 
                 
@@ -418,25 +445,25 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             // AとBで違うカメラをDisolveしたいとき
             else
             {
-                trackBinding.volumeA.weight = A.behaviour.volumeWeight;
-                trackBinding.volumeA.priority = A.behaviour.volumePriority;
-                trackBinding.volumeB.weight = B.behaviour.volumeWeight;
-                trackBinding.volumeB.priority = B.behaviour.volumePriority;
-                SetVolumeValues(trackBinding.volumeProfileA, A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
-                SetVolumeValues(trackBinding.volumeProfileB, B, B.behaviour.bokehProps, B.behaviour.gaussianProps);
+                // trackBinding.volumeA.weight = A.clip.volumeWeight;
+                // trackBinding.volumeA.priority = A.clip.volumePriority;
+                // trackBinding.volumeB.weight = B.clip.volumeWeight;
+                // trackBinding.volumeB.priority = B.clip.volumePriority;
+                // SetVolumeValues(trackBinding.volumeProfileA, A, A.clip.bokehProps, A.clip.gaussianProps);
+                // SetVolumeValues(trackBinding.volumeProfileB, B, B.clip.bokehProps, B.clip.gaussianProps);
                 
                 InitLookAt(A);
                 InitLookAt(B);
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
                 trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
                 trackBinding.material.SetVector("_WigglerValueA",CalcNoise(A));
-                trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
+                trackBinding.material.SetColor("_MultiplyColorA", A.clip.colorBlendProps.color);
                 trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
                 
                 trackBinding.material.SetTexture("_TextureB", trackBinding.renderTextureB);
                 trackBinding.material.SetVector("_ClipSizeB", GetClopSize(B));
                 trackBinding.material.SetVector("_WigglerValueB",CalcNoise(B));
-                trackBinding.material.SetColor("_MultiplyColorB", B.behaviour.colorBlendProps.color);
+                trackBinding.material.SetColor("_MultiplyColorB", B.clip.colorBlendProps.color);
                 trackBinding.material.SetInt("_BlendB", GetBlendNum(B));
                 
                 trackBinding.material.SetFloat("_CrossFade", 1f-A.inputWeigh);
@@ -447,13 +474,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         else
         {
             InitLookAt(A);
-            trackBinding.volumeA.weight = A.behaviour.volumeWeight;
-            trackBinding.volumeA.priority = A.behaviour.volumePriority;
-            SetVolumeValues(trackBinding.volumeProfileA,A, A.behaviour.bokehProps, A.behaviour.gaussianProps);
+            // trackBinding.volumeA.weight = A.clip.volumeWeight;
+            // trackBinding.volumeA.priority = A.clip.volumePriority;
+            // SetVolumeValues(trackBinding.volumeProfileA,A, A.clip.bokehProps, A.clip.gaussianProps);
             trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
             trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
             trackBinding.material.SetVector("_WigglerValueA", CalcNoise(A));
-            trackBinding.material.SetColor("_MultiplyColorA", A.behaviour.colorBlendProps.color);
+            trackBinding.material.SetColor("_MultiplyColorA", A.clip.colorBlendProps.color);
             trackBinding.material.SetInt("_BlendA", GetBlendNum(A));
             trackBinding.material.SetFloat("_CrossFade", 0);
            
@@ -463,8 +490,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
     private int GetBlendNum(ClipInfo clipInfo)
     {
-        var blendNumB = clipInfo.behaviour.colorBlend ? 1 : 0;
-        blendNumB += blendNumB == 0 ? 0 : (int) clipInfo.behaviour.colorBlendProps.blendMode;
+        var blendNumB = clipInfo.clip.colorBlend ? 1 : 0;
+        blendNumB += blendNumB == 0 ? 0 : (int) clipInfo.clip.colorBlendProps.blendMode;
         return blendNumB;
     }
     
@@ -472,8 +499,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
    
     private Color BlendColor(ClipInfo A, ClipInfo B)
     {
-        var colorA = A.behaviour.colorBlendProps.color;
-        var colorB = B.behaviour.colorBlendProps.color;
+        var colorA = A.clip.colorBlendProps.color;
+        var colorB = B.clip.colorBlendProps.color;
         return Color.Lerp(colorA, colorB, A.inputWeigh);
     }
 
@@ -484,19 +511,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
     private Vector2 GetClopSize(ClipInfo clipInfo)
     {
-        return  clipInfo.behaviour.wiggle ? clipInfo.behaviour.wigglerProps.wiggleRange / 100f : Vector2.zero;
+        return  clipInfo.clip.wiggle ? clipInfo.clip.wigglerProps.wiggleRange / 100f : Vector2.zero;
     }
     private Vector2 CalcNoise(ClipInfo clipInfo)
     {
         var currentTime = (float) director.time;
-        if (!clipInfo.behaviour.wiggle) return Vector2.zero;
+        if (!clipInfo.clip.wiggle) return Vector2.zero;
         var wiggler = new Vector2(
-            (Mathf.PerlinNoise(clipInfo.behaviour.wigglerProps.noiseSeed.x * clipInfo.behaviour.wigglerProps.noiseScale.x,
-                 currentTime *clipInfo.behaviour. wigglerProps.roughness + clipInfo.behaviour.wigglerProps.noiseScale.y * clipInfo.behaviour.wigglerProps.noiseSeed.y) -
-             0.5f) * clipInfo.behaviour.wigglerProps.wiggleRange.x / 100f,
+            (Mathf.PerlinNoise(clipInfo.clip.wigglerProps.noiseSeed.x * clipInfo.clip.wigglerProps.noiseScale.x,
+                 currentTime *clipInfo.clip. wigglerProps.roughness + clipInfo.clip.wigglerProps.noiseScale.y * clipInfo.clip.wigglerProps.noiseSeed.y) -
+             0.5f) * clipInfo.clip.wigglerProps.wiggleRange.x / 100f,
             (Mathf.PerlinNoise(
-                clipInfo.behaviour.wigglerProps.noiseSeed.x * clipInfo.behaviour.wigglerProps.noiseScale.x + currentTime * clipInfo.behaviour.wigglerProps.roughness,
-                clipInfo.behaviour.wigglerProps.noiseScale.y * clipInfo.behaviour.wigglerProps.noiseSeed.y) - 0.5f) * clipInfo.behaviour.wigglerProps.wiggleRange.y /
+                clipInfo.clip.wigglerProps.noiseSeed.x * clipInfo.clip.wigglerProps.noiseScale.x + currentTime * clipInfo.clip.wigglerProps.roughness,
+                clipInfo.clip.wigglerProps.noiseScale.y * clipInfo.clip.wigglerProps.noiseSeed.y) - 0.5f) * clipInfo.clip.wigglerProps.wiggleRange.y /
             100f
         );
 
@@ -514,17 +541,17 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private void BlendLookAt()
     {
         var clipInfo = A.inputWeigh > 0.5f ? A : B; 
-        var target = clipInfo.clip.target;
-        SetLookAtTarget(A.clip.lookAtConstraint, target);
-        clipInfo.clip.lookAtConstraint.enabled = clipInfo.behaviour.lookAt;
-        var lookAt = clipInfo.clip.lookAtConstraint;
-        lookAt.locked = clipInfo.behaviour.lookAtProps.Lock;
-        lookAt.constraintActive = clipInfo.behaviour.lookAtProps.IsActive;
-        lookAt.weight = A.behaviour.lookAtProps.Weight * A.inputWeigh + B.behaviour.lookAtProps.Weight * (1f - A.inputWeigh);
-        lookAt.roll = A.behaviour.lookAtProps.Roll * A.inputWeigh + B.behaviour.lookAtProps.Roll * (1f - A.inputWeigh);
-        lookAt.useUpObject = A.behaviour.lookAtProps.UseUpObject;
-        lookAt.rotationOffset = A.behaviour.lookAtProps.RotationOffset * A.inputWeigh + B.behaviour.lookAtProps.RotationOffset * (1f - A.inputWeigh);
-        lookAt.rotationAtRest = A.behaviour.lookAtProps.RotationAtReset * A.inputWeigh + B.behaviour.lookAtProps.RotationAtReset * (1f - A.inputWeigh);
+        var target = clipInfo.behaviour.lookAtTarget;
+        SetLookAtTarget(A.behaviour.lookAtConstraint, target);
+        clipInfo.behaviour.lookAtConstraint.enabled = clipInfo.clip.lookAt;
+        var lookAt = clipInfo.behaviour.lookAtConstraint;
+        lookAt.locked = clipInfo.clip.lookAtProps.Lock;
+        lookAt.constraintActive = clipInfo.clip.lookAtProps.IsActive;
+        lookAt.weight = A.clip.lookAtProps.Weight * A.inputWeigh + B.clip.lookAtProps.Weight * (1f - A.inputWeigh);
+        lookAt.roll = A.clip.lookAtProps.Roll * A.inputWeigh + B.clip.lookAtProps.Roll * (1f - A.inputWeigh);
+        lookAt.useUpObject = A.clip.lookAtProps.UseUpObject;
+        lookAt.rotationOffset = A.clip.lookAtProps.RotationOffset * A.inputWeigh + B.clip.lookAtProps.RotationOffset * (1f - A.inputWeigh);
+        lookAt.rotationAtRest = A.clip.lookAtProps.RotationAtReset * A.inputWeigh + B.clip.lookAtProps.RotationAtReset * (1f - A.inputWeigh);
     }
 
 
@@ -569,19 +596,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
         
        
-        var target = clipInfo.clip.target;
-        clipInfo.clip.lookAtConstraint.enabled = clipInfo.behaviour.lookAt;
-        var lookAt = clipInfo.clip.lookAtConstraint;
+        var target = clipInfo.behaviour.lookAtTarget;
+        clipInfo.behaviour.lookAtConstraint.enabled = clipInfo.clip.lookAt;
+        var lookAt = clipInfo.behaviour.lookAtConstraint;
         SetLookAtTarget(lookAt, target);
         if (target != null)
         {
-            lookAt.locked = clipInfo.behaviour.lookAtProps.Lock;
-            lookAt.constraintActive = clipInfo.behaviour.lookAtProps.IsActive;
-            lookAt.weight = clipInfo.behaviour.lookAtProps.Weight;
-            lookAt.roll = clipInfo.behaviour.lookAtProps.Roll;
-            lookAt.useUpObject = clipInfo.behaviour.lookAtProps.UseUpObject;
-            lookAt.rotationOffset = clipInfo.behaviour.lookAtProps.RotationOffset;
-            lookAt.rotationAtRest = clipInfo.behaviour.lookAtProps.RotationAtReset;
+            lookAt.locked = clipInfo.clip.lookAtProps.Lock;
+            lookAt.constraintActive = clipInfo.clip.lookAtProps.IsActive;
+            lookAt.weight = clipInfo.clip.lookAtProps.Weight;
+            lookAt.roll = clipInfo.clip.lookAtProps.Roll;
+            lookAt.useUpObject = clipInfo.clip.lookAtProps.UseUpObject;
+            lookAt.rotationOffset = clipInfo.clip.lookAtProps.RotationOffset;
+            lookAt.rotationAtRest = clipInfo.clip.lookAtProps.RotationAtReset;
         }
        
             
@@ -610,7 +637,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             dof.highQualitySampling.overrideState = true;
         }
 
-        dof.mode.value = clipInfo.behaviour.mode;
+        // dof.mode.value = clipInfo.clip.mode;
         
 
         if (dof.mode.value == DepthOfFieldMode.Bokeh)

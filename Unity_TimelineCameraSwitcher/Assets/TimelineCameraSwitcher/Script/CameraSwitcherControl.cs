@@ -130,11 +130,7 @@ public class CameraSwitcherControl : MonoBehaviour
     private void Update()
     {
 
-        volumeA.gameObject.layer = cameraALayer;
-        volumeB.gameObject.layer = cameraBLayer;
 
-        volumeA.profile = volumeProfileA;
-        volumeB.profile = volumeProfileB;
 
 
         if(cameraSwitcherSettings == null) return;

@@ -100,7 +100,7 @@ Material:
     - _BlendA: 0
     - _BlendB: 0
     - _BumpScale: 1
-    - _CrossFade: 0
+    - _CrossFade: 0.93139195
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -113,7 +113,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayableDirectorTime: 3.5166667
+    - _PlayableDirectorTime: 10.216666
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
@@ -134,7 +134,7 @@ Material:
     - Vector2_8702686b77fe47e6bee7286a126dc481: {r: 0.45, g: 0.54, b: 0, a: 0}
     - Vector2_c2165efa7c654798af5072cb642b261e: {r: 0, g: 0, b: 0, a: 0}
     - _ClipSizeA: {r: 0, g: 0, b: 0, a: 0}
-    - _ClipSizeB: {r: 0.05, g: 0.05, b: 0, a: 0}
+    - _ClipSizeB: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MultiplyColorA: {r: 1, g: 1, b: 1, a: 1}
@@ -148,7 +148,7 @@ Material:
     - _RangeA: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _RangeB: {r: 0.0232, g: 0.024, b: 0, a: 0}
     - _WigglerValueA: {r: 0, g: 0, b: 0, a: 0}
-    - _WigglerValueB: {r: 0.003234145, g: -0.0017363459, b: 0, a: 0}
+    - _WigglerValueB: {r: 0, g: 0, b: 0, a: 0}
     - _noiseSeedA: {r: 0.46, g: 0.36, b: 0, a: 0}
     - _noiseSeedB: {r: 0.45, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
