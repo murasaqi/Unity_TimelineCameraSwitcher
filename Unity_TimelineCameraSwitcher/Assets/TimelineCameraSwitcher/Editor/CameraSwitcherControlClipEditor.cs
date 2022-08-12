@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
 using Cinemachine.Editor;
 using UnityEditor;
 using UnityEditor.Rendering;
@@ -255,3 +256,4 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     }
     
 }
+#endif

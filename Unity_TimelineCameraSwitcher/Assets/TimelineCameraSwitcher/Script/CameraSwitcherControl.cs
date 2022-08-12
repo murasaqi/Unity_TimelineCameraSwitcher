@@ -211,8 +211,10 @@ public class CameraSwitcherControl : MonoBehaviour
         dof.gaussianMaxRadius.overrideState = true;
         dof.highQualitySampling.overrideState = true;
     }
-    
 
+
+
+    
     public void ApplyProfileSettings()
     {
         if (cameraSwitcherSettings == null) return;
@@ -220,8 +222,11 @@ public class CameraSwitcherControl : MonoBehaviour
         renderTextureA = cameraSwitcherSettings.renderTextureA;
         renderTextureB = cameraSwitcherSettings.renderTextureB;
         resolution = cameraSwitcherSettings.resolution;
+#if UNITY_EDITOR
         EditorUtility.SetDirty(cameraSwitcherSettings);
         AssetDatabase.SaveAssets();
+    
+#endif
         // volume = cameraSwitcherSettings.volume;
     }
     
@@ -230,8 +235,10 @@ public class CameraSwitcherControl : MonoBehaviour
         if(cameraSwitcherSettings == null) return;
 
         cameraSwitcherSettings.resolution = resolution;
+#if UNITY_EDITOR
         EditorUtility.SetDirty(cameraSwitcherSettings);
         AssetDatabase.SaveAssets();
+#endif
         // cameraSwitcherSettings.volume = volume;
         
     }
