@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 #if UNITY_EDITOR
-using Cinemachine.Editor;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -20,6 +19,7 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     GUIContent m_CloneLabel;
     private void OnEnable()
     {
+       
         m_Target = target as CameraSwitcherControlClip;
         m_NewLabel = new GUIContent("New", "Create a new profile.");
         m_ProfileLabel = new GUIContent("Profile", "A reference to a profile asset");
@@ -27,14 +27,10 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
         m_Profile = serializedObject.FindProperty("volumeProfile");
         m_volumeOverride = serializedObject.FindProperty("volumeOverride");
     }
-    protected virtual void GetExcludedPropertiesInInspector(List<string> excluded)
-    {
-        excluded.Add("m_Script");
-    }
 
     private void OnDisable()
     {
-        
+        m_Target.isUpdateThumbnail = false;
         DestroyComponentEditors();
     }
 
@@ -45,6 +41,8 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     
     public override void OnInspectorGUI()
     {
+        m_Target.isUpdateThumbnail = true;
+        
         BeginInspector();
         
         EditorGUI.BeginChangeCheck();

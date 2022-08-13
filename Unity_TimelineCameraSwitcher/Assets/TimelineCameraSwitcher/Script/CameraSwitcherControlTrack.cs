@@ -9,7 +9,7 @@ using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 [Serializable]
-[TrackColor(0.8700427f, 0.4803044f, 0.790566f)]
+[TrackColor(0.6f, 0.4f, 1)]
 [TrackClipType(typeof(CameraSwitcherControlClip))]
 [TrackBindingType(typeof(CameraSwitcherControl))]
 public class CameraSwitcherControlTrack : TrackAsset
@@ -18,8 +18,11 @@ public class CameraSwitcherControlTrack : TrackAsset
   
     public ExposedReference<TextMeshProUGUI> cameraNamePreviewGUI; 
     public bool disableWiggler = false;
-    private CameraSwitcherControlMixerBehaviour _cameraSwitcherControlMixerBehaviour;
-    public List<Camera> cameras = new List<Camera>();
+    public bool drawThumbnail = true;
+    public Color thumbnailColor = Color.white;
+    public DrawTimeMode drawTimeMode = DrawTimeMode.Frame;
+    public Material thumbnailMaterial;
+    private CameraSwitcherControlMixerBehaviour cameraSwitcherControlMixerBehaviour;
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
         
@@ -27,9 +30,8 @@ public class CameraSwitcherControlTrack : TrackAsset
      
         var playable = ScriptPlayable<CameraSwitcherControlMixerBehaviour>.Create (graph, inputCount);
         var playableBehaviour = playable.GetBehaviour();
-        _cameraSwitcherControlMixerBehaviour = playableBehaviour;
-        
-        // InitTexturePools();
+        cameraSwitcherControlMixerBehaviour = playableBehaviour;
+
 
         if (playableDirector != null)
         {
@@ -44,16 +46,9 @@ public class CameraSwitcherControlTrack : TrackAsset
         return playable;    
     }
 
-    public void InitTexturePools()
-    {
-       KillRenderTexturePool();
-    }
 
-    public void KillRenderTexturePool()
+    private void OnEnable()
     {
-        // cameraSwitcherSettings.material.SetTexture("_TextureA",cameraSwitcherSettings.renderTextureA);
-        // cameraSwitcherSettings.material.SetTexture("_TextureB",cameraSwitcherSettings.renderTextureB);
-        // if(_cameraSwitcherControlMixerBehaviour !=null) _cameraSwitcherControlMixerBehaviour.ResetCameraTarget();
     }
 
     private void OnDestroy()
@@ -71,4 +66,12 @@ public enum DepthList
     AtLeast24_WidthStencil = 24,
 
 
+}
+
+public enum DrawTimeMode
+{
+    None,
+    Frame,
+    Duration,
+    TimeCode
 }

@@ -1,9 +1,11 @@
 ﻿#if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UIElements;
 
 [CustomTimelineEditor(typeof(CameraSwitcherControlClip))]
 public class CameraSwitcherControlClipTimelineEditor: ClipEditor
@@ -13,11 +15,24 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
     {
         static EditorInitialize()
         {
-            playableDirector = GetMasterDirector();  } 
+            playableDirector = GetMasterDirector();  
+           
+        } 
         static PlayableDirector GetMasterDirector() { return TimelineEditor.masterDirector; }
     }
 
+    public bool forceUpdate = false;
     private static PlayableDirector playableDirector;
+    private Texture2D thumbnailTexture2d;
+    private GUIStyle timeCodeStyle = new GUIStyle()
+    {
+        alignment = TextAnchor.MiddleLeft,
+        fontSize = 12,
+        normal = new GUIStyleState() { textColor = Color.gray },
+        richText = true,
+        stretchWidth = true,
+        wordWrap = true
+    };
     
     public override ClipDrawOptions GetClipOptions(TimelineClip clip)
     {
@@ -35,6 +50,7 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
                 else
                     clipOptions.tooltip = cam.name;
 
+                
             }
         }
         return clipOptions;
@@ -42,6 +58,7 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
     
     public override void OnClipChanged(TimelineClip clip)
     {
+        
         var cameraSwitcherControlClip = (CameraSwitcherControlClip)clip.asset;
         if (cameraSwitcherControlClip == null)
             return;
@@ -55,65 +72,72 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
                 cameraSwitcherControlClip.template.camera = cameraSwitcherControlClip.camera.Resolve(director);
                 if (cameraSwitcherControlClip.template.camera != null)
                     clip.displayName = cameraSwitcherControlClip.template.camera.name;
+                
             }
+            
+            
         }
     }
+    
+    
     
     public override void OnCreate(TimelineClip clip, TrackAsset track, TimelineClip clonedFrom)
     {
         base.OnCreate(clip, track, clonedFrom);
        
     }
-    GUIContent kUndamped = new GUIContent("UNCACHED");
-    
+
+    private static string GetTimeCode(double time, float fps, DrawTimeMode drawTimeMode)
+    {
+        var dateTime = TimeSpan.FromSeconds( time );
+        switch (drawTimeMode)
+        {
+            
+            case DrawTimeMode.Duration:
+                return String.Format("{0:0.##} s", time);
+            break;
+            case DrawTimeMode.Frame:
+                var frameCount = (int) (time * fps);
+                return $"{frameCount} f";
+            break;
+            case DrawTimeMode.TimeCode:
+                return dateTime.ToString(@"mm\:ss\:ff");
+            break;
+            
+        }
+        
+
+        return "";
+    }
+
     public override void DrawBackground(TimelineClip clip, ClipBackgroundRegion region)
     {
-        base.DrawBackground(clip, region);
+        
 
-        // if (Application.isPlaying || !TargetPositionCache.UseCache 
-        //     || TargetPositionCache.CacheMode == TargetPositionCache.Mode.Disabled
-        //     || TimelineEditor.inspectedDirector == null)
-        // {
-        //     return;
-        // }
-        //
-        // // Draw the cache indicator over the cached region
-        // var cacheRange = TargetPositionCache.CacheTimeRange;
-        // if (!cacheRange.IsEmpty)
-        // {
-        //     cacheRange.Start = (float)TimelineGlobalToLocalTime(cacheRange.Start);
-        //     cacheRange.End = (float)TimelineGlobalToLocalTime(cacheRange.End);
-        //
-        //     // Clip cacheRange to rect
-        //     float start = (float)region.startTime;
-        //     float end = (float)region.endTime;
-        //     cacheRange.Start = Mathf.Max((float)clip.ToLocalTime(cacheRange.Start), start);
-        //     cacheRange.End = Mathf.Min((float)clip.ToLocalTime(cacheRange.End), end);
-        //         
-        //     var r = region.position;
-        //     var a = r.x + r.width * (cacheRange.Start - start) / (end - start);
-        //     var b = r.x + r.width * (cacheRange.End - start) / (end - start);
-        //     r.x = a; r.width = b-a;
-        //     r.y += r.height; r.height *= 0.2f; r.y -= r.height;
-        //     EditorGUI.DrawRect(r, new Color(0.1f, 0.2f, 0.8f, 0.6f));
-        // }
-        //
-        // // Draw the "UNCACHED" indicator, if appropriate
-        // if (!TargetPositionCache.IsRecording && !TargetPositionCache.CurrentPlaybackTimeValid)
-        // {
-        //     var r = region.position;
-        //     var t = clip.ToLocalTime(TimelineGlobalToLocalTime(TimelineEditor.masterDirector.time));
-        //     var pos = r.x + r.width 
-        //         * (float)((t - region.startTime) / (region.endTime - region.startTime));
-        //
-        //     var s = EditorStyles.miniLabel.CalcSize(kUndamped);
-        //     r.width = s.x; r.x = pos - r.width / 2;
-        //     var c = GUI.color;
-        //     GUI.color = Color.yellow;
-        //     EditorGUI.LabelField(r, kUndamped, EditorStyles.miniLabel);
-        //     GUI.color = c;
-        // }
+        var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
+       var drawTimeMode = cameraSwitcherControlClip.drawTimeMode;
+       
+        if (cameraSwitcherControlClip.thumbnailRenderTexture != null)
+        {
+            GUI.DrawTexture(region.position, cameraSwitcherControlClip.thumbnailRenderTexture);
+        }
+
+        if (drawTimeMode != DrawTimeMode.None)
+        {
+            var fps = clip.GetParentTrack().timelineAsset.editorSettings.fps;
+            var paddingX = 10;
+            var r = new Rect(region.position.x+10,  region.position.y+region.position.height*0.4f, region.position.width, region.position.height);
+            GUI.Label(r,GetTimeCode(clip.start,fps,drawTimeMode),timeCodeStyle);
+
+        
+            var endFrameText = GetTimeCode(clip.end,fps,drawTimeMode);
+            r = new Rect(region.position.x+region.position.width-endFrameText.Length*8, region.position.y-region.position.height*0.4f, region.position.width, region.position.height);
+            GUI.Label(r,endFrameText,timeCodeStyle);    
+        }
+        
     }
+    
+    
     
 }
 

@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEditor;
+using UnityEditor.Timeline;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
+#if UNITY_EDITOR
+using UnityEditor.Timeline;
+#endif
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #endif
@@ -52,7 +57,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private StringBuilder _stringBuilder;
     private double offsetStartTime;
     private CameraSwitcherControl trackBinding;
-
     private List<ClipInfo> clipInfos = new List<ClipInfo>();
 
     private ClipInfo A;
@@ -63,7 +67,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private ClipInfo preB;
 
     public bool disableWiggler;
-    
+    private bool isUpdateThumbnail = false;
     private Dictionary<Camera, VolumeProfile> cameraVolumeProfiles = new Dictionary<Camera, VolumeProfile>();
 
     private void InitBehaviour(CameraSwitcherControlBehaviour cameraSwitcherControlBehaviour)
@@ -94,6 +98,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             InitBehaviour(cameraSwitcherControlBehaviour);
 
             var cameraSwitcherControlClip = clips[i].asset as CameraSwitcherControlClip;
+            if(cameraSwitcherControlClip.thumbnailRenderTexture == null) cameraSwitcherControlClip.InitThumbnail();
             // cameraSwitcherControlBehaviour.camera = cameraSwitcherControlClip.camera.Resolve(playable.GetGraph().GetResolver());
             clipInfos.Add(new ClipInfo()
             {
@@ -110,6 +115,38 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         }
     }
 
+
+
+    private void BlitThumbnail(ClipInfo clipInfo, RenderTexture source)
+    {
+        trackBinding.BlitThumbnail(clipInfo.clip.thumbnailRenderTexture,track.thumbnailColor);
+    }
+   
+
+    private void AsyncThumbnailTexture(RenderTexture rt, Texture2D texture2D)
+    {
+      
+        AsyncGPUReadback.Request(rt, 0, request => {
+            if (request.hasError)
+            {
+                // エラー
+                Debug.LogError("Error.");
+            }
+            else
+            {
+                texture2D = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+                // データを取得してTexture2Dに反映する
+                var data = request.GetData<Color32>();
+                texture2D.LoadRawTextureData(data);
+                texture2D.Apply();
+                
+                
+            }
+        });
+    }
+    
+    
+
     private void Init(Playable playable)
     {
         var timelineAsset = director.playableAsset as TimelineAsset;
@@ -125,6 +162,14 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         }
         
         InitPlayables(playable);
+
+        // if (thumbnailMat == null)
+        // {
+        //     thumbnailMat = Resources.Load<Material>("CameraSwitcherControlResources/ThumbnailMat");
+        //     thumbnailMat.SetTexture("_MainTex",trackBinding.renderTextureA);
+        //
+        // }
+        
     }
     
 
@@ -163,9 +208,10 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     }
 
 
-
+    
     private void Refresh()
     {
+
         A = null;
         B = null;
         _stringBuilder.Clear();
@@ -174,9 +220,12 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             if (pair.behaviour.camera == null)
             {
-                Debug.LogWarning($"{pair.timelineClip.displayName} Camera is null");
+               Debug.LogWarning($"{pair.timelineClip.displayName} Camera is null");
                 continue;
             }
+
+            if (pair.clip.isUpdateThumbnail) isUpdateThumbnail = true;
+            pair.clip.drawTimeMode = track.drawTimeMode;
             pair.timelineClip.displayName = pair.behaviour.camera != null ? pair.behaviour.camera.name : "!CAMERA NULL";
             pair.behaviour.camera.enabled = false;
             pair.behaviour.camera.targetTexture = null;
@@ -220,20 +269,22 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             var clipInfo = clipInfos[i];
             clipInfo.inputWeigh = playable.GetInputWeight(i);
-
+            
             if (CheckClipOnFrame(clipInfo.timelineClip))
             {
                 A = clipInfo;
+                
+               
                 var nextIndex = i + 1;
                 if (nextIndex < clipInfos.Count)
                 {
                     var nextClipInfo = clipInfos[nextIndex];
                     nextClipInfo.inputWeigh = playable.GetInputWeight(nextIndex);
                     
-                    
                     if (CheckClipOnFrame(nextClipInfo.timelineClip, trackBinding.prerenderingFrameCount * offsetStartTime))
                     {
                        B = nextClipInfo;
+                       
                   
                     }
                 }
@@ -256,6 +307,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         SetLayer();
         SetVolume();
         SetLookAt();
+        CheckThumbnail();
         BlendCameraAB(playable);
         if (cameraNamePreviewGUI != null) cameraNamePreviewGUI.text = _stringBuilder.ToString();
 
@@ -263,7 +315,36 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         preB = B;
 
     }
-   
+
+
+    private void CheckThumbnail()
+    {
+#if UNITY_EDITOR
+
+        if (track.drawThumbnail && isUpdateThumbnail)
+        {
+            if (A != null)
+            {
+                if (A.timelineClip.start+ A.timelineClip.duration* 0.4f < director.time && 
+                    director.time < A.timelineClip.start + A.timelineClip.duration*0.6f)
+                {
+                    if((int)(fps*director.time) %4 ==0)BlitThumbnail(A,A.behaviour.camera.targetTexture);
+                }         
+            }
+
+            if (B != null)
+            {
+                if (B.timelineClip.start+ B.timelineClip.duration* 0.4f < director.time && 
+                    director.time < B.timelineClip.start + B.timelineClip.duration*0.6f)
+                {
+                    if((int)(fps*director.time) %4 ==0)BlitThumbnail(B,B.behaviour.camera.targetTexture);
+                }     
+            }
+           
+        }
+                
+#endif
+    }
 
     private void SetLayer()
     {
@@ -416,19 +497,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             if (A.behaviour.camera == B.behaviour.camera)
             {
 
-                var useVolumeOverride = A.clip.volumeOverride || B.clip.volumeOverride;
-                if (useVolumeOverride)
-                {
-                    // var bokehProps = A.clip.bokehProps * A.inputWeigh+ (B.clip.bokehProps * (B.inputWeigh));
-                    // var gaussianProps = A.clip.gaussianProps * A.inputWeigh + B.clip.gaussianProps * (B.inputWeigh);
-                    // var weight= A.clip.volumeWeight * A.inputWeigh + B.clip.volumeWeight * (B.inputWeigh);
-                    // var priority = A.clip.volumePriority * A.inputWeigh + B.clip.volumePriority * (B.inputWeigh);
-                    // trackBinding.volumeA.priority = priority;
-                    // trackBinding.volumeA.weight = weight;
-                    // SetVolumeValues(trackBinding.volumeProfileA, A, bokehProps, gaussianProps);     
-                }
-               
-                
                 BlendLookAt();
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
                 trackBinding.material.SetTexture("_TextureB", trackBinding.renderTextureA);
@@ -445,13 +513,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             // AとBで違うカメラをDisolveしたいとき
             else
             {
-                // trackBinding.volumeA.weight = A.clip.volumeWeight;
-                // trackBinding.volumeA.priority = A.clip.volumePriority;
-                // trackBinding.volumeB.weight = B.clip.volumeWeight;
-                // trackBinding.volumeB.priority = B.clip.volumePriority;
-                // SetVolumeValues(trackBinding.volumeProfileA, A, A.clip.bokehProps, A.clip.gaussianProps);
-                // SetVolumeValues(trackBinding.volumeProfileB, B, B.clip.bokehProps, B.clip.gaussianProps);
-                
+              
                 InitLookAt(A);
                 InitLookAt(B);
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
@@ -465,7 +527,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 trackBinding.material.SetVector("_WigglerValueB",CalcNoise(B));
                 trackBinding.material.SetColor("_MultiplyColorB", B.clip.colorBlendProps.color);
                 trackBinding.material.SetInt("_BlendB", GetBlendNum(B));
-                
                 trackBinding.material.SetFloat("_CrossFade", 1f-A.inputWeigh);
                 
             }     
@@ -474,9 +535,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         else
         {
             InitLookAt(A);
-            // trackBinding.volumeA.weight = A.clip.volumeWeight;
-            // trackBinding.volumeA.priority = A.clip.volumePriority;
-            // SetVolumeValues(trackBinding.volumeProfileA,A, A.clip.bokehProps, A.clip.gaussianProps);
             trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
             trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
             trackBinding.material.SetVector("_WigglerValueA", CalcNoise(A));

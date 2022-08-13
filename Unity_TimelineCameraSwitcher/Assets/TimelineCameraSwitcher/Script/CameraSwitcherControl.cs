@@ -20,7 +20,7 @@ public class CameraVolumeProfileSetting
     public VolumeProfile volumeProfile;
 }
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class CameraSwitcherControl : MonoBehaviour
 {
     
@@ -373,6 +373,18 @@ public class CameraSwitcherControl : MonoBehaviour
         renderTextureB.Release();
         // cameraA = null;
         // cameraB = null;
+    }
+
+    private Material thumbnailsMaterial;
+    public void BlitThumbnail(RenderTexture target, Color color)
+    {
+        if(thumbnailsMaterial == null)
+        {
+            thumbnailsMaterial = Resources.Load<Material>("CameraSwitcherControlResources/ThumbnailMat");
+        }
+        thumbnailsMaterial.SetColor("_Color",color);
+        Graphics.Blit(renderTextureA, target, thumbnailsMaterial, thumbnailsMaterial.FindPass("Universal Forward"));
+
     }
 
     public void Blit()

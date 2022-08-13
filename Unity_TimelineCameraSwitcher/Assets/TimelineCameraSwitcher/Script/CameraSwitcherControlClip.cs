@@ -41,10 +41,11 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 
     private CameraSwitcherControlBehaviour clone;
     private PlayableGraph playableGraph;
-    // [HideInInspector] public Camera resolvedCamera;
-    // public CameraSwitcherControlBehaviour clone;
     
-    
+    [HideInInspector]public RenderTexture thumbnailRenderTexture;
+    [HideInInspector] public DrawTimeMode drawTimeMode = DrawTimeMode.Frame;
+
+    [HideInInspector]public bool isUpdateThumbnail = false;
     public ClipCaps clipCaps
     {
         get { return ClipCaps.Blending; }
@@ -54,6 +55,21 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     {
         clone.camera= camera.Resolve (playableGraph.GetResolver ());
     }
+
+    public void InitThumbnail(RenderTexture sorce = null)
+    {
+        if (sorce == null)
+        {
+            thumbnailRenderTexture = new RenderTexture (256, 256, 0, RenderTextureFormat.ARGB32);
+        }
+        else
+        {
+            thumbnailRenderTexture = new RenderTexture(256, 256, sorce.depth, sorce.format);
+        }
+    
+    }
+    
+    
     
     
 
@@ -96,6 +112,6 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
 
     private void OnDestroy()
     {
-        
+        DestroyImmediate(thumbnailRenderTexture);
     }
 }

@@ -100,7 +100,7 @@ Material:
     - _BlendA: 0
     - _BlendB: 0
     - _BumpScale: 1
-    - _CrossFade: 0.61897594
+    - _CrossFade: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0

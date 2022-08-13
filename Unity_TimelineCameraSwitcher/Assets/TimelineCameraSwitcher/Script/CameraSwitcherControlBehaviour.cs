@@ -322,6 +322,7 @@ public class ColorBlendProps
 [Serializable]
 public class CameraSwitcherControlBehaviour : PlayableBehaviour
 {
+    
     // public Volume volume;
     [HideInInspector][SerializeField] public Camera camera;
     

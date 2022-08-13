@@ -25,46 +25,6 @@ MonoBehaviour:
   clamp:
     m_OverrideState: 1
     m_Value: 0.028
---- !u!114 &-6818518268720912900
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 1
-  threshold:
-    m_OverrideState: 1
-    m_Value: 1.27
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.79
-  scatter:
-    m_OverrideState: 1
-    m_Value: 0.179
-  clamp:
-    m_OverrideState: 1
-    m_Value: 65472
-  tint:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  highQualityFiltering:
-    m_OverrideState: 1
-    m_Value: 1
-  skipIterations:
-    m_OverrideState: 1
-    m_Value: 8
-  dirtTexture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-  dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
 --- !u!114 &-5644612824934719901
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -336,7 +296,6 @@ MonoBehaviour:
   m_Name: Volume Profile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: -6818518268720912900}
   - {fileID: -5644612824934719901}
   - {fileID: 4887459483230633159}
   - {fileID: -7560587918558649056}
