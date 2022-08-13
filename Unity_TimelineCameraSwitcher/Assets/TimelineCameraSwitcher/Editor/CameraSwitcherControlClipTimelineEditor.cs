@@ -95,14 +95,12 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
             
             case DrawTimeMode.Duration:
                 return String.Format("{0:0.##} s", time);
-            break;
+            
             case DrawTimeMode.Frame:
                 var frameCount = (int) (time * fps);
                 return $"{frameCount} f";
-            break;
             case DrawTimeMode.TimeCode:
                 return dateTime.ToString(@"mm\:ss\:ff");
-            break;
             
         }
         
@@ -124,8 +122,7 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
 
         if (drawTimeMode != DrawTimeMode.None)
         {
-            var fps = clip.GetParentTrack().timelineAsset.editorSettings.fps;
-            var paddingX = 10;
+            var fps = (float)clip.GetParentTrack().timelineAsset.editorSettings.frameRate;
             var r = new Rect(region.position.x+10,  region.position.y+region.position.height*0.4f, region.position.width, region.position.height);
             GUI.Label(r,GetTimeCode(clip.start,fps,drawTimeMode),timeCodeStyle);
 

@@ -38,22 +38,10 @@ public class CameraSwitcherControl : MonoBehaviour
 
     [SerializeField] public Volume volumeA;
     [SerializeField] public Volume volumeB;
-    // HDAdditionalCameraData.
-    // [SerializeField] public layer
-    // [SerializeField] public bool dofControl = false;
+    
     [SerializeField] public LayerMask cameraALayer= new LayerMask();
     [SerializeField] public LayerMask cameraBLayer= new LayerMask();
-#if USE_URP
-    [SerializeField] public BokehProp bokehBaseValues= new BokehProp();
-    [SerializeField] public GaussianProp gaussianBaseValues= new GaussianProp();
-#elif USE_HDRP
-    // [SerializeField] public LayerMask volumeLayerMaskA = new LayerMask();
-    // [SerializeField] public LayerMask volumeLayerMaskB = new LayerMask();
-   
-    [SerializeField] public DepthOfFieldMode depthOfFieldMode;
-    [SerializeField] public PhysicalCameraProps physicalCameraBaseValues= new PhysicalCameraProps();
-    [SerializeField] public ManualRangeProps manualRangeBaseValues= new ManualRangeProps();
-#endif
+
   
     
    
@@ -145,23 +133,12 @@ public class CameraSwitcherControl : MonoBehaviour
             outputRawImage.texture = null;
         }
 
-        CheckVolumeProfile();
-        CheckTextureFormat();
+        // CheckTextureFormat();
         
-        Blit();
+        // Blit();
     }
 
-    public void CheckVolumeProfile()
-    {
-        if (volumeProfileA == null)
-        {
-            volumeProfileA = CreateVolumeProfile();
-        }
-        if (volumeProfileB == null)
-        {
-            volumeProfileB = CreateVolumeProfile();
-        }
-    }
+    
     public void CheckTextureFormat()
     {
         if(renderTextureA != null)CheckTextureFormat(renderTextureA);
@@ -186,33 +163,6 @@ public class CameraSwitcherControl : MonoBehaviour
     {
         return Instantiate(volumeProfile);
     }
-    private VolumeProfile CreateVolumeProfile()
-    {
-
-        var volumeProfile = ScriptableObject.CreateInstance<VolumeProfile>();
-        volumeProfile.name = "ProfileA";
-        var dof = volumeProfile.Add<DepthOfField>();
-        InitDofValues(dof);
-        return volumeProfile;
-
-    }
-
-    private void InitDofValues(DepthOfField dof)
-    {
-        dof.mode = new DepthOfFieldModeParameter( DepthOfFieldMode.Bokeh ,true);
-        dof.focusDistance.overrideState = true;
-        dof.focalLength.overrideState = true;
-        dof.aperture.overrideState = true;
-        dof.bladeCount.overrideState = true;
-        dof.bladeCurvature.overrideState = true;
-        dof.bladeRotation.overrideState = true;
-        dof.gaussianStart.overrideState = true;
-        dof.gaussianEnd.overrideState = true;
-        dof.gaussianMaxRadius.overrideState = true;
-        dof.highQualitySampling.overrideState = true;
-    }
-
-
 
     
     public void ApplyProfileSettings()
@@ -242,112 +192,8 @@ public class CameraSwitcherControl : MonoBehaviour
         // cameraSwitcherSettings.volume = volume;
         
     }
-    public void ChangeDofMode()
-    {
 
-
-        if (dof == null)
-        {
-            // if (volume != null) volume.TryGet<DepthOfField>(out dof);
-        }
-        
-        if(dof == null) return;
-#if USE_HDRP
-        dof.focusMode.value = depthOfFieldMode;
-#elif USE_URP
-        // dof.mode.value = depthOfFieldMode;
-#endif
-
-        // dof.quality.value = 0;
-    }
-    public void SetBaseDofValues()
-    {
-        // if(volume == null) return;
-        // cameraSwitcherSettings.volume = volume;
-        // volume.TryGet<DepthOfField>(out dof);
-#if USE_URP
-        
-        // bokehBaseValues.depthOfFieldMode = dof.mode.value;
-        bokehBaseValues.focusDistance = dof.focusDistance.value;
-        bokehBaseValues.focalLength = dof.focalLength.value;
-        bokehBaseValues.aperture = dof.aperture.value;
-        bokehBaseValues.bladeCount = dof.bladeCount.value;
-        bokehBaseValues.bladeRotation = dof.bladeRotation.value;
-        gaussianBaseValues.start = dof.gaussianStart.value;
-        gaussianBaseValues.end = dof.gaussianEnd.value;
-        gaussianBaseValues.maxRadius = dof.gaussianMaxRadius.value;
-        gaussianBaseValues.highQualitySampling = dof.highQualitySampling.value;
-#elif USE_HDRP
-        depthOfFieldMode = dof.focusMode.value;
-        physicalCameraBaseValues.focusDistanceMode = dof.focusDistanceMode.value;
-        physicalCameraBaseValues.focusDistance = dof.focusDistance.value;
-        physicalCameraBaseValues.nearBluer.maxRadius = dof.nearMaxBlur;
-        physicalCameraBaseValues.nearBluer.sampleCount = dof.nearSampleCount;
-        physicalCameraBaseValues.farBluer.maxRadius = dof.farMaxBlur;
-        physicalCameraBaseValues.farBluer.sampleCount = dof.farSampleCount;
-
-        manualRangeBaseValues.nearRange.start = dof.nearFocusStart.value;
-        manualRangeBaseValues.nearRange.end = dof.nearFocusEnd.value;
-        manualRangeBaseValues.farRange.start = dof.farFocusStart.value;
-        manualRangeBaseValues.farRange.end = dof.farFocusEnd.value;
-        manualRangeBaseValues.quality = (QualitySetting)Enum.ToObject(typeof(QualitySetting), dof.quality.value);
-        manualRangeBaseValues.nearBluer.maxRadius = dof.nearMaxBlur;
-        manualRangeBaseValues.nearBluer.sampleCount = dof.nearSampleCount;
-        manualRangeBaseValues.farBluer.maxRadius = dof.farMaxBlur;
-        manualRangeBaseValues.farBluer.sampleCount = dof.farSampleCount;
-        
-#endif
-    }
     
-     public void ApplyBaseDofValuesToVolumeProfile()
-    {
-        // Debug.Log("Update dof value");
-        // if(volume == null) return;
-        // volume.TryGet<DepthOfField>(out dof);
-#if USE_URP
-        
-        // bokehBaseValues.depthOfFieldMode = dof.mode.value;
-        // bokehBaseValues.focusDistance = dof.focusDistance.value;
-        // bokehBaseValues.focalLength = dof.focalLength.value;
-        // bokehBaseValues.aperture = dof.aperture.value;
-        // bokehBaseValues.bladeCount = dof.bladeCount.value;
-        // bokehBaseValues.bladeRotation = dof.bladeRotation.value;
-        // gaussianBaseValues.start = dof.gaussianStart.value;
-        // gaussianBaseValues.end = dof.gaussianEnd.value;
-        // gaussianBaseValues.maxRadius = dof.gaussianMaxRadius.value;
-        // gaussianBaseValues.highQualitySampling = dof.highQualitySampling.value;
-#elif USE_HDRP
-        
-        
-        dof.quality.value = (int) physicalCameraBaseValues.quality;
-        
-        
-        if (dof.focusMode == DepthOfFieldMode.UsePhysicalCamera)
-        {
-            dof.focusMode.value = depthOfFieldMode;
-            dof.focusDistanceMode.value = physicalCameraBaseValues.focusDistanceMode;
-            dof.focusDistance.value = physicalCameraBaseValues.focusDistance;
-            dof.nearMaxBlur = physicalCameraBaseValues.nearBluer.maxRadius;
-            dof.nearSampleCount = physicalCameraBaseValues.nearBluer.sampleCount;
-            dof.farMaxBlur = physicalCameraBaseValues.farBluer.maxRadius;
-            dof.farSampleCount = physicalCameraBaseValues.farBluer.sampleCount;    
-        }
-
-        if (dof.focusMode == DepthOfFieldMode.Manual)
-        {
-            dof.nearFocusStart.value = manualRangeBaseValues.nearRange.start;
-            dof.nearFocusEnd.value = manualRangeBaseValues.nearRange.end;
-            dof.farFocusStart.value = manualRangeBaseValues.farRange.start;
-            dof.farFocusEnd.value = manualRangeBaseValues.farRange.end;
-            dof.nearMaxBlur = manualRangeBaseValues.nearBluer.maxRadius;
-            dof.nearSampleCount = manualRangeBaseValues.nearBluer.sampleCount;
-            dof.farMaxBlur = manualRangeBaseValues.farBluer.maxRadius;
-            dof.farSampleCount = manualRangeBaseValues.farBluer.sampleCount;
-        }
-
-#endif
-    }
-
      private void InitRenderTexture(RenderTexture renderTexture)
      {
         

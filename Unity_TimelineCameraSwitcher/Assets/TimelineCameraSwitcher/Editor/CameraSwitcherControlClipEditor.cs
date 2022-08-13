@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Playables;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEditor.Timeline;
 
 [CustomEditor(typeof(CameraSwitcherControlClip))]
 public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlClip>
@@ -17,6 +19,9 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     VolumeComponentListEditor m_ComponentList;
     CameraSwitcherControlClip m_Target;
     GUIContent m_CloneLabel;
+    private SerializedProperty lookAt;
+    private SerializedProperty colorBlend;
+    private SerializedProperty wiggle;
     private void OnEnable()
     {
        
@@ -26,6 +31,9 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
         m_CloneLabel = new GUIContent("Clone", "Create a new profile and copy the content of the currently assigned profile.");
         m_Profile = serializedObject.FindProperty("volumeProfile");
         m_volumeOverride = serializedObject.FindProperty("volumeOverride");
+        lookAt = serializedObject.FindProperty("lookAt");
+        colorBlend = serializedObject.FindProperty("colorBlend");
+        wiggle = serializedObject.FindProperty("wiggle");
     }
 
     private void OnDisable()
@@ -41,27 +49,25 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     
     public override void OnInspectorGUI()
     {
-        m_Target.isUpdateThumbnail = true;
-        
+        //
         BeginInspector();
-        
+        //
         EditorGUI.BeginChangeCheck();
-            DrawProperties(serializedObject, mExcluded.ToArray());
+        DrawProperties(serializedObject, mExcluded.ToArray());
+
+        EditorGUI.BeginDisabledGroup(!m_volumeOverride.boolValue);
+        DrawProfileInspectorGUI();  
+        EditorGUI.EndDisabledGroup();
+        
+
         if (EditorGUI.EndChangeCheck())
         {
+            
             serializedObject.ApplyModifiedProperties();
             GUI.changed = false;
         }
         
-        EditorGUI.BeginDisabledGroup(!m_volumeOverride.boolValue);
-            EditorGUI.BeginChangeCheck();
-                DrawProfileInspectorGUI();  
-            EditorGUI.EndDisabledGroup();
-        if (EditorGUI.EndChangeCheck())
-        {
-            serializedObject.ApplyModifiedProperties();
-            GUI.changed = false;
-        }
+        m_Target.isUpdateThumbnail = true;
 
     }
 
@@ -78,7 +84,7 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
             {
                 if (iterator.name == "wigglerProps")
                 {
-                    EditorGUI.BeginDisabledGroup(!obj.FindProperty("wiggle").boolValue);
+                    EditorGUI.BeginDisabledGroup(!wiggle.boolValue);
                     EditorGUILayout.PropertyField(iterator, true);
                     EditorGUI.EndDisabledGroup();
                 }
@@ -90,25 +96,23 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
                     EditorGUILayout.PropertyField(iterator, true);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        serializedObject.ApplyModifiedProperties();
                         m_Target.Init();
-                        GUI.changed = false;
                     }
 
-                    EditorGUI.EndChangeCheck();
+                    
 
                 }
                 else
                 if(iterator.name == "lookAtTarget" || iterator.name =="lookAtProps")
                 {
-                    EditorGUI.BeginDisabledGroup(!obj.FindProperty("lookAt").boolValue);
+                    EditorGUI.BeginDisabledGroup(!lookAt.boolValue);
                     EditorGUILayout.PropertyField(iterator, true);
                     EditorGUI.EndDisabledGroup();
                 }
                 else
                 if(iterator.name == "colorBlendProps")
                 {
-                    EditorGUI.BeginDisabledGroup(!obj.FindProperty("colorBlend").boolValue);
+                    EditorGUI.BeginDisabledGroup(!colorBlend.boolValue);
                     EditorGUILayout.PropertyField(iterator, true);
                     EditorGUI.EndDisabledGroup();
                 }

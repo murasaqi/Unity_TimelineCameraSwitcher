@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ThumbnailMat
-  m_Shader: {fileID: -6465566751694194690, guid: f460d51e4642b7d4e81699c660a17f91,
-    type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: f460d51e4642b7d4e81699c660a17f91, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -129,7 +128,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.18704751, g: 0.7137316, b: 0.9150943, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FrameColor: {r: 0.46016318, g: 0.27506816, b: 0.7169812, a: 0}
     - _Offset: {r: 0.5, g: 0.5, b: 0, a: 0}

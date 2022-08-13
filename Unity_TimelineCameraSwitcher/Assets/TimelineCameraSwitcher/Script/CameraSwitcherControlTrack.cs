@@ -37,7 +37,7 @@ public class CameraSwitcherControlTrack : TrackAsset
         {
             playableBehaviour.cameraNamePreviewGUI = cameraNamePreviewGUI.Resolve(graph.GetResolver());
             playableBehaviour.director = playableDirector;
-            playableBehaviour.fps = timelineAsset.editorSettings.fps;
+            playableBehaviour.fps = (float)timelineAsset.editorSettings.frameRate;
             playableBehaviour.clips = GetClips().ToList();
             playableBehaviour.disableWiggler = disableWiggler;
             playableBehaviour.track = this;

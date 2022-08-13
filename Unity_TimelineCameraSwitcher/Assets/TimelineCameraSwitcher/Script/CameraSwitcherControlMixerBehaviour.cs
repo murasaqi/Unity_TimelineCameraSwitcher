@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
-using UnityEditor;
-using UnityEditor.Timeline;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
-#if UNITY_EDITOR
-using UnityEditor.Timeline;
-#endif
 #if USE_URP
 using UnityEngine.Rendering.Universal;
 #endif
@@ -98,8 +92,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             InitBehaviour(cameraSwitcherControlBehaviour);
 
             var cameraSwitcherControlClip = clips[i].asset as CameraSwitcherControlClip;
-            if(cameraSwitcherControlClip.thumbnailRenderTexture == null) cameraSwitcherControlClip.InitThumbnail();
-            // cameraSwitcherControlBehaviour.camera = cameraSwitcherControlClip.camera.Resolve(playable.GetGraph().GetResolver());
+            if(cameraSwitcherControlClip != null && cameraSwitcherControlClip.thumbnailRenderTexture == null) cameraSwitcherControlClip.InitThumbnail();
             clipInfos.Add(new ClipInfo()
             {
                 behaviour =     cameraSwitcherControlBehaviour, 
@@ -150,7 +143,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     private void Init(Playable playable)
     {
         var timelineAsset = director.playableAsset as TimelineAsset;
-        fps = timelineAsset != null ? timelineAsset.editorSettings.fps : 60;
+        fps = timelineAsset != null ? (float)timelineAsset.editorSettings.frameRate : 60;
         offsetStartTime = (1f / fps) * trackBinding.prerenderingFrameCount;
         firstFrameHappened = true;
         
@@ -308,7 +301,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         SetVolume();
         SetLookAt();
         CheckThumbnail();
-        BlendCameraAB(playable);
+        BlendCamera();
         if (cameraNamePreviewGUI != null) cameraNamePreviewGUI.text = _stringBuilder.ToString();
 
         preA = A;
@@ -321,23 +314,26 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     {
 #if UNITY_EDITOR
 
+        var startRange = 0.3f;
+        var endRange = 1f - startRange;
+        var step = 2;
         if (track.drawThumbnail && isUpdateThumbnail)
         {
             if (A != null)
             {
-                if (A.timelineClip.start+ A.timelineClip.duration* 0.4f < director.time && 
-                    director.time < A.timelineClip.start + A.timelineClip.duration*0.6f)
+                if (A.timelineClip.start+ A.timelineClip.duration* startRange < director.time && 
+                    director.time < A.timelineClip.start + A.timelineClip.duration*endRange)
                 {
-                    if((int)(fps*director.time) %4 ==0)BlitThumbnail(A,A.behaviour.camera.targetTexture);
+                    if((int)(fps*director.time) %step ==0)BlitThumbnail(A,A.behaviour.camera.targetTexture);
                 }         
             }
 
             if (B != null)
             {
-                if (B.timelineClip.start+ B.timelineClip.duration* 0.4f < director.time && 
-                    director.time < B.timelineClip.start + B.timelineClip.duration*0.6f)
+                if (B.timelineClip.start+ B.timelineClip.duration* startRange < director.time && 
+                    director.time < B.timelineClip.start + B.timelineClip.duration*endRange)
                 {
-                    if((int)(fps*director.time) %4 ==0)BlitThumbnail(B,B.behaviour.camera.targetTexture);
+                    if((int)(fps*director.time) %step ==0)BlitThumbnail(B,B.behaviour.camera.targetTexture);
                 }     
             }
            
@@ -484,7 +480,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
     
 
-    private void BlendCameraAB(Playable playable)
+    private void BlendCamera()
     {
         if(A == null && B == null) return;
         
@@ -553,14 +549,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         return blendNumB;
     }
     
-
-   
-    private Color BlendColor(ClipInfo A, ClipInfo B)
-    {
-        var colorA = A.clip.colorBlendProps.color;
-        var colorB = B.clip.colorBlendProps.color;
-        return Color.Lerp(colorA, colorB, A.inputWeigh);
-    }
 
     private Vector2 BlendClopSize(ClipInfo A, ClipInfo B)
     {
@@ -670,51 +658,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         }
        
             
-        
-    }
-
-
-   
-
-    private void SetVolumeValues(VolumeProfile applyTo,ClipInfo clipInfo,BokehProp bokehProp, GaussianProp gaussianProp)
-    {
-        DepthOfField dof;
-        applyTo.TryGet<DepthOfField>(out dof);
-        if (dof == null)
-        {
-            dof = applyTo.Add<DepthOfField>();
-            dof.focusDistance.overrideState = true;
-            dof.focalLength.overrideState = true;
-            dof.aperture.overrideState = true;
-            dof.bladeCount.overrideState = true;
-            dof.bladeCurvature.overrideState = true;
-            dof.bladeRotation.overrideState = true;
-            dof.gaussianStart.overrideState = true;
-            dof.gaussianEnd.overrideState = true;
-            dof.gaussianMaxRadius.overrideState = true;
-            dof.highQualitySampling.overrideState = true;
-        }
-
-        // dof.mode.value = clipInfo.clip.mode;
-        
-
-        if (dof.mode.value == DepthOfFieldMode.Bokeh)
-        {
-            dof.focusDistance.value = bokehProp.focusDistance;
-            dof.focalLength.value = bokehProp.focalLength;
-            dof.aperture.value = bokehProp.aperture;
-            dof.bladeCount.value = bokehProp.bladeCount;
-            dof.bladeCurvature.value = bokehProp.bladeCurvature;
-            dof.bladeRotation.value = bokehProp.bladeRotation;
-        }
-
-        if (dof.mode.value == DepthOfFieldMode.Gaussian)
-        {
-            dof.gaussianStart.value = gaussianProp.start;
-            dof.gaussianEnd.value = gaussianProp.end;
-            dof.gaussianMaxRadius.value = gaussianProp.maxRadius;
-            dof.highQualitySampling.value = gaussianProp.highQualitySampling;
-        }
         
     }
 

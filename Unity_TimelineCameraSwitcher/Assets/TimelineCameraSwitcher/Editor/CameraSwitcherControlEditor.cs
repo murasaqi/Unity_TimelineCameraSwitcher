@@ -55,7 +55,6 @@ public class CameraSwitcherControlEditor : Editor
             {
                 InitResolutionListButton(cameraSwitcherControl);
                 cameraSwitcherControl.ApplyProfileSettings();
-                cameraSwitcherControl.ChangeDofMode();
             }
             cameraSwitcherPropsElement.SetEnabled(profileField.value != null);
             createButton.SetEnabled(profileField.value == null);
@@ -155,12 +154,14 @@ public class CameraSwitcherControlEditor : Editor
         
         var volumeAObjectField =  container.Q<ObjectField>("VolumeAObjectField");
         volumeAObjectField.objectType = typeof(Volume);
+        volumeAObjectField.value = cameraSwitcherControl.volumeA;
         volumeAObjectField.RegisterValueChangedCallback((v) =>
         {
             cameraSwitcherControl.volumeA = v.newValue as Volume;
         });
         var volumeBObjectField = container.Q<ObjectField>("VolumeBObjectField");
         volumeBObjectField.objectType = typeof(Volume);
+        volumeBObjectField.value = cameraSwitcherControl.volumeB;
         volumeBObjectField.RegisterValueChangedCallback((v) =>
         {
             cameraSwitcherControl.volumeB = v.newValue as Volume;
@@ -272,6 +273,8 @@ public class CameraSwitcherControlEditor : Editor
         {
             Debug.Log($"{pair.camera}, {pair.volumeProfile}");
         }
+
+        Save();
     }
 
     private void CheckCameraVolumeSettingRemovable()
@@ -284,6 +287,8 @@ public class CameraSwitcherControlEditor : Editor
         }
         
         removeCameraVolumeProfileButton.SetEnabled(isRemove);
+        
+        Save();
     }
 
     private VisualElement AddCameraVolumeProfileField(VisualElement cameraVolumeProfileSettingElement, Camera camera, VolumeProfile volumeProfile)
@@ -312,11 +317,18 @@ public class CameraSwitcherControlEditor : Editor
         {
             UpdateCameraVolumeProfileData();
         });
-        
-        
+        Save();
         return cameraVolumeProfileSettingElement;
+        
+    
     }
 
+
+    internal void Save()
+    {
+        EditorUtility.SetDirty(target);
+        AssetDatabase.SaveAssets();
+    }
 
   
     private void CheckDofMode(CameraSwitcherControl cameraSwitcherControl)
