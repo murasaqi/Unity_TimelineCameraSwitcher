@@ -21,6 +21,30 @@ public class LookAtProps
     [SerializeField] public bool Lock = false;
     [SerializeField] public Vector3 RotationAtReset;
     [SerializeField] public Vector3 RotationOffset;
+
+    public LookAtProps(LookAtProps lookAtProps = null)
+    {
+        if(lookAtProps != null)
+        {
+            IsActive = lookAtProps.IsActive;
+            Weight = lookAtProps.Weight;
+            Roll = lookAtProps.Roll;
+            UseUpObject = lookAtProps.UseUpObject;
+            Lock = lookAtProps.Lock;
+            RotationAtReset = lookAtProps.RotationAtReset;
+            RotationOffset = lookAtProps.RotationOffset;
+        }
+        else
+        {
+            IsActive = false;
+            Weight = 0f;
+            Roll = 0f;
+            UseUpObject = false;
+            Lock = false;
+            RotationAtReset = Vector3.zero;
+            RotationOffset = Vector3.zero;
+        }
+    }
     // [SerializeField] public List<ExposedReference<Transform>> Sources;
 
 }
@@ -32,6 +56,25 @@ public class WigglerProps
     [SerializeField] public Vector2 noiseScale = Vector2.one;
     [SerializeField] public float roughness = 1;
     [SerializeField] public Vector2 wiggleRange  = new Vector2(5,5);
+
+    public WigglerProps(WigglerProps wigglerProps = null)
+    {
+        if (wigglerProps != null)
+        {
+            noiseSeed = wigglerProps.noiseSeed;
+            noiseScale = wigglerProps.noiseScale;
+            roughness = wigglerProps.roughness;
+            wiggleRange = wigglerProps.wiggleRange;
+            
+        }
+        else
+        {
+            noiseSeed = Vector2.one;
+            noiseScale = Vector2.one;
+            roughness = 1;
+            wiggleRange = new Vector2(5,5);
+        }
+    }
     // [SerializeField] public List<ExposedReference<Transform>> Sources;
 
 }
@@ -50,6 +93,20 @@ public class ColorBlendProps
 {
     public BlendMode blendMode = BlendMode.Multiply;
     public Color color = Color.white;
+
+    public ColorBlendProps(ColorBlendProps colorBlendProps = null)
+    {
+        if (colorBlendProps != null)
+        {
+            blendMode = colorBlendProps.blendMode;
+            color = colorBlendProps.color;
+        }
+        else
+        {
+            blendMode = BlendMode.Multiply;
+            color = Color.white;
+        }
+    }
 }
 
 

@@ -46,6 +46,9 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [HideInInspector] public DrawTimeMode drawTimeMode = DrawTimeMode.Frame;
 
     [HideInInspector]public bool isUpdateThumbnail = false;
+
+    [HideInInspector] public int clipIndex = 0;
+    [HideInInspector] public CameraSwitcherControlMixerBehaviour mixer;
     public ClipCaps clipCaps
     {
         get { return ClipCaps.Blending; }

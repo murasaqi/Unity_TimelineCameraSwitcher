@@ -24,8 +24,6 @@ using Toggle = UnityEngine.UIElements.Toggle;
 [CustomEditor(typeof(CameraSwitcherControl))]//拡張するクラスを指定
 public class CameraSwitcherControlEditor : Editor
 {
-
-
     
 
     private List<Toggle> toggles = new List<Toggle>();
@@ -322,8 +320,7 @@ public class CameraSwitcherControlEditor : Editor
         
     
     }
-
-
+    
     internal void Save()
     {
         EditorUtility.SetDirty(target);
@@ -331,37 +328,7 @@ public class CameraSwitcherControlEditor : Editor
     }
 
   
-    private void CheckDofMode(CameraSwitcherControl cameraSwitcherControl)
-    {
-        var dofParameterElement = container.Q<VisualElement>("DoFParameterElement");
-        var dofMode = dofParameterElement.Q<EnumField>("DepthOfFieldMode");
-        var bokeh = dofParameterElement.Q<Foldout>("Bokeh");
-        var gaussian = dofParameterElement.Q<Foldout>("Gaussian");
-        var physical = dofParameterElement.Q<PropertyField>("PhysicalCameraProps");
-        var manual = dofParameterElement.Q<PropertyField>("ManualRangeProps");
-
-#if USE_URP
-        // bokeh.value = cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh;
-        // bokeh.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Bokeh);    
-        // gaussian.value =cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian;
-        // gaussian.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Gaussian);
-        physical.visible = false;
-        manual.visible = false;
-
-#elif USE_HDRP
-        // bokeh.value = false;
-        // gaussian.value = false;
-        // bokeh.visible = false;
-        // gaussian.visible = false;
-        // bokeh.SetEnabled(false);
-        // gaussian.SetEnabled(false);
-        if(bokeh != null)bokeh.RemoveFromHierarchy();
-        if(gaussian != null)gaussian.RemoveFromHierarchy();
-        physical.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.UsePhysicalCamera);
-        manual.SetEnabled(cameraSwitcherControl.depthOfFieldMode == DepthOfFieldMode.Manual);
-#endif
-    }
-
+   
     private void InitResolutionListButton(CameraSwitcherControl cameraSwitcherControl)
     {
 

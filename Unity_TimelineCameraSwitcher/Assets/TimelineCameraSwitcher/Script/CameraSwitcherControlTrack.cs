@@ -15,7 +15,7 @@ using UnityEngine.UI;
 public class CameraSwitcherControlTrack : TrackAsset
 {
     
-  
+    
     public ExposedReference<TextMeshProUGUI> cameraNamePreviewGUI; 
     public bool disableWiggler = false;
     public bool drawThumbnail = true;

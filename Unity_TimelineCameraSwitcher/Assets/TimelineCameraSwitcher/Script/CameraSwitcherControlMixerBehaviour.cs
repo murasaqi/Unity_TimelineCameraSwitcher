@@ -115,28 +115,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         trackBinding.BlitThumbnail(clipInfo.clip.thumbnailRenderTexture,track.thumbnailColor);
     }
    
-
-    private void AsyncThumbnailTexture(RenderTexture rt, Texture2D texture2D)
-    {
-      
-        AsyncGPUReadback.Request(rt, 0, request => {
-            if (request.hasError)
-            {
-                // エラー
-                Debug.LogError("Error.");
-            }
-            else
-            {
-                texture2D = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
-                // データを取得してTexture2Dに反映する
-                var data = request.GetData<Color32>();
-                texture2D.LoadRawTextureData(data);
-                texture2D.Apply();
-                
-                
-            }
-        });
-    }
     
     
 
@@ -208,15 +186,18 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         A = null;
         B = null;
         _stringBuilder.Clear();
-        
+
+        var index = 0;
         foreach (var pair in clipInfos)
         {
+            
             if (pair.behaviour.camera == null)
             {
                Debug.LogWarning($"{pair.timelineClip.displayName} Camera is null");
                 continue;
             }
-
+            pair.clip.clipIndex = index;
+            pair.clip.mixer = this;
             if (pair.clip.isUpdateThumbnail) isUpdateThumbnail = true;
             pair.clip.drawTimeMode = track.drawTimeMode;
             pair.timelineClip.displayName = pair.behaviour.camera != null ? pair.behaviour.camera.name : "!CAMERA NULL";
@@ -225,6 +206,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             pair.behaviour.lookAtConstraint.enabled = false;
             pair.clip.defaultVolume.profile = cameraVolumeProfiles.ContainsKey(pair.behaviour.camera) ? cameraVolumeProfiles[pair.behaviour.camera] : null;
             pair.clip.defaultVolume.enabled = false;
+            index++;
             // CheckVolumeProfile(pair);
         }
 
@@ -246,16 +228,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
         Refresh();
 
-
-        if (cameraNamePreviewGUI != null)
-        {
-            var dateTime = new TimeSpan(0, 0, (int) director.time);
-            _stringBuilder.Append(dateTime.ToString(@"hh\:mm\:ss"));
-            _stringBuilder.Append(" ");
-            _stringBuilder.Append((Mathf.CeilToInt(fps * (float) director.time)));
-            _stringBuilder.Append("f ");
-
-        }
         
         
         for (int i = 0; i < clipInfos.Count; i++)
@@ -295,6 +267,21 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 B = preB;
             }
         }
+     
+        if (cameraNamePreviewGUI != null)
+        {
+            var dateTime = TimeSpan.FromSeconds(director.time);
+            _stringBuilder.Append($"[{trackBinding.gameObject.scene.name}]  ");
+            // _stringBuilder.Append(" ");
+            _stringBuilder.Append(dateTime.ToString(@"hh\:mm\:ss\:ff"));
+            _stringBuilder.Append(" ");
+            _stringBuilder.Append((Mathf.CeilToInt(fps * (float) director.time)));
+            _stringBuilder.Append("f  ");
+            if (A != null && A.behaviour.camera != null) _stringBuilder.Append($"{A.behaviour.camera.name}");
+            if (B != null && B.behaviour.camera != null) _stringBuilder.Append($" >> {B.behaviour.camera.name}");
+
+        }
+
         
         SetRenderTexture();
         SetLayer();
@@ -306,6 +293,41 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
 
         preA = A;
         preB = B;
+        
+     
+
+    }
+
+    public void SyncProfileSameCameraClip(int clipIndex)
+    {
+        
+        var referenceClipInfo = clipInfos[clipIndex];
+        
+        var camera = clipInfos[clipIndex].behaviour.camera;
+
+
+        foreach (var clipInfo in clipInfos)
+        {
+            if (clipInfo.behaviour.camera == camera)
+            {
+                CopyClipValues(referenceClipInfo, clipInfo);
+            }
+        }
+    }
+
+    private void CopyClipValues(ClipInfo from, ClipInfo to)
+    {
+        to.clip.wiggle = from.clip.wiggle;
+        to.clip.wigglerProps = new WigglerProps(from.clip.wigglerProps);
+        to.clip.colorBlend = from.clip.colorBlend;
+        to.clip.colorBlendProps = new ColorBlendProps(from.clip.colorBlendProps);
+        to.clip.lookAt = from.clip.lookAt;
+        to.clip.lookAtProps = new LookAtProps(from.clip.lookAtProps);
+        to.clip.lookAtTarget = from.clip.lookAtTarget;
+        to.clip.volumeOverride = from.clip.volumeOverride;
+        to.clip.volumeProfile = from.clip.volumeProfile;
+        
+        to.behaviour.lookAtTarget = from.behaviour.lookAtTarget;
 
     }
 
@@ -317,7 +339,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         var startRange = 0.3f;
         var endRange = 1f - startRange;
         var step = 2;
-        if (track.drawThumbnail && isUpdateThumbnail)
+        if (track.drawThumbnail)
         {
             if (A != null)
             {

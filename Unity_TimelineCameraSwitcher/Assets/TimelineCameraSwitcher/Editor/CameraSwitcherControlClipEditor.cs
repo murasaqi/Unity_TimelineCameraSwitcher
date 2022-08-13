@@ -51,6 +51,18 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     {
         //
         BeginInspector();
+        int buttonWidth = 160;
+        float indentOffset = EditorGUI.indentLevel * 15f;
+        var lineRect = GUILayoutUtility.GetRect(1, EditorGUIUtility.singleLineHeight);
+        var labelRect = new Rect(lineRect.x, lineRect.y, EditorGUIUtility.labelWidth - indentOffset, lineRect.height);
+        var fieldRect = new Rect(labelRect.xMax, lineRect.y, lineRect.width - labelRect.width - buttonWidth, lineRect.height);
+        var buttonNewRect = new Rect(fieldRect.xMax, lineRect.y, buttonWidth, lineRect.height);
+        if(GUI.Button(buttonNewRect,"Apply value same clip"))
+        {
+            m_Target.mixer.SyncProfileSameCameraClip(m_Target.clipIndex);
+        }
+            
+        EditorGUILayout.Space();
         //
         EditorGUI.BeginChangeCheck();
         DrawProperties(serializedObject, mExcluded.ToArray());
