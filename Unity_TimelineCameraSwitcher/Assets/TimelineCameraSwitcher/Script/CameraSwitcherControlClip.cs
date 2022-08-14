@@ -43,6 +43,7 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     private PlayableGraph playableGraph;
     
     [HideInInspector]public RenderTexture thumbnailRenderTexture;
+    [HideInInspector] public Texture2D bakedThumbnail;
     [HideInInspector] public DrawTimeMode drawTimeMode = DrawTimeMode.Frame;
 
     [HideInInspector]public bool isUpdateThumbnail = false;
@@ -111,7 +112,6 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         
     }
     
-
 
     private void OnDestroy()
     {
