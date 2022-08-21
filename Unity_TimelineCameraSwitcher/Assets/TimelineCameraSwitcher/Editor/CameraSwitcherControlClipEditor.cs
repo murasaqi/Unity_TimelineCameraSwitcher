@@ -34,6 +34,7 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
         lookAt = serializedObject.FindProperty("lookAt");
         colorBlend = serializedObject.FindProperty("colorBlend");
         wiggle = serializedObject.FindProperty("wiggle");
+        TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
     }
 
     private void OnDisable()
@@ -45,6 +46,7 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
     private void OnDestroy()
     {
         DestroyComponentEditors();
+        TimelineEditor.Refresh(RefreshReason.ContentsAddedOrRemoved);
     }
     
     public override void OnInspectorGUI()
@@ -77,6 +79,7 @@ public class CameraSwitcherControlClipEditor : BaseEditor<CameraSwitcherControlC
             
             serializedObject.ApplyModifiedProperties();
             GUI.changed = false;
+            TimelineEditor.Refresh(RefreshReason.ContentsModified);
         }
         
         m_Target.isUpdateThumbnail = true;

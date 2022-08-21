@@ -664,20 +664,19 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         
         
        
-        var target = clipInfo.behaviour.lookAtTarget;
-        clipInfo.behaviour.lookAtConstraint.enabled = clipInfo.clip.lookAt;
         var lookAt = clipInfo.behaviour.lookAtConstraint;
+        if(lookAt == null) return;
+        lookAt.enabled = clipInfo.clip.lookAt;
+        var target = clipInfo.behaviour.lookAtTarget;
         SetLookAtTarget(lookAt, target);
-        if (target != null)
-        {
-            lookAt.locked = clipInfo.clip.lookAtProps.Lock;
-            lookAt.constraintActive = clipInfo.clip.lookAtProps.IsActive;
-            lookAt.weight = clipInfo.clip.lookAtProps.Weight;
-            lookAt.roll = clipInfo.clip.lookAtProps.Roll;
-            lookAt.useUpObject = clipInfo.clip.lookAtProps.UseUpObject;
-            lookAt.rotationOffset = clipInfo.clip.lookAtProps.RotationOffset;
-            lookAt.rotationAtRest = clipInfo.clip.lookAtProps.RotationAtReset;
-        }
+        lookAt.locked = clipInfo.clip.lookAtProps.Lock;
+        lookAt.constraintActive = clipInfo.clip.lookAtProps.IsActive;
+        lookAt.weight = clipInfo.clip.lookAtProps.Weight;
+        lookAt.roll = clipInfo.clip.lookAtProps.Roll;
+        lookAt.useUpObject = clipInfo.clip.lookAtProps.UseUpObject;
+        lookAt.rotationOffset = clipInfo.clip.lookAtProps.RotationOffset;
+        lookAt.rotationAtRest = clipInfo.clip.lookAtProps.RotationAtReset;
+        
        
             
         
