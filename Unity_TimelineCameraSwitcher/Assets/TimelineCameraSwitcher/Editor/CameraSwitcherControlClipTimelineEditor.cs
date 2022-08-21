@@ -115,7 +115,9 @@ public class CameraSwitcherControlClipTimelineEditor: ClipEditor
         var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
        var drawTimeMode = cameraSwitcherControlClip.drawTimeMode;
        
-        if (cameraSwitcherControlClip.thumbnailRenderTexture != null && cameraSwitcherControlClip.mixer.track.drawThumbnail)
+       if(cameraSwitcherControlClip.mixer == null) return;
+       
+        if ( cameraSwitcherControlClip.mixer.track.drawThumbnail && cameraSwitcherControlClip.thumbnailRenderTexture != null)
         {
             GUI.DrawTexture(region.position, cameraSwitcherControlClip.thumbnailRenderTexture);
         }

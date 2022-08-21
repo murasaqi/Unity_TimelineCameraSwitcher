@@ -36,8 +36,8 @@ public class LookAtProps
         }
         else
         {
-            IsActive = false;
-            Weight = 0f;
+            IsActive = true;
+            Weight = 1f;
             Roll = 0f;
             UseUpObject = false;
             Lock = false;
