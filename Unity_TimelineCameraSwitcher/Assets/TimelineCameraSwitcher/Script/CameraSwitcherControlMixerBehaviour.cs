@@ -69,6 +69,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         if (cameraSwitcherControlBehaviour.camera != null)
         {
             cameraSwitcherControlBehaviour.camera.enabled = false;
+#if USE_URP
             cameraSwitcherControlBehaviour.universalAdditionalCameraData = cameraSwitcherControlBehaviour.camera.gameObject.GetComponent<UniversalAdditionalCameraData>();
             cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
                 cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask,
@@ -76,6 +77,17 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
                 cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask,
                 trackBinding.cameraBLayer);
+            }
+#elif USE_HDRP
+
+            cameraSwitcherControlBehaviour.hdAdditionalCameraData = cameraSwitcherControlBehaviour.camera.gameObject.GetComponent<HDAdditionalCameraData>();
+            cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask,
+                trackBinding.cameraALayer);
+            cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+                cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask,
+                trackBinding.cameraBLayer);
+#endif
             
         }
     }
@@ -164,8 +176,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         var camera = cameraSwitcherControlBehaviour.camera;
         
         camera.gameObject.layer = isA ? trackBinding.cameraALayer : trackBinding.cameraBLayer;
-        
-        
+
+#if USE_URP
         var volumeLayerMask = cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask;
         cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Add(
             volumeLayerMask,
@@ -174,6 +186,17 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
             volumeLayerMask,
             isA ? trackBinding.cameraBLayer : trackBinding.cameraALayer);
+#elif USE_HDRP
+        var volumeLayerMask = cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask;
+        cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask = Add(
+            volumeLayerMask,
+            isA ? trackBinding.cameraALayer : trackBinding.cameraBLayer);
+        volumeLayerMask = cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask;
+        cameraSwitcherControlBehaviour.hdAdditionalCameraData.volumeLayerMask = Remove(
+            volumeLayerMask,
+            isA ? trackBinding.cameraBLayer : trackBinding.cameraALayer);
+#endif
+        
         
         
     }

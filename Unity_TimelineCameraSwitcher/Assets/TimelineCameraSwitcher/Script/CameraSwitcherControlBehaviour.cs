@@ -120,6 +120,7 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
 #if USE_URP
      [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
 #elif USE_HDRP
+    [HideInInspector] public HDAdditionalCameraData hdAdditionalCameraData;
 #endif
     [SerializeField] public Transform lookAtTarget;
     [SerializeField] public LookAtConstraint lookAtConstraint;
