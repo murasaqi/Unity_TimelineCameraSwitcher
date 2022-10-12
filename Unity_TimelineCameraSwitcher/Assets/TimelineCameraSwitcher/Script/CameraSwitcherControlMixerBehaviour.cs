@@ -77,7 +77,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask = Remove(
                 cameraSwitcherControlBehaviour.universalAdditionalCameraData.volumeLayerMask,
                 trackBinding.cameraBLayer);
-            }
+            
 #elif USE_HDRP
 
             cameraSwitcherControlBehaviour.hdAdditionalCameraData = cameraSwitcherControlBehaviour.camera.gameObject.GetComponent<HDAdditionalCameraData>();
