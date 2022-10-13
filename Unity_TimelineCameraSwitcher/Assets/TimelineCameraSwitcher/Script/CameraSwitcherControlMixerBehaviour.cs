@@ -684,9 +684,6 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
     }
     private void InitLookAt(ClipInfo clipInfo)
     {
-        
-        
-       
         var lookAt = clipInfo.behaviour.lookAtConstraint;
         if(lookAt == null) return;
         lookAt.enabled = clipInfo.clip.lookAt;
@@ -699,10 +696,7 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         lookAt.useUpObject = clipInfo.clip.lookAtProps.UseUpObject;
         lookAt.rotationOffset = clipInfo.clip.lookAtProps.RotationOffset;
         lookAt.rotationAtRest = clipInfo.clip.lookAtProps.RotationAtReset;
-        
-       
-            
-        
+
     }
 
 

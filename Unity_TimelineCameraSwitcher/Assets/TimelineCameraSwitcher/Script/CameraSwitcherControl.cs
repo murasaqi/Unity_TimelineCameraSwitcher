@@ -135,7 +135,7 @@ public class CameraSwitcherControl : MonoBehaviour
 
         // CheckTextureFormat();
         
-        // Blit();
+        Blit();
     }
 
     
@@ -217,8 +217,6 @@ public class CameraSwitcherControl : MonoBehaviour
         
         renderTextureA.Release();
         renderTextureB.Release();
-        // cameraA = null;
-        // cameraB = null;
     }
 
     private Material thumbnailsMaterial;
