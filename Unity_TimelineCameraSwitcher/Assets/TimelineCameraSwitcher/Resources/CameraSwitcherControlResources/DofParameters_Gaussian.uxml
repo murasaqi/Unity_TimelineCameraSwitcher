@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="DoFParameterElement" style="padding-left: 0;">
+        <ui:Foldout text="Gaussian" name="Gaussian">
+            <uie:FloatField label="End" value="30" binding-path="end" name="EndField" />
+            <ui:Slider picking-mode="Ignore" label="Max Radius" value="1" high-value="1.5" name="MaxRadiusField" low-value="0.5" binding-path="maxRadius" />
+            <ui:Toggle label="HighQualitySampling" binding-path="highQualitySampling" name="highQualitySamplingField" />
+            <uie:FloatField label="Start" value="10" binding-path="start" name="StartField" text="Bokeh" />
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>

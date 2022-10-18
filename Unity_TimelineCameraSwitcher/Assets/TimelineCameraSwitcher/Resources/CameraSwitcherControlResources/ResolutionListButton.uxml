@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement style="padding-bottom: 0; margin-bottom: 4px;">
+        <ui:VisualElement name="CurrentResolution" style="flex-direction: row; justify-content: space-between; margin-top: 2px; margin-bottom: 2px;">
+            <ui:Label text="Resolution" display-tooltip-when-elided="true" style="-unity-text-align: middle-left;" />
+            <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                <ui:VisualElement name="Width" style="max-width: 50%; flex-direction: row; justify-content: flex-start; min-width: 80px;">
+                    <ui:Label text="Width" display-tooltip-when-elided="true" style="margin-right: 2px; margin-left: 2px; -unity-text-align: middle-left;" />
+                    <uie:IntegerField value="1920" name="WidthField" style="min-width: 80px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Height" style="max-width: 50%; flex-direction: row; justify-content: flex-start;">
+                    <ui:Label text="Hight" display-tooltip-when-elided="true" style="margin-left: 2px; margin-right: 2px; -unity-text-align: middle-left;" />
+                    <uie:IntegerField value="1080" name="HeightField" style="min-width: 100px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Foldout text="Resolution List" name="ResolutionList">
+            <ui:ScrollView name="ResolutionListField" usage-hints="DynamicTransform" style="height: 84px; margin-top: 4px; margin-bottom: 0; background-color: rgba(7, 7, 7, 0.33); padding-top: 4px; padding-bottom: 4px;" />
+            <ui:VisualElement name="CustomResolution" style="flex-direction: column; justify-content: center; margin-top: 4px;">
+                <ui:VisualElement style="flex-direction: row; justify-content: flex-end; margin-bottom: 4px;">
+                    <ui:Button text="Remove" display-tooltip-when-elided="true" name="RemoveButton" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-direction: row; justify-content: center;">
+                    <ui:VisualElement name="CustomWidth" style="max-width: none; flex-direction: row; justify-content: flex-start; min-width: auto;">
+                        <ui:Label text="Width" display-tooltip-when-elided="true" style="margin-right: 2px; margin-left: 2px; -unity-text-align: middle-left;" />
+                        <uie:IntegerField value="1920" name="CustomWidthField" style="min-width: 80px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="CustomHeight" style="max-width: none; flex-direction: row; justify-content: flex-start;">
+                        <ui:Label text="Hight" display-tooltip-when-elided="true" style="margin-left: 2px; margin-right: 2px; -unity-text-align: middle-left;" />
+                        <uie:IntegerField value="1080" name="CustomHeightField" style="min-width: 80px;" />
+                    </ui:VisualElement>
+                    <ui:Button text="Add" display-tooltip-when-elided="true" name="AddResolutionButton" style="min-width: 80px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>
