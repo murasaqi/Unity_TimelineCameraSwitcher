@@ -27,7 +27,15 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
     [SerializeField] public bool wiggle = false;
     [SerializeField] public WigglerProps wigglerProps = new WigglerProps();
     
-   
+    [SerializeField] public bool focalLength = false;
+    [SerializeField] public FocusProps focusProps = new FocusProps();
+    
+    [SerializeField] public bool position = false;
+    [SerializeField] public PositionProps positionProps = new PositionProps();
+    
+    [SerializeField] public bool rotation = false;
+    [SerializeField] public RotationProps rotationProps = new RotationProps();
+    
     [SerializeField] public bool lookAt = false;
     [SerializeField] public ExposedReference<Transform> lookAtTarget;
     [SerializeField] public LookAtProps lookAtProps = new LookAtProps();

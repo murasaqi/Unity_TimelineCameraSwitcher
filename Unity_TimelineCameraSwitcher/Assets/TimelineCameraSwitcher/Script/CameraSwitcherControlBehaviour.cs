@@ -79,6 +79,60 @@ public class WigglerProps
 
 }
 
+[Serializable] 
+public class FocusProps
+{
+    [SerializeField] public float focalLength = 30;
+    public FocusProps(FocusProps focusProps = null)
+    {
+        if (focusProps != null)
+        {
+            focalLength = focusProps.focalLength;
+        }
+        else
+        {
+            focalLength = 30;
+        }
+    }
+}
+
+
+[Serializable]
+public class PositionProps
+{
+    [SerializeField] public Vector3 position;
+    
+    public PositionProps(PositionProps positionProps = null)
+    {
+        if (positionProps != null)
+        {
+            position = positionProps.position;
+        }
+        else
+        {
+            position = Vector3.zero;
+        }
+    }   
+}
+
+[Serializable]
+public class RotationProps
+{
+    [SerializeField] public Vector3 rotation;
+  
+    public RotationProps(RotationProps rotationProps = null)
+    {
+        if (rotationProps != null)
+        {
+            rotation = rotationProps.rotation;
+        }
+        else
+        {
+            rotation = Vector3.zero;
+        }
+    }   
+}
+
 [Serializable]
 public enum BlendMode
 {
