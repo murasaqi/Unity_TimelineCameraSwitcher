@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-#if USE_URP
-using UnityEngine.Rendering.Universal;
-#elif USE_HDRP
+#if USE_HDRP
 using UnityEngine.Rendering.HighDefinition;
+#elif USE_URP
+using UnityEngine.Rendering.Universal;
 #endif
 
 [Serializable]
@@ -170,11 +170,11 @@ public class CameraSwitcherControlBehaviour : PlayableBehaviour
     
     // public Volume volume;
     [HideInInspector][SerializeField] public Camera camera;
-  
-#if USE_URP
-     [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
-#elif USE_HDRP
+
+#if USE_HDRP
     [HideInInspector] public HDAdditionalCameraData hdAdditionalCameraData;
+#elif USE_URP
+     [HideInInspector] public UniversalAdditionalCameraData universalAdditionalCameraData;
 #endif
     [SerializeField] public Transform lookAtTarget;
     [SerializeField] public LookAtConstraint lookAtConstraint;

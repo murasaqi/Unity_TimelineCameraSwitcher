@@ -4,11 +4,10 @@ using UnityEngine.Animations;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
-
-#if USE_URP
-using UnityEngine.Rendering.Universal;
-#elif USE_HDRP
+#if USE_HDRP
 using UnityEngine.Rendering.HighDefinition;
+#elif USE_URP
+using UnityEngine.Rendering.Universal;
 #endif
 
 using UnityEngine.Timeline;
@@ -110,8 +109,6 @@ public class CameraSwitcherControlClip : PlayableAsset, ITimelineClipAsset
         
         
 #if USE_HDRP
-        // clone.physicalCameraProps.focusLength = clone.camera.focalLength;
-        // clone.camera.focusDi
         if(clone.camera != null)template.hdAdditionalCameraData = clone.camera.GetComponent<HDAdditionalCameraData>();
 #elif USE_URP
         if(clone.camera != null)template.universalAdditionalCameraData = clone.camera.GetComponent<UniversalAdditionalCameraData>();
