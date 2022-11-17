@@ -539,6 +539,9 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             {
 
                 BlendLookAt();
+                A.behaviour.camera.focalLength = A.clip.focalLength ? (A.clip.focusProps.focalLength* A.inputWeigh + B.clip.focusProps.focalLength * B.inputWeigh ): A.behaviour.camera.focalLength;
+                A.behaviour.camera.transform.localPosition = A.clip.position ? (A.clip.positionProps.position * A.inputWeigh + B.clip.positionProps.position * B.inputWeigh) : A.behaviour.camera.transform.localPosition;
+                A.behaviour.camera.transform.localEulerAngles = A.clip.rotation ? (A.clip.rotationProps.rotation * A.inputWeigh + B.clip.rotationProps.rotation * B.inputWeigh) : A.behaviour.camera.transform.localEulerAngles;
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
                 trackBinding.material.SetTexture("_TextureB", trackBinding.renderTextureA);
                 trackBinding.material.SetVector("_ClipSizeA", BlendClopSize(A,B));
@@ -557,6 +560,13 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
               
                 InitLookAt(A);
                 InitLookAt(B);
+                A.behaviour.camera.focalLength = A.clip.focalLength ? A.clip.focusProps.focalLength : A.behaviour.camera.focalLength;
+                B.behaviour.camera.focalLength = B.clip.focalLength ? B.clip.focusProps.focalLength : B.behaviour.camera.focalLength;
+                A.behaviour.camera.transform.localPosition = A.clip.position ? A.clip.positionProps.position : A.behaviour.camera.transform.localPosition;
+                A.behaviour.camera.transform.localEulerAngles = A.clip.rotation ? A.clip.rotationProps.rotation : A.behaviour.camera.transform.localEulerAngles;
+                B.behaviour.camera.transform.localPosition = B.clip.position ? B.clip.positionProps.position : B.behaviour.camera.transform.localPosition;
+                B.behaviour.camera.transform.localEulerAngles = B.clip.rotation ? B.clip.rotationProps.rotation : B.behaviour.camera.transform.localEulerAngles;
+                
                 trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
                 trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
                 trackBinding.material.SetVector("_WigglerValueA",CalcNoise(A));
@@ -576,6 +586,10 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         else
         {
             InitLookAt(A);
+                
+            A.behaviour.camera.focalLength = A.clip.focalLength ? A.clip.focusProps.focalLength : A.behaviour.camera.focalLength;
+            A.behaviour.camera.transform.localPosition = A.clip.position ? A.clip.positionProps.position : A.behaviour.camera.transform.localPosition;
+            A.behaviour.camera.transform.localEulerAngles = A.clip.rotation ? A.clip.rotationProps.rotation : A.behaviour.camera.transform.localEulerAngles;
             trackBinding.material.SetTexture("_TextureA", trackBinding.renderTextureA);
             trackBinding.material.SetVector("_ClipSizeA", GetClopSize(A));
             trackBinding.material.SetVector("_WigglerValueA", CalcNoise(A));
