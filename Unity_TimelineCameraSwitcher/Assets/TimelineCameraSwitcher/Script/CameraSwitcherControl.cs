@@ -19,14 +19,17 @@ public class CameraVolumeProfileSetting
     public Camera camera;
     public VolumeProfile volumeProfile;
 }
-
+/*
+ * だいたい欲しい機能は詰め込んだので、あとは役割ごとにわける
+ * カメラのDissolveはDissolveのみで、VolumeのBlendingはBlendingのみで機能をセレクトできるようにする
+ */
 [ExecuteInEditMode]
 public class CameraSwitcherControl : MonoBehaviour
 {
     
     
     [SerializeField] public CameraSwitcherSettings cameraSwitcherSettings = null;
-    // [SerializeField] public VolumeProfile volume;
+    
     [SerializeField] public RawImage outputRawImage;
     [SerializeField] public RenderTexture outPutRenderTarget;
     [SerializeField] public Vector2Int resolution = new Vector2Int(1920,1080);
@@ -69,15 +72,10 @@ public class CameraSwitcherControl : MonoBehaviour
     #if UNITY_EDITOR
     [MenuItem("GameObject/Camera Switcher Control/Camera Switcher Control", false, 10)]
     static void CreateCameraSwitcherControl(MenuCommand command) {
-        //　空のゲームオブジェクト作成
         GameObject obj = new GameObject ("Camera Switcher Control");
-        //　ゲームオブジェクトの親の設定
         GameObjectUtility.SetParentAndAlign (obj, command.context as GameObject);
-        //　Undo操作を加える(Ctrl+Zキーの操作に加える）
         Undo.RegisterCreatedObjectUndo (obj, "Create " + obj.name);
-        //　初期位置を設定
         var cameraSwitcherControl =  obj.AddComponent<CameraSwitcherControl>();
-        //　作成したゲームオブジェクトを選択状態にする
         Selection.activeObject = obj;
 
 

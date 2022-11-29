@@ -451,8 +451,11 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             {
                 trackBinding.volumeA.enabled = A.clip.volumeOverride;
                 trackBinding.volumeA.profile = A.clip.volumeProfile;
-                trackBinding.volumeB.enabled = false;
+                trackBinding.volumeB.gameObject.layer = trackBinding.cameraBLayer;
+                trackBinding.volumeB.enabled = true;
+                trackBinding.volumeB.weight = 0f;
                 trackBinding.volumeA.weight = 1f;   
+                
                 
                 A.clip.defaultVolume.enabled = true;
             }
