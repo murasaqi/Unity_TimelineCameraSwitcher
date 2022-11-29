@@ -15,7 +15,7 @@ Cinemasceneとの併用も可能です。
 
 ## インストールガイド  
 ### UnityPackage版
-[UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.3)
+[UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.6)
 
 ### PackageManager版
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/packageInstall.png)  
@@ -26,7 +26,7 @@ Add package from git URL
 ```
 を選択し
 ```
-https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.4
+https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.6
 ```
 を入力することで追加できます
 
@@ -36,7 +36,7 @@ dependenciesに一行追加してください。
 ```
 {
 "dependencies": {
-    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.4",
+    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.6",
     ...
 }
 ```
