@@ -26,7 +26,7 @@ Add package from git URL
 ```
 を選択し
 ```
-https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.7
+https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Unity_TimelineCameraSwitcher/Assets/TimelineCameraSwitcher#v0.1.7
 ```
 を入力することで追加できます
 
@@ -36,7 +36,7 @@ dependenciesに一行追加してください。
 ```
 {
 "dependencies": {
-    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.7",
+    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Unity_TimelineCameraSwitcher/Assets/TimelineCameraSwitcher#v0.1.7",
     ...
 }
 ```
