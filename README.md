@@ -1,9 +1,9 @@
 # Unity_TimelineCameraSwitcher
 [![Unity 2020.3+](https://img.shields.io/badge/Unity-2020.3+-DCD0FF.svg?logo=unity&style=for-the-badge)](https://unity3d.com/jp/unity/qa/lts-releases?version=2020.3)
 
-> ## v0.1.6 (11/30/2022)
+> ## v0.1.7 (11/30/2022)
 > 
-<!-- > - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.6)    -->
+<!-- > - [UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.7)    -->
 <br>
 
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/bandicam%202021-06-28%2002-02-49-927_1.gif)  
@@ -15,7 +15,7 @@ Cinemasceneとの併用も可能です。
 
 ## インストールガイド  
 ### UnityPackage版
-[UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.6)
+[UnityPackage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/releases/tag/v0.1.7)
 
 ### PackageManager版
 ![demoImage](https://github.com/murasaqi/Unity_TimelineCameraSwitcher/blob/main/Docs/packageInstall.png)  
@@ -26,7 +26,7 @@ Add package from git URL
 ```
 を選択し
 ```
-https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.6
+https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.7
 ```
 を入力することで追加できます
 
@@ -36,7 +36,7 @@ dependenciesに一行追加してください。
 ```
 {
 "dependencies": {
-    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.6",
+    "com.murasaqi.camera_switcher_control": "https://github.com/murasaqi/Unity_TimelineCameraSwitcher.git?path=/Assets/TimelineCameraSwitcher#v0.1.7",
     ...
 }
 ```
