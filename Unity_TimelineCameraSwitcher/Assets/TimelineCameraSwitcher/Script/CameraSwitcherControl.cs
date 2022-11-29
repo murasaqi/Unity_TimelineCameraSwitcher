@@ -172,6 +172,7 @@ public class CameraSwitcherControl : MonoBehaviour
         resolution = cameraSwitcherSettings.resolution;
 #if UNITY_EDITOR
         EditorUtility.SetDirty(cameraSwitcherSettings);
+        
         AssetDatabase.SaveAssets();
     
 #endif

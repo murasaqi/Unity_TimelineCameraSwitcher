@@ -68,13 +68,23 @@ public class CameraSwitcherTimelineClipRenamer : EditorWindow
         renameButton.SetEnabled(false);
         
         
+        
+        var volumeProfileRenameButton = new Button(() =>
+        {
+            if(targetTrack != null)RenameVolumeProfiles(targetTrack);
+            
+        });
+        
+        volumeProfileRenameButton.text = "Rename Volume Profiles";
+        
      
        
         root.Add(objectField);
         root.Add(popupField);
         
         root.Add(renameButton);
-        
+        root.Add(volumeProfileRenameButton);
+
     }
     
     public void InitPopup()
@@ -128,6 +138,32 @@ public class CameraSwitcherTimelineClipRenamer : EditorWindow
         
         RenameCameraByClipName();
     }
+    
+    
+     public void RenameVolumeProfiles(CameraSwitcherControlTrack cameraSwitcherControlTrack)
+        {
+            var i = 0;
+            foreach (var clip in
+                     cameraSwitcherControlTrack.GetClips())
+            {
+                var cameraSwitcherControlClip = clip.asset as CameraSwitcherControlClip;
+                if (cameraSwitcherControlClip && cameraSwitcherControlClip.volumeProfile)
+                {
+                    cameraSwitcherControlClip.volumeProfile.name = $"C{i}_{clip.displayName}_volume";
+                    var path = AssetDatabase.GetAssetPath(cameraSwitcherControlClip.volumeProfile);
+                    AssetDatabase.RenameAsset(path, $"C{i}_{clip.displayName}_volume");    
+                    
+                    EditorUtility.SetDirty(cameraSwitcherControlClip.volumeProfile);
+                    AssetDatabase.SaveAssets();
+                }
+
+                i++;
+
+            }
+            
+            
+            
+        }
 
     
     [ContextMenu("RenameCameraByClipName")]

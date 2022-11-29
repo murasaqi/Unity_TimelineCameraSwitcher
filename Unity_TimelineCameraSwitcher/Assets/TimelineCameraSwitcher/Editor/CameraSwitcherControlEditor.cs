@@ -354,6 +354,19 @@ public class CameraSwitcherControlEditor : Editor
                 cameraSwitcherControl.resolution = new Vector2Int(res.x, res.y);
                 widthField.value = res.x;
                 heightField.value = res.y;
+                if (cameraSwitcherControl.renderTextureA)
+                {
+                    cameraSwitcherControl.renderTextureA.width = res.x;
+                    cameraSwitcherControl.renderTextureA.height = res.y;
+                }
+                
+                if (cameraSwitcherControl.renderTextureB)
+                {
+                    cameraSwitcherControl.renderTextureB.width = res.x;
+                    cameraSwitcherControl.renderTextureB.height = res.y;
+                }
+                EditorUtility.SetDirty(cameraSwitcherControl.renderTextureA);
+                EditorUtility.SetDirty(cameraSwitcherControl.renderTextureB);
                 EditorUtility.SetDirty(cameraSwitcherControl.cameraSwitcherSettings);
                 AssetDatabase.SaveAssets();
             };
