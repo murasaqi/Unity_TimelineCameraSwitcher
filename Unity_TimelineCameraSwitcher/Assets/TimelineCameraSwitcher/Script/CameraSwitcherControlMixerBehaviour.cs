@@ -427,8 +427,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
                 {
                     trackBinding.volumeA.gameObject.layer = trackBinding.cameraALayer;
                     trackBinding.volumeB.gameObject.layer = trackBinding.cameraALayer;
-                    trackBinding.volumeA.enabled = true;
-                    trackBinding.volumeB.enabled = true;
+                    // trackBinding.volumeA.enabled = true;
+                    // trackBinding.volumeB.enabled = true;
                     trackBinding.volumeA.weight = A.inputWeigh;
                     trackBinding.volumeB.weight = B.inputWeigh;
                 }
@@ -438,8 +438,8 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
             {
                 trackBinding.volumeA.weight = 1f;
                 trackBinding.volumeB.weight = 1f;
-                trackBinding.volumeA.enabled = A.clip.volumeOverride;
-                trackBinding.volumeB.enabled = B.clip.volumeOverride;
+                // trackBinding.volumeA.enabled = A.clip.volumeOverride;
+                //trackBinding.volumeB.enabled = B.clip.volumeOverride;
                 trackBinding.volumeA.gameObject.layer = trackBinding.cameraALayer;
                 trackBinding.volumeB.gameObject.layer = trackBinding.cameraBLayer;
 
@@ -449,10 +449,10 @@ public class CameraSwitcherControlMixerBehaviour : PlayableBehaviour
         {
             if (A != null)
             {
-                trackBinding.volumeA.enabled = A.clip.volumeOverride;
+                // trackBinding.volumeA.enabled = A.clip.volumeOverride;
                 trackBinding.volumeA.profile = A.clip.volumeProfile;
                 trackBinding.volumeB.gameObject.layer = trackBinding.cameraBLayer;
-                trackBinding.volumeB.enabled = true;
+                //trackBinding.volumeB.enabled = true;
                 trackBinding.volumeB.weight = 0f;
                 trackBinding.volumeA.weight = 1f;   
                 
