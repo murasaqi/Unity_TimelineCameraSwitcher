@@ -1,9 +1,9 @@
 {
-  "name": "com.murasaqi.camera_switcher_control",
-  "displayName": "Camera Switcher Control",
+  "name": "com.iridescent.camera_live_switcher",
+  "displayName": "Camera Live Switcher",
   "version": "0.1.6",
   "unity": "2020.1",
-  "description": "Camera Switcher Control",
+  "description": "Camera Live Switcher",
   "keywords": [
     "Timeline",
     "Camera"
