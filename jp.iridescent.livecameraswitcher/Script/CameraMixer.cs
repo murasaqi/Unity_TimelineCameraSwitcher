@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace CameraLiveSwitcher
 {
@@ -36,6 +37,7 @@ namespace CameraLiveSwitcher
         [SerializeField] private Material material;
 
         public RenderTexture outputTarget;
+        public RawImage outputImage;
 
 
         public List<Camera> cameraList = new List<Camera>();
@@ -51,14 +53,19 @@ namespace CameraLiveSwitcher
             if (renderTexture1 != null)
             {
                 renderTexture1.Release();
+                DestroyImmediate(renderTexture1);
             }
             if (renderTexture2 != null)
             {
                 renderTexture2.Release();
+                DestroyImmediate(renderTexture2);
             }
             renderTexture1 = new RenderTexture(width, height, (int)depthStencilFormat, format);
             // renderTexture1.Create();
             renderTexture2 = new RenderTexture(width, height, (int)depthStencilFormat, format);
+            
+            if(material != null) material.SetTexture("_TextureA", renderTexture1);
+            if(material != null) material.SetTexture("_TextureB", renderTexture2);
             // renderTexture2.Create();
         }
 
@@ -66,6 +73,7 @@ namespace CameraLiveSwitcher
         public void Initialize()
         {
             if(material)DestroyImmediate(material);
+            shader = Resources.Load<Shader>("CameraSwitcherResources/Shader/CameraSwitcherFader");
             material = new Material(shader);
             InitRenderTextures();
             if(cam1 != null)cam1.targetTexture = renderTexture1;
@@ -94,6 +102,11 @@ namespace CameraLiveSwitcher
             if (cam2 != null) cam2.Render();
             
             material.SetFloat("_CrossFade", fader);
+            
+        }
+
+        public void BlitOutputTarget()
+        {
             Graphics.Blit(Texture2D.blackTexture, outputTarget, material);
         }
 
@@ -111,9 +124,18 @@ namespace CameraLiveSwitcher
             if (camera1 == null && camera2 == null) return;
 
             cam1 = camera1;
-            if (cam1) cam1.targetTexture = renderTexture1;
+            if (cam1)
+            {
+                cam1.targetTexture = renderTexture1;
+                cam1.enabled = true;
+            }
             cam2 = camera2;
-            if (cam2) cam2.targetTexture = renderTexture2;
+            if (cam2)
+            {
+                cam2.targetTexture = renderTexture2;
+                cam2.enabled = true;
+            }
+            
             // Debug.Log(blend);
             fader = blend;
         }
@@ -121,11 +143,19 @@ namespace CameraLiveSwitcher
         // Update is called once per frame
         void Update()
         {
-            if (!useTimeline)
+            
+            cameraList.Distinct();
+            // DisableCameras();
+            Render();
+            
+            if (outputTarget != null)
             {
-                cameraList.Distinct();
-                DisableCameras();
-                Render();
+                BlitOutputTarget();    
+            }
+            
+            if(outputImage!= null)
+            {
+                outputImage.material = material;
             }
             // Debug.Log(fader);
             // DisableCameras();

@@ -33,6 +33,15 @@ namespace CameraLiveSwitcher
             if(isFirstFrameHappened == false)
             {
                 isFirstFrameHappened = true;
+
+                foreach (var clip in timelineClips)
+                {
+                    var cameraMixerTimelineClip = clip.asset as CameraSwitcherTimelineClip;
+                    var cameraMixerTimelineBehaviour = cameraMixerTimelineClip.behaviour;
+                    // remove same type of cameraPostProductions in cameraMixerTimelineBehaviour list
+                    var v = cameraMixerTimelineBehaviour.cameraPostProductions.RemoveAll(x => cameraMixerTimelineBehaviour.cameraPostProductions.Any(y => y.GetType() == x.GetType() && x!= y));
+
+                }
                 
             }
 
@@ -46,7 +55,7 @@ namespace CameraLiveSwitcher
                 ScriptPlayable<CameraSwitcherTimelineBehaviour> inputPlayable =
                     (ScriptPlayable<CameraSwitcherTimelineBehaviour>)playable.GetInput(i);
                 CameraSwitcherTimelineBehaviour input = inputPlayable.GetBehaviour();
-
+                input.cameraPostProductions.Distinct();
                 input.camera.enabled = inputWeight > 0;
 
                 if (input.camera != null && cameraMixer.cameraList.Contains(input.camera) != true)
@@ -67,14 +76,26 @@ namespace CameraLiveSwitcher
             }
             
             Mix(clipInfoList);
-            cameraMixer.Render();
-            cameraMixer.useTimeline = true;
+            ApplyPostEffect(clipInfoList);
+            // cameraMixer.Render();
+            // cameraMixer.useTimeline = true;
         }
         
         public override void OnPlayableDestroy (Playable playable)
         {
             isFirstFrameHappened = false;
             if(cameraMixer)cameraMixer.useTimeline = false;
+        }
+
+        private void ApplyPostEffect(List<CameraSwitcherClipInfo> clipInfos)
+        {
+            foreach (var clipInfo in clipInfos)
+            {
+                foreach (var cameraPostProduction in clipInfo.behaviour.cameraPostProductions)
+                {
+                    cameraPostProduction.UpdateEffect(clipInfo.behaviour.camera);
+                }
+            }
         }
 
         private void Mix(List<CameraSwitcherClipInfo> clips)

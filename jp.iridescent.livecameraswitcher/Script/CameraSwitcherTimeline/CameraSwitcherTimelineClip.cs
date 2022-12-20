@@ -12,7 +12,7 @@ namespace CameraLiveSwitcher
     {
         public CameraSwitcherTimelineBehaviour behaviour = new CameraSwitcherTimelineBehaviour();
         public ExposedReference<Camera> newExposedReference;
-        public Camera camera;
+        // public Camera camera;
         public ClipCaps clipCaps
         {
             get { return ClipCaps.Blending; }
