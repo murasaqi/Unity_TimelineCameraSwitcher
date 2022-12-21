@@ -64,11 +64,15 @@ namespace CameraLiveSwitcher
             var popUpField1 = root.Q<DropdownField>("CameraList1");
             var cameraList = new List<string>();
             // convert cameraMixer.cameraList to camera name list
-            foreach (var camera in cameraMixer.cameraList)
+            if (cameraMixer.cameraList != null)
             {
-                cameraList.Add(camera.name);
+                foreach (var camera in cameraMixer.cameraList)
+                {
+                    if(camera != null)cameraList.Add(camera.name);
+                }
+    
             }
-
+            
             popUpField1.choices = cameraList;
             popUpField1.index = cameraMixer.cam1 == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.cam1);
             popUpField1.RegisterValueChangedCallback((v) =>

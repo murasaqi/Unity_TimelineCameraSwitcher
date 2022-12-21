@@ -145,7 +145,6 @@ namespace CameraLiveSwitcher
         {
             
             cameraList.Distinct();
-            // DisableCameras();
             Render();
             
             if (outputTarget != null)
