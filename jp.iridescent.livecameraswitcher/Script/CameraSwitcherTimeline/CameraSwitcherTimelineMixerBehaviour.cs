@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -13,14 +15,20 @@ namespace CameraLiveSwitcher
         public TimelineClip clip;
         public CameraSwitcherTimelineBehaviour behaviour;
         public float inputWeight;
+        
+        
     }
     public class CameraSwitcherTimelineMixerBehaviour : PlayableBehaviour
     {
+        public TextMeshProUGUI debugText;
+        private StringBuilder stringBuilder;
 
         public List<TimelineClip> timelineClips = new List<TimelineClip>();
         private CameraMixer cameraMixer;
+        
         readonly List<CameraSwitcherClipInfo> clipInfoList = new List<CameraSwitcherClipInfo>();
-
+        private TimelineAsset timelineAsset;
+        private PlayableDirector director;
         private bool isFirstFrameHappened = false;
         // NOTE: This function is called at runtime and edit time.  Keep that in mind when setting the values of properties.
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
@@ -32,6 +40,10 @@ namespace CameraLiveSwitcher
             
             if(isFirstFrameHappened == false)
             {
+                stringBuilder = new StringBuilder();
+                director =   playable.GetGraph().GetResolver() as PlayableDirector;
+                timelineAsset = director.playableAsset as TimelineAsset;
+
                 isFirstFrameHappened = true;
 
                 foreach (var clip in timelineClips)
@@ -79,6 +91,23 @@ namespace CameraLiveSwitcher
             ApplyPostEffect(clipInfoList);
             // cameraMixer.Render();
             // cameraMixer.useTimeline = true;
+            
+            if (debugText != null)
+            {
+                stringBuilder.Clear();
+                var dateTime = TimeSpan.FromSeconds(director.time);
+                stringBuilder.Append($"[{cameraMixer.gameObject.scene.name}]  ");
+                // _stringBuilder.Append(" ");
+                stringBuilder.Append(dateTime.ToString(@"hh\:mm\:ss\:ff"));
+                stringBuilder.Append(" ");
+                stringBuilder.Append((Mathf.CeilToInt((float)timelineAsset.editorSettings.frameRate * (float) director.time)));
+                stringBuilder.Append("f  ");
+                
+                debugText.text = stringBuilder.ToString();
+                // if (A != null && A.behaviour.camera != null) _stringBuilder.Append($"{A.behaviour.camera.name}");
+                // if (B != null && B.behaviour.camera != null) _stringBuilder.Append($" >> {B.behaviour.camera.name}");
+
+            }
         }
         
         public override void OnPlayableDestroy (Playable playable)
