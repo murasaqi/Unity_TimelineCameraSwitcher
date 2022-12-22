@@ -47,15 +47,25 @@ namespace CameraLiveSwitcher
             {
                 cameraMixer.width = v.newValue.x;
                 cameraMixer.height = v.newValue.y;
+                cameraMixer.InitRenderTextures();
+                Resize();
             });
             var xInput = resolutionField.Q<VisualElement>("unity-x-input");
             var yInput = resolutionField.Q<VisualElement>("unity-y-input");
             xInput.Q<Label>().text = "W";
             yInput.Q<Label>().text = "H";
+            
+            var antiAliasingField = root.Q<EnumField>("RTAntiAliasingField");
+            antiAliasingField.RegisterValueChangedCallback((v) =>
+            {
+                cameraMixer.InitRenderTextures();
+                Resize();
+            });
 
             resolutionField.RegisterValueChangedCallback((v) =>
             {
                 cameraMixer.InitRenderTextures();
+                Resize();
             });
             
             root.Q<ObjectField>("Cam1Field").objectType = typeof(Camera);

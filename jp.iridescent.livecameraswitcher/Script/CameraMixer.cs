@@ -20,7 +20,16 @@ namespace CameraLiveSwitcher
         D32_SFLOAT_S8_UINT = 32,
     }
 
-    [ExecuteAlways]
+
+    public enum AntiAliasing
+    {
+        NONE = 0,
+        x2 = 2,
+        x4 = 4,
+        x8 = 8,
+    }
+
+        [ExecuteAlways]
     public class CameraMixer : MonoBehaviour
     {
         public bool useTimeline = false;
@@ -35,7 +44,7 @@ namespace CameraLiveSwitcher
         [Range(0, 1)] public float fader = 0f;
         public Shader shader;
         [SerializeField] private Material material;
-
+        public AntiAliasing antiAliasing = AntiAliasing.NONE;
         public RenderTexture outputTarget;
         public RawImage outputImage;
 
@@ -50,6 +59,7 @@ namespace CameraLiveSwitcher
         
         public void InitRenderTextures()
         {
+            RemoveCameraTargetTexture();
             if (renderTexture1 != null)
             {
                 renderTexture1.Release();
@@ -61,12 +71,30 @@ namespace CameraLiveSwitcher
                 DestroyImmediate(renderTexture2);
             }
             renderTexture1 = new RenderTexture(width, height, (int)depthStencilFormat, format);
-            // renderTexture1.Create();
-            renderTexture2 = new RenderTexture(width, height, (int)depthStencilFormat, format);
+            renderTexture1.antiAliasing = (int)antiAliasing;
             
+            renderTexture2 = new RenderTexture(width, height, (int)depthStencilFormat, format);
+            renderTexture2.antiAliasing = (int)antiAliasing;
             if(material != null) material.SetTexture("_TextureA", renderTexture1);
             if(material != null) material.SetTexture("_TextureB", renderTexture2);
-            // renderTexture2.Create();
+            
+        }
+
+        public void RemoveCameraTargetTexture()
+        {
+
+            foreach (var camera in cameraList)
+            {
+                camera.targetTexture = null;
+            }
+            if (cam1 != null)
+            {
+                cam1.targetTexture = null;
+            }
+            if (cam2 != null)
+            {
+                cam2.targetTexture = null;
+            }
         }
 
         [ContextMenu("Initialize")]

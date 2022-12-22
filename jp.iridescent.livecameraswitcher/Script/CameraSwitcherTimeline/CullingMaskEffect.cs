@@ -11,7 +11,7 @@ namespace CameraLiveSwitcher
 
         public override void UpdateEffect(Camera camera)
         {
-            if(camera == null || cullingMask == null)
+            if(camera == null)
                 return;
             #if USE_HDRP
             var hdrpCamera = camera.GetComponent<UnityEngine.Rendering.HighDefinition.HDAdditionalCameraData>();

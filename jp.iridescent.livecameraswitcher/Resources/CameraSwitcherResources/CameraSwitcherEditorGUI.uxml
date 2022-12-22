@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="Settings">
         <uie:Vector2IntField label="Resolution" name="ResolutionField" />
-        <uie:EnumField label="Format" binding-path="format" style="margin-top: 4px;" />
-        <uie:EnumField label="Depth" binding-path="depthStencilFormat" style="margin-top: 4px;" />
+        <uie:EnumField label="Format" binding-path="format" name="RTFormatField" style="margin-top: 4px;" />
+        <uie:EnumField label="Depth" binding-path="depthStencilFormat" name="RTDepthField" style="margin-top: 4px;" />
+        <uie:EnumField label="AntiAliasing" binding-path="antiAliasing" name="RTAntiAliasingField" style="margin-top: 4px;" />
         <ui:ListView focusable="true" binding-path="cameraList" usage-hints="DynamicTransform" virtualization-method="DynamicHeight" selection-type="Multiple" show-alternating-row-backgrounds="All" show-border="true" show-foldout-header="true" show-add-remove-footer="true" reorderable="true" reorder-mode="Animated" header-title="Camera List" name="CameraListView" style="margin-left: 3px; margin-right: 3px; margin-top: 4px; margin-bottom: 1px;" />
     </ui:VisualElement>
     <ui:VisualElement name="CameraSelection" style="flex-direction: column; justify-content: space-around; margin-top: 4px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
