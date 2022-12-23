@@ -4,25 +4,21 @@
         <uie:EnumField label="Format" binding-path="format" name="RTFormatField" style="margin-top: 4px;" />
         <uie:EnumField label="Depth" binding-path="depthStencilFormat" name="RTDepthField" style="margin-top: 4px;" />
         <uie:EnumField label="AntiAliasing" binding-path="antiAliasing" name="RTAntiAliasingField" style="margin-top: 4px;" />
-        <ui:ListView focusable="true" binding-path="cameraList" usage-hints="DynamicTransform" virtualization-method="DynamicHeight" selection-type="Multiple" show-alternating-row-backgrounds="All" show-border="true" show-foldout-header="true" show-add-remove-footer="true" reorderable="true" reorder-mode="Animated" header-title="Camera List" name="CameraListView" style="margin-left: 3px; margin-right: 3px; margin-top: 4px; margin-bottom: 1px;" />
+        <uie:PropertyField binding-path="cameraList" />
     </ui:VisualElement>
     <ui:VisualElement name="CameraSelection" style="flex-direction: column; justify-content: space-around; margin-top: 4px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-        <ui:VisualElement style="flex-direction: row; justify-content: space-around; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-            <ui:VisualElement name="Camera1" style="align-items: center; flex-wrap: nowrap; padding-left: 5px; padding-right: 5px;">
+        <ui:VisualElement style="flex-direction: row; justify-content: space-around; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-self: auto; align-items: flex-start;">
+            <ui:VisualElement name="Camera1" style="align-items: center; flex-wrap: nowrap; padding-left: 5px; padding-right: 5px; justify-content: space-around; align-self: center; width: 50%;">
                 <ui:Label text="Cam 1" display-tooltip-when-elided="true" />
-                <ui:VisualElement name="Camera1Preview" />
-                <ui:VisualElement style="flex-direction: column; min-width: auto; align-items: stretch; justify-content: space-around; flex-wrap: nowrap; width: 100%; margin-left: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-                    <uie:ObjectField binding-path="cam1" name="Cam1Field" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
-                    <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="CameraList1" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
-                </ui:VisualElement>
+                <ui:VisualElement name="Camera1Preview" style="max-width: none; max-height: 100px;" />
+                <uie:ObjectField binding-path="cam1" name="Cam1Field" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
+                <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="CameraList1" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Camera2" style="align-items: center; min-width: auto; flex-wrap: nowrap; width: auto; padding-left: 5px; padding-right: 5px;">
+            <ui:VisualElement name="Camera2" style="align-items: center; min-width: auto; flex-wrap: nowrap; width: 50%; padding-left: 5px; padding-right: 5px; justify-content: space-around; align-self: center;">
                 <ui:Label text="Cam 2" display-tooltip-when-elided="true" />
-                <ui:VisualElement name="Camera2Preview" />
-                <ui:VisualElement style="flex-direction: column; min-width: auto; align-items: stretch; justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-                    <uie:ObjectField binding-path="cam2" name="Cam2Field" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
-                    <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="CameraList2" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
-                </ui:VisualElement>
+                <ui:VisualElement name="Camera2Preview" style="max-width: none; max-height: 100px;" />
+                <uie:ObjectField binding-path="cam2" name="Cam2Field" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
+                <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" name="CameraList2" style="justify-content: space-around; width: 100%; margin-left: 0; margin-right: 0; margin-top: 1px; margin-bottom: 1px;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement style="margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
@@ -32,9 +28,7 @@
     <ui:VisualElement style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 8px; margin-bottom: 0;">
         <uie:PropertyField name="OutputImage" binding-path="outputImage" style="margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px;" />
         <uie:PropertyField name="OutputTarget" binding-path="outputTarget" style="margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px;" />
-        <ui:VisualElement name="OutputPreview" label="Fader" virtualization-method="DynamicHeight" show-border="true" selection-type="Multiple" show-alternating-row-backgrounds="All" show-foldout-header="true" show-add-remove-footer="true" reorderable="true" reorder-mode="Animated" horizontal-scrolling="false" style="margin-left: 3px; margin-right: 3px; margin-top: 4px; margin-bottom: 1px; -unity-text-align: upper-center;">
-            <ui:Label text="Output" display-tooltip-when-elided="true" />
-        </ui:VisualElement>
+        <ui:VisualElement name="OutputPreview" label="Fader" virtualization-method="DynamicHeight" show-border="true" selection-type="Multiple" show-alternating-row-backgrounds="All" show-foldout-header="true" show-add-remove-footer="true" reorderable="true" reorder-mode="Animated" horizontal-scrolling="false" style="margin-left: 3px; margin-right: 3px; margin-top: 4px; margin-bottom: 1px; -unity-text-align: upper-center;" />
     </ui:VisualElement>
     <uie:PropertyField binding-path="material" />
 </ui:UXML>

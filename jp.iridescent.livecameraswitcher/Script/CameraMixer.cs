@@ -12,7 +12,7 @@ namespace CameraLiveSwitcher
 
     public enum DepthStencilFormat
     {
-        NONE = 0,
+        NONE = 1,
         D16_UNORM = 16,
         D24_UNORM = 32,
         D24_UNORM_S8_UINT = 24,
@@ -85,7 +85,7 @@ namespace CameraLiveSwitcher
 
             foreach (var camera in cameraList)
             {
-                camera.targetTexture = null;
+                if(camera)camera.targetTexture = null;
             }
             if (cam1 != null)
             {

@@ -68,7 +68,7 @@ namespace CameraLiveSwitcher
                     (ScriptPlayable<CameraSwitcherTimelineBehaviour>)playable.GetInput(i);
                 CameraSwitcherTimelineBehaviour input = inputPlayable.GetBehaviour();
                 input.cameraPostProductions.Distinct();
-                input.camera.enabled = inputWeight > 0;
+                if(input.camera)input.camera.enabled = inputWeight > 0;
 
                 if (input.camera != null && cameraMixer.cameraList.Contains(input.camera) != true)
                 {

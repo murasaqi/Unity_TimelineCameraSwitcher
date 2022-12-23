@@ -97,14 +97,6 @@ namespace CameraLiveSwitcher
                 cameraMixer.cam2 = cameraMixer.cameraList[popUpField2.index];
             });
 
-            
-            var listField = root.Q<ListView>("CameraListView");
-            listField.Bind(serializedObject);
-            listField.bindingPath = "cameraList";
-            listField.itemsSourceChanged += () =>
-            {
-                Resize();
-            };
             Resize();
             return root;
         }
