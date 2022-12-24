@@ -82,16 +82,13 @@ namespace CameraLiveSwitcher
                         behaviour = input,
                         inputWeight = inputWeight
                     });
-                    // Debug.Log(clip);
                 }
                 
             }
             
             Mix(clipInfoList);
             ApplyPostEffect(clipInfoList);
-            // cameraMixer.Render();
-            // cameraMixer.useTimeline = true;
-            
+
             if (debugText != null)
             {
                 stringBuilder.Clear();
