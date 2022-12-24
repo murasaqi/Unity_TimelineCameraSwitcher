@@ -17,6 +17,7 @@ namespace CameraLiveSwitcher
             var mixer= ScriptPlayable<CameraSwitcherTimelineMixerBehaviour>.Create(graph, inputCount);
             mixer.GetBehaviour().timelineClips = m_Clips;
             mixer.GetBehaviour().debugText = debugText.Resolve(graph.GetResolver());
+            mixer.GetBehaviour().director = go.GetComponent<PlayableDirector>();
             return mixer;
         }
     }

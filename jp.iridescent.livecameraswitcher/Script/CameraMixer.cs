@@ -120,10 +120,11 @@ namespace CameraLiveSwitcher
         private void OnDestroy()
         {
             DestroyImmediate(material);
-            DestroyImmediate(renderTexture1);
-            DestroyImmediate(renderTexture2);
-            cam1.targetTexture = null;
-            cam2.targetTexture = null;
+            if(cam1)cam1.targetTexture = null;
+            if(cam2)cam2.targetTexture = null;
+            if(renderTexture1)DestroyImmediate(renderTexture1);
+            if(renderTexture2)DestroyImmediate(renderTexture2);
+           
         }
 
 
@@ -164,8 +165,17 @@ namespace CameraLiveSwitcher
             foreach (var camera in cameraList)
             {
                 if(camera == null) continue;
-                camera.enabled = false;
-                camera.targetTexture = null;
+                if (camera == cam1 || camera == cam2)
+                {
+                    camera.enabled = true;
+                }
+                else
+                {
+                    camera.enabled = false;
+                }
+                
+                camera.targetTexture = null;    
+                
             }
         }
 

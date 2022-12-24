@@ -16,6 +16,13 @@ namespace CameraLiveSwitcher
         public CameraSwitcherTimelineBehaviour behaviour;
         public float inputWeight;
         
+        public CameraSwitcherClipInfo(TimelineClip clip, CameraSwitcherTimelineBehaviour behaviour, float inputWeight)
+        {
+            this.clip = clip;
+            this.behaviour = behaviour;
+            this.inputWeight = inputWeight;
+        }
+        
         
     }
     public class CameraSwitcherTimelineMixerBehaviour : PlayableBehaviour
@@ -28,20 +35,20 @@ namespace CameraLiveSwitcher
         
         readonly List<CameraSwitcherClipInfo> cameraQue = new List<CameraSwitcherClipInfo>();
         private TimelineAsset timelineAsset;
-        private PlayableDirector director;
+        internal PlayableDirector director;
         private bool isFirstFrameHappened = false;
         // NOTE: This function is called at runtime and edit time.  Keep that in mind when setting the values of properties.
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             cameraMixer = playerData as CameraMixer;
 
-            if (!cameraMixer)
+            if (!cameraMixer || !director)
                 return;
             
             if(isFirstFrameHappened == false)
             {
                 stringBuilder = new StringBuilder();
-                director =   playable.GetGraph().GetResolver() as PlayableDirector;
+                
                 timelineAsset = director.playableAsset as TimelineAsset;
 
                 isFirstFrameHappened = true;
@@ -51,15 +58,14 @@ namespace CameraLiveSwitcher
                 {
                     var cameraMixerTimelineClip = clip.asset as CameraSwitcherTimelineClip;
                     var cameraMixerTimelineBehaviour = cameraMixerTimelineClip.behaviour;
-                    // remove same type of cameraPostProductions in cameraMixerTimelineBehaviour list
                     var v = cameraMixerTimelineBehaviour.cameraPostProductions.RemoveAll(x => cameraMixerTimelineBehaviour.cameraPostProductions.Any(y => y.GetType() == x.GetType() && x!= y));
 
                 }
                 
             }
 
-            var currentTime = director.time;
-
+            // var _director =   playable.GetGraph().GetResolver() as PlayableDirector;
+            // Debug.Log($"{director.name}:{director.time},{_director.name}:{_director.time}");
             int inputCount = playable.GetInputCount();
             cameraQue.Clear();
             for (int i = 0; i < inputCount; i++)
@@ -71,30 +77,23 @@ namespace CameraLiveSwitcher
                 CameraSwitcherTimelineBehaviour input = inputPlayable.GetBehaviour();
                 input.cameraPostProductions.Distinct();
                 
+                
                 if (input.camera != null && cameraMixer.cameraList.Contains(input.camera) != true)
                 {
                     cameraMixer.cameraList.Add(input.camera);
                 }
 
-                if (clip.start <= currentTime && currentTime < clip.start+clip.duration && cameraQue.Count <2)
+                if (inputWeight > 0)
                 {
-                    if (input.camera) input.camera.enabled = inputWeight > 0;
-                    cameraQue.Add(new CameraSwitcherClipInfo()
-                    {
-                        clip = clip,
-                        behaviour = input,
-                        inputWeight = inputWeight
-                    });
+                    cameraQue.Add(new CameraSwitcherClipInfo(clip, input, inputWeight));
                 }
-                else
-                {
-                    if (input.camera)
-                    {
-                        input.camera.enabled = false;
-                        input.camera.targetTexture = null;
-                    }
-                    
-                }
+                
+                // if (clip.start <= director.time && director.time < clip.start + clip.duration)
+                // {
+                //     cameraQue.Add(new CameraSwitcherClipInfo(clip, input, inputWeight));
+                //     Debug.Log($"time: {clip.displayName} {input.camera.name}, {clip.start}, {clip.duration}");
+                //    
+                // }
                 
             }
             
@@ -140,6 +139,7 @@ namespace CameraLiveSwitcher
         {
             if(cameraMixer == null) return;
             if(clips.Count<=0) return;
+            
             if (clips.Count == 1)
             {
                
@@ -148,7 +148,7 @@ namespace CameraLiveSwitcher
             }
             else if (clips.Count == 2)
             {
-                // if(clips[0].behaviour.camera == null || clips[0].behaviour.camera == null) return;
+                if(clips[0].behaviour.camera == null || clips[1].behaviour.camera == null) return;
                 cameraMixer.SetCameraQueue(clips[0].behaviour.camera, clips[1].behaviour.camera, 1f-clips[0].inputWeight);
             }
             
