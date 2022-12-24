@@ -120,19 +120,19 @@ namespace CameraLiveSwitcher
         }
 
 
-        // public void Render()
-        // {
+        public void Render()
+        {
             // if(renderTexture1 == null || renderTexture2 == null || material == null)
             // {
             //     Initialize();
             // }
-            
-            // if (cam1 != null) cam1.Render();
-            // if (cam2 != null) cam2.Render();
+
+            if (cam1 != null) cam1.enabled = true;
+            if (cam2 != null) cam2.enabled = true;
             
             // material.SetFloat("_CrossFade", fader);
             
-        // }
+        }
 
         public void BlitOutputTarget()
         {
@@ -173,25 +173,22 @@ namespace CameraLiveSwitcher
         void Update()
         {
             
-            // cameraList.Distinct();
-            // Render();
-            
             if(renderTexture1 == null || renderTexture2 == null || material == null)
             {
                 Initialize();
             }
             
-            material.SetFloat("_CrossFade", fader);
-            
+            Render();
+
             if (outputTarget != null)
             {
                 BlitOutputTarget();    
             }
             
-            if(outputImage!= null)
-            {
-                outputImage.material = material;
-            }
+            
+            outputImage.material = material;
+            material.SetFloat("_CrossFade", fader);
+
             // Debug.Log(fader);
             // DisableCameras();
             // Render();

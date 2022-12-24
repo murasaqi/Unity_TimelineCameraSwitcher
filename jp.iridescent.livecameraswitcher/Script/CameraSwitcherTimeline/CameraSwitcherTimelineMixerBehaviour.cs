@@ -26,7 +26,7 @@ namespace CameraLiveSwitcher
         public List<TimelineClip> timelineClips = new List<TimelineClip>();
         private CameraMixer cameraMixer;
         
-        readonly List<CameraSwitcherClipInfo> clipInfoList = new List<CameraSwitcherClipInfo>();
+        readonly List<CameraSwitcherClipInfo> cameraQue = new List<CameraSwitcherClipInfo>();
         private TimelineAsset timelineAsset;
         private PlayableDirector director;
         private bool isFirstFrameHappened = false;
@@ -46,6 +46,7 @@ namespace CameraLiveSwitcher
 
                 isFirstFrameHappened = true;
 
+                cameraMixer.cameraList.Distinct();
                 foreach (var clip in timelineClips)
                 {
                     var cameraMixerTimelineClip = clip.asset as CameraSwitcherTimelineClip;
@@ -57,9 +58,10 @@ namespace CameraLiveSwitcher
                 
             }
 
+            var currentTime = director.time;
+
             int inputCount = playable.GetInputCount();
-            clipInfoList.Clear();
-            cameraMixer.cameraList.Distinct();
+            cameraQue.Clear();
             for (int i = 0; i < inputCount; i++)
             {
                 var clip = timelineClips[i];
@@ -68,26 +70,36 @@ namespace CameraLiveSwitcher
                     (ScriptPlayable<CameraSwitcherTimelineBehaviour>)playable.GetInput(i);
                 CameraSwitcherTimelineBehaviour input = inputPlayable.GetBehaviour();
                 input.cameraPostProductions.Distinct();
-                if(input.camera)input.camera.enabled = inputWeight > 0;
-
+                
                 if (input.camera != null && cameraMixer.cameraList.Contains(input.camera) != true)
                 {
                     cameraMixer.cameraList.Add(input.camera);
                 }
-                if (inputWeight > 0)
+
+                if (clip.start <= currentTime && currentTime < clip.start+clip.duration && cameraQue.Count <2)
                 {
-                    clipInfoList.Add(new CameraSwitcherClipInfo()
+                    if(input.camera)input.camera.enabled = true;
+                    cameraQue.Add(new CameraSwitcherClipInfo()
                     {
                         clip = clip,
                         behaviour = input,
                         inputWeight = inputWeight
                     });
                 }
+                else
+                {
+                    if (input.camera)
+                    {
+                        input.camera.enabled = false;
+                        input.camera.targetTexture = null;
+                    }
+                    
+                }
                 
             }
             
-            Mix(clipInfoList);
-            ApplyPostEffect(clipInfoList);
+            Mix(cameraQue);
+            ApplyPostEffect(cameraQue);
 
             if (debugText != null)
             {
@@ -136,10 +148,8 @@ namespace CameraLiveSwitcher
                 if(clips[0].behaviour.camera == null) return;
                 cameraMixer.SetCamera(clips[0].behaviour.camera,null,0);
             }
-
-            if (clips.Count == 2)
+            else if (clips.Count == 2)
             {
-                
                 // if(clips[0].behaviour.camera == null || clips[0].behaviour.camera == null) return;
                 cameraMixer.SetCamera(clips[0].behaviour.camera, clips[1].behaviour.camera, 1f-clips[0].inputWeight);
             }
