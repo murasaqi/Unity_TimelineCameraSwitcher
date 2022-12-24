@@ -78,7 +78,7 @@ namespace CameraLiveSwitcher
 
                 if (clip.start <= currentTime && currentTime < clip.start+clip.duration && cameraQue.Count <2)
                 {
-                    if(input.camera)input.camera.enabled = true;
+                    if (input.camera) input.camera.enabled = inputWeight > 0;
                     cameraQue.Add(new CameraSwitcherClipInfo()
                     {
                         clip = clip,
@@ -98,7 +98,8 @@ namespace CameraLiveSwitcher
                 
             }
             
-            Mix(cameraQue);
+            
+            SetCameraQueue(cameraQue);
             ApplyPostEffect(cameraQue);
 
             if (debugText != null)
@@ -106,7 +107,6 @@ namespace CameraLiveSwitcher
                 stringBuilder.Clear();
                 var dateTime = TimeSpan.FromSeconds(director.time);
                 stringBuilder.Append($"[{cameraMixer.gameObject.scene.name}]  ");
-                // _stringBuilder.Append(" ");
                 stringBuilder.Append(dateTime.ToString(@"hh\:mm\:ss\:ff"));
                 stringBuilder.Append(" ");
                 stringBuilder.Append((Mathf.CeilToInt((float)timelineAsset.editorSettings.frameRate * (float) director.time)));
@@ -136,22 +136,20 @@ namespace CameraLiveSwitcher
             }
         }
 
-        private void Mix(List<CameraSwitcherClipInfo> clips)
+        private void SetCameraQueue(List<CameraSwitcherClipInfo> clips)
         {
             if(cameraMixer == null) return;
             if(clips.Count<=0) return;
-            // Debug.Log(clips.Count);
-
             if (clips.Count == 1)
             {
                
                 if(clips[0].behaviour.camera == null) return;
-                cameraMixer.SetCamera(clips[0].behaviour.camera,null,0);
+                cameraMixer.SetCameraQueue(clips[0].behaviour.camera,null,0);
             }
             else if (clips.Count == 2)
             {
                 // if(clips[0].behaviour.camera == null || clips[0].behaviour.camera == null) return;
-                cameraMixer.SetCamera(clips[0].behaviour.camera, clips[1].behaviour.camera, 1f-clips[0].inputWeight);
+                cameraMixer.SetCameraQueue(clips[0].behaviour.camera, clips[1].behaviour.camera, 1f-clips[0].inputWeight);
             }
             
             

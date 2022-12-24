@@ -18,10 +18,19 @@ namespace CameraLiveSwitcher
         private Image outputImage;
         private float previewWidth = -1;
         private VisualElement root;
+
+        private RenderTexture outputThumbnail;
+        private Vector2 aspectRatio = Vector2.one;
+        public DropdownField popUpField1;
+        public DropdownField popUpField2;
         public override VisualElement CreateInspectorGUI()
         {
+
+            DestroyInstantiateObjects();
             
             cameraMixer = serializedObject.targetObject as CameraMixer;
+            
+            outputThumbnail = new RenderTexture((int)(cameraMixer.width*0.1f), (int)(cameraMixer.height*0.1), 0,RenderTextureFormat.DefaultHDR);
             root = Resources.Load<VisualTreeAsset>("CameraSwitcherResources/CameraSwitcherEditorGUI")
                 .CloneTree("CameraMixer");
             
@@ -71,7 +80,7 @@ namespace CameraLiveSwitcher
             root.Q<ObjectField>("Cam1Field").objectType = typeof(Camera);
             root.Q<ObjectField>("Cam2Field").objectType = typeof(Camera);
             
-            var popUpField1 = root.Q<DropdownField>("CameraList1");
+            popUpField1 = root.Q<DropdownField>("CameraList1");
             var cameraList = new List<string>();
             // convert cameraMixer.cameraList to camera name list
             if (cameraMixer.cameraList != null)
@@ -84,20 +93,29 @@ namespace CameraLiveSwitcher
             }
             
             popUpField1.choices = cameraList;
-            popUpField1.index = cameraMixer.cam1 == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.cam1);
+            popUpField1.index = cameraMixer.camera1Queue == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.camera1Queue);
             popUpField1.RegisterValueChangedCallback((v) =>
             {
-                cameraMixer.cam1 = cameraMixer.cameraList[popUpField1.index];
+                if(cameraMixer.cameraList.IndexOf(cameraMixer.camera1Queue) == popUpField1.index) return;
+                var index = popUpField1.index;
+                cameraMixer.camera1Queue = index >= 0 && index < cameraMixer.cameraList.Count ? cameraMixer.cameraList[index] : null;
             });
-            var popUpField2 = root.Q<DropdownField>("CameraList2");
+            popUpField2 = root.Q<DropdownField>("CameraList2");
             popUpField2.choices = cameraList;
-            popUpField2.index = cameraMixer.cam2 == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.cam2);
+            popUpField2.index = cameraMixer.camera2Queue == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.camera2Queue);
             popUpField2.RegisterValueChangedCallback((v) =>
             {
-                cameraMixer.cam2 = cameraMixer.cameraList[popUpField2.index];
+                if(cameraMixer.cameraList.IndexOf(cameraMixer.camera2Queue) == popUpField2.index) return;
+                var index = popUpField2.index;
+                cameraMixer.camera2Queue = index >= 0 && index < cameraMixer.cameraList.Count ? cameraMixer.cameraList[index] : null;
             });
 
             Resize();
+            
+            EditorApplication.update -= Repaint; //増殖を防ぐ
+            EditorApplication.update += Repaint;
+            
+            
             return root;
         }
 
@@ -118,31 +136,67 @@ namespace CameraLiveSwitcher
             camera1Image.style.height =  camera1.layout.width * aspectRatio;
             camera2Image.style.height =  camera2.layout.width * aspectRatio;
 
-            outputImage.image = cameraMixer.outputTarget == null ? Texture2D.grayTexture : cameraMixer.outputTarget;
+            if (cameraMixer.outputTarget != null)
+            {
+                outputImage.image = cameraMixer.outputTarget;
+            }
+            else if (cameraMixer.outputImage != null)
+            {
+                outputImage.image = outputThumbnail;
+
+            }
             
             outputImage.style.height = camera1.layout.width * aspectRatio;
             
             previewWidth = camera1.layout.width;
+            
         }
 
-        private void OnSceneGUI()
+        private void OnDestroy()
+        {
+            DestroyInstantiateObjects();
+        }
+
+        private void OnDisable()
+        {
+            DestroyInstantiateObjects();
+        }
+
+        private void DestroyInstantiateObjects()
+        {
+            if (outputThumbnail != null)
+            {
+                outputThumbnail.Release();
+                DestroyImmediate(outputThumbnail);
+                
+            }
+        }
+        
+        private void Repaint()
         {
             Resize();
-        }
+            
+            if(cameraMixer == null) return;
+            if (popUpField1 != null && popUpField1.index != cameraMixer.cameraList.IndexOf(cameraMixer.camera1Queue))
+            {
+                popUpField1.index = cameraMixer.camera1Queue == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.camera1Queue);
+                serializedObject.ApplyModifiedProperties();
+            }
+            if (popUpField2 != null && popUpField2.index != cameraMixer.cameraList.IndexOf(cameraMixer.camera2Queue))
+            {
+                popUpField2.index = cameraMixer.camera2Queue == null ? -1 : cameraMixer.cameraList.IndexOf(cameraMixer.camera2Queue);
+                serializedObject.ApplyModifiedProperties();
+            }
 
+            if (cameraMixer.outputImage != null && cameraMixer.outputTarget == null)
+            {
+                cameraMixer.BlitOutputTarget(outputThumbnail);
+            }
+        }
         private void OnEnable()
         {
             Resize();
         }
         
-        // private void OnDisable()
-        // {
-        //     Resize();
-        // }
-
-        private void OnValidate()
-        {
-            Resize();
-        }
     }
 }

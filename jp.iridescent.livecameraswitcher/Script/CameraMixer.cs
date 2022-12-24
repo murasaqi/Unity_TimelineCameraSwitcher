@@ -29,10 +29,19 @@ namespace CameraLiveSwitcher
         x8 = 8,
     }
 
+    [Serializable]
+
+    public class CameraRenderQueue
+    {
+        public Camera camera = null;
+        public float inputWeight = 0.0f;
+    }
         [ExecuteAlways]
     public class CameraMixer : MonoBehaviour
     {
         public bool useTimeline = false;
+        public Camera camera1Queue;
+        public Camera camera2Queue;
         public Camera cam1;
         public Camera cam2;
         public int width = 1920;
@@ -48,10 +57,8 @@ namespace CameraLiveSwitcher
         public RenderTexture outputTarget;
         public RawImage outputImage;
 
-
         public List<Camera> cameraList = new List<Camera>();
-
-        // Start is called before the first frame update
+        
         void Start()
         {
 
@@ -120,78 +127,67 @@ namespace CameraLiveSwitcher
         }
 
 
-        public void Render()
+        private void ApplyCameraQueue()
         {
-            // if(renderTexture1 == null || renderTexture2 == null || material == null)
-            // {
-            //     Initialize();
-            // }
+            cam1 = camera1Queue;
+            cam2 = camera2Queue;
+            if (cam1 != null)
+            {
+                cam1.enabled = true;
+                cam1.targetTexture = renderTexture1; 
+            }
 
-            if (cam1 != null) cam1.enabled = true;
-            if (cam2 != null) cam2.enabled = true;
+            if (cam2 != null)
+            {
+                cam2.enabled = true;
+                cam2.targetTexture = renderTexture2;
+            }
             
             // material.SetFloat("_CrossFade", fader);
             
         }
 
-        public void BlitOutputTarget()
+        public void BlitOutputTarget(RenderTexture dst)
         {
-            Graphics.Blit(Texture2D.blackTexture, outputTarget, material);
+            Graphics.Blit(Texture2D.blackTexture, dst, material);
         }
-
-        public void DisableCameras()
-        {
-            foreach (var camera in cameraList)
-            {
-                camera.enabled = false;
-            }
-        }
-
-        public void SetCamera(Camera camera1, Camera camera2 = null, float blend = 0f)
-        {
-            // Debug.Log(blend);
-            if (camera1 == null && camera2 == null) return;
-
-            cam1 = camera1;
-            if (cam1)
-            {
-                cam1.targetTexture = renderTexture1;
-                cam1.enabled = true;
-            }
-            cam2 = camera2;
-            if (cam2)
-            {
-                cam2.targetTexture = renderTexture2;
-                cam2.enabled = true;
-            }
-            
-            // Debug.Log(blend);
+        public void SetCameraQueue(Camera camera1, Camera camera2 = null, float blend = 0f)
+        { 
+            camera1Queue = camera1; 
+            camera2Queue = camera2;
             fader = blend;
         }
+        
+        private void RefreshCamera()
+        {
+        
+            foreach (var camera in cameraList)
+            {
+                if(camera == null) continue;
+                camera.enabled = false;
+                camera.targetTexture = null;
+            }
+        }
 
-        // Update is called once per frame
         void Update()
         {
-            
+          
+            RefreshCamera();
             if(renderTexture1 == null || renderTexture2 == null || material == null)
             {
                 Initialize();
             }
-            
-            Render();
 
             if (outputTarget != null)
             {
-                BlitOutputTarget();    
+                BlitOutputTarget(outputTarget);    
             }
-            
-            
+          
             outputImage.material = material;
+            ApplyCameraQueue();
             material.SetFloat("_CrossFade", fader);
-
-            // Debug.Log(fader);
-            // DisableCameras();
-            // Render();
+            
+            
         }
     }
 
